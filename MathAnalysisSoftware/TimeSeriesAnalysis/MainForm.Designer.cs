@@ -41,6 +41,8 @@ namespace TimeSeriesAnalysis {
             this.fourierPBox = new System.Windows.Forms.PictureBox();
             this.label12 = new System.Windows.Forms.Label();
             this.waveletGroup = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.CboxColorMap = new System.Windows.Forms.ComboBox();
             this.wav_nameCbox = new System.Windows.Forms.ComboBox();
             this.wav_dtNum = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -77,8 +79,6 @@ namespace TimeSeriesAnalysis {
             this.lyap_k_Grp = new System.Windows.Forms.GroupBox();
             this.ComboKantzSlope = new System.Windows.Forms.ComboBox();
             this.lyap_k_Lbl_window = new System.Windows.Forms.Label();
-            this.lyap_k_Lbl_dmax = new System.Windows.Forms.Label();
-            this.lyap_k_Num_dmax = new System.Windows.Forms.NumericUpDown();
             this.lyap_k_Num_maxiter = new System.Windows.Forms.NumericUpDown();
             this.lyap_k_Lbl_maxiter = new System.Windows.Forms.Label();
             this.lyap_k_Lbl_scales = new System.Windows.Forms.Label();
@@ -114,8 +114,6 @@ namespace TimeSeriesAnalysis {
             this.label1 = new System.Windows.Forms.Label();
             this.pointsNum = new System.Windows.Forms.NumericUpDown();
             this.sourceColumnNum = new System.Windows.Forms.NumericUpDown();
-            this.CboxColorMap = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.poincareMapPBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.signalPBox)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -137,7 +135,6 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.lyapStartNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyapEndNum)).BeginInit();
             this.lyap_k_Grp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_dmax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_maxiter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_window)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_scales)).BeginInit();
@@ -344,6 +341,28 @@ namespace TimeSeriesAnalysis {
             this.waveletGroup.TabIndex = 22;
             this.waveletGroup.TabStop = false;
             this.waveletGroup.Text = "Вейвлет";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(86, 163);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(40, 13);
+            this.label10.TabIndex = 31;
+            this.label10.Text = "Цвет:";
+            // 
+            // CboxColorMap
+            // 
+            this.CboxColorMap.DisplayMember = "haar";
+            this.CboxColorMap.FormattingEnabled = true;
+            this.CboxColorMap.Items.AddRange(new object[] {
+            "pink",
+            "parula"});
+            this.CboxColorMap.Location = new System.Drawing.Point(131, 160);
+            this.CboxColorMap.Name = "CboxColorMap";
+            this.CboxColorMap.Size = new System.Drawing.Size(80, 21);
+            this.CboxColorMap.TabIndex = 30;
+            this.CboxColorMap.Text = "pink";
             // 
             // wav_nameCbox
             // 
@@ -832,8 +851,6 @@ namespace TimeSeriesAnalysis {
             // 
             this.lyap_k_Grp.Controls.Add(this.ComboKantzSlope);
             this.lyap_k_Grp.Controls.Add(this.lyap_k_Lbl_window);
-            this.lyap_k_Grp.Controls.Add(this.lyap_k_Lbl_dmax);
-            this.lyap_k_Grp.Controls.Add(this.lyap_k_Num_dmax);
             this.lyap_k_Grp.Controls.Add(this.lyap_k_Num_maxiter);
             this.lyap_k_Grp.Controls.Add(this.lyap_k_Lbl_maxiter);
             this.lyap_k_Grp.Controls.Add(this.lyap_k_Lbl_scales);
@@ -842,14 +859,14 @@ namespace TimeSeriesAnalysis {
             this.lyap_k_Grp.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lyap_k_Grp.Location = new System.Drawing.Point(6, 365);
             this.lyap_k_Grp.Name = "lyap_k_Grp";
-            this.lyap_k_Grp.Size = new System.Drawing.Size(301, 163);
+            this.lyap_k_Grp.Size = new System.Drawing.Size(301, 134);
             this.lyap_k_Grp.TabIndex = 20;
             this.lyap_k_Grp.TabStop = false;
             // 
             // ComboKantzSlope
             // 
             this.ComboKantzSlope.FormattingEnabled = true;
-            this.ComboKantzSlope.Location = new System.Drawing.Point(115, 130);
+            this.ComboKantzSlope.Location = new System.Drawing.Point(118, 101);
             this.ComboKantzSlope.Name = "ComboKantzSlope";
             this.ComboKantzSlope.Size = new System.Drawing.Size(177, 21);
             this.ComboKantzSlope.TabIndex = 30;
@@ -857,49 +874,16 @@ namespace TimeSeriesAnalysis {
             // lyap_k_Lbl_window
             // 
             this.lyap_k_Lbl_window.AutoSize = true;
-            this.lyap_k_Lbl_window.Location = new System.Drawing.Point(101, 81);
+            this.lyap_k_Lbl_window.Location = new System.Drawing.Point(104, 52);
             this.lyap_k_Lbl_window.Name = "lyap_k_Lbl_window";
             this.lyap_k_Lbl_window.Size = new System.Drawing.Size(85, 13);
             this.lyap_k_Lbl_window.TabIndex = 21;
             this.lyap_k_Lbl_window.Text = "Размер окна:";
             // 
-            // lyap_k_Lbl_dmax
-            // 
-            this.lyap_k_Lbl_dmax.AutoSize = true;
-            this.lyap_k_Lbl_dmax.Location = new System.Drawing.Point(2, 24);
-            this.lyap_k_Lbl_dmax.Name = "lyap_k_Lbl_dmax";
-            this.lyap_k_Lbl_dmax.Size = new System.Drawing.Size(184, 13);
-            this.lyap_k_Lbl_dmax.TabIndex = 20;
-            this.lyap_k_Lbl_dmax.Text = "Макс. размерность вложения:";
-            // 
-            // lyap_k_Num_dmax
-            // 
-            this.lyap_k_Num_dmax.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.lyap_k_Num_dmax.Location = new System.Drawing.Point(192, 22);
-            this.lyap_k_Num_dmax.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.lyap_k_Num_dmax.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.lyap_k_Num_dmax.Name = "lyap_k_Num_dmax";
-            this.lyap_k_Num_dmax.Size = new System.Drawing.Size(100, 21);
-            this.lyap_k_Num_dmax.TabIndex = 21;
-            this.lyap_k_Num_dmax.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
-            this.lyap_k_Num_dmax.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            // 
             // lyap_k_Num_maxiter
             // 
             this.lyap_k_Num_maxiter.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.lyap_k_Num_maxiter.Location = new System.Drawing.Point(192, 49);
+            this.lyap_k_Num_maxiter.Location = new System.Drawing.Point(195, 20);
             this.lyap_k_Num_maxiter.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -918,7 +902,7 @@ namespace TimeSeriesAnalysis {
             // lyap_k_Lbl_maxiter
             // 
             this.lyap_k_Lbl_maxiter.AutoSize = true;
-            this.lyap_k_Lbl_maxiter.Location = new System.Drawing.Point(47, 52);
+            this.lyap_k_Lbl_maxiter.Location = new System.Drawing.Point(50, 23);
             this.lyap_k_Lbl_maxiter.Name = "lyap_k_Lbl_maxiter";
             this.lyap_k_Lbl_maxiter.Size = new System.Drawing.Size(139, 13);
             this.lyap_k_Lbl_maxiter.TabIndex = 18;
@@ -927,7 +911,7 @@ namespace TimeSeriesAnalysis {
             // lyap_k_Lbl_scales
             // 
             this.lyap_k_Lbl_scales.AutoSize = true;
-            this.lyap_k_Lbl_scales.Location = new System.Drawing.Point(40, 105);
+            this.lyap_k_Lbl_scales.Location = new System.Drawing.Point(43, 76);
             this.lyap_k_Lbl_scales.Name = "lyap_k_Lbl_scales";
             this.lyap_k_Lbl_scales.Size = new System.Drawing.Size(146, 13);
             this.lyap_k_Lbl_scales.TabIndex = 16;
@@ -936,7 +920,7 @@ namespace TimeSeriesAnalysis {
             // lyap_k_Num_window
             // 
             this.lyap_k_Num_window.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.lyap_k_Num_window.Location = new System.Drawing.Point(192, 76);
+            this.lyap_k_Num_window.Location = new System.Drawing.Point(195, 47);
             this.lyap_k_Num_window.Maximum = new decimal(new int[] {
             999,
             0,
@@ -950,7 +934,7 @@ namespace TimeSeriesAnalysis {
             // lyap_k_Num_scales
             // 
             this.lyap_k_Num_scales.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.lyap_k_Num_scales.Location = new System.Drawing.Point(192, 103);
+            this.lyap_k_Num_scales.Location = new System.Drawing.Point(195, 74);
             this.lyap_k_Num_scales.Maximum = new decimal(new int[] {
             999,
             0,
@@ -1068,6 +1052,11 @@ namespace TimeSeriesAnalysis {
             this.scaleMaxNum.Size = new System.Drawing.Size(100, 21);
             this.scaleMaxNum.TabIndex = 11;
             this.scaleMaxNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.scaleMaxNum.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
             // 
             // label3
             // 
@@ -1408,28 +1397,6 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             // 
-            // CboxColorMap
-            // 
-            this.CboxColorMap.DisplayMember = "haar";
-            this.CboxColorMap.FormattingEnabled = true;
-            this.CboxColorMap.Items.AddRange(new object[] {
-            "pink",
-            "parula"});
-            this.CboxColorMap.Location = new System.Drawing.Point(131, 160);
-            this.CboxColorMap.Name = "CboxColorMap";
-            this.CboxColorMap.Size = new System.Drawing.Size(80, 21);
-            this.CboxColorMap.TabIndex = 30;
-            this.CboxColorMap.Text = "pink";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(86, 163);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(40, 13);
-            this.label10.TabIndex = 31;
-            this.label10.Text = "Цвет:";
-            // 
             // mainForm
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
@@ -1471,7 +1438,6 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.lyapEndNum)).EndInit();
             this.lyap_k_Grp.ResumeLayout(false);
             this.lyap_k_Grp.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_dmax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_maxiter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_window)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lyap_k_Num_scales)).EndInit();
@@ -1577,8 +1543,6 @@ namespace TimeSeriesAnalysis {
         private Label lyap_k_Lbl_scales;
         private NumericUpDown lyap_k_Num_scales;
         private Label lyap_k_Lbl_window;
-        private Label lyap_k_Lbl_dmax;
-        private NumericUpDown lyap_k_Num_dmax;
         private NumericUpDown lyap_k_Num_window;
         private RadioButton lyap_calc_Rad_kantz;
         private NumericUpDown fourier_dtNum;

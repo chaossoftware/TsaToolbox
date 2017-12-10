@@ -272,7 +272,6 @@ namespace TimeSeriesAnalysis {
                 routines.lyapunov = new KantzMethod(
                     routines.sourceData.TimeSeries.ValY,
                     dim,
-                    (int)lyap_k_Num_dmax.Value,
                     tau,
                     (int)lyap_k_Num_maxiter.Value,
                     (int)lyap_k_Num_window.Value,
