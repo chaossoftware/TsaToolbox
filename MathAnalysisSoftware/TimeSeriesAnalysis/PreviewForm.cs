@@ -31,7 +31,7 @@ namespace TimeSeriesAnalysis
 
         private void redraw() {
             if (plotObject != null) {
-                plotObject.BitmapSize = new Size(previewPBox.Width, previewPBox.Height);
+                plotObject.Size = new Size(previewPBox.Width, previewPBox.Height);
                 previewPBox.Image = plotObject.Plot();
             }
         }
