@@ -55,7 +55,10 @@ namespace TimeSeriesAnalysis
         public SignalPlot GetFourierPlot(Size size, int thickness, double statrFreq, double endFreq, double dt, int logScale) {
 
             DataSeries fourierSeries = Fourier.GetFourier(sourceData.TimeSeries.ValY, statrFreq, endFreq, dt, logScale);
-            return new SignalPlot(fourierSeries, size, thickness);
+            var fourierPlot = new SignalPlot(fourierSeries, size, thickness);
+            fourierPlot.LabelY = "F(ω)";
+            fourierPlot.LabelX = "ω";
+            return fourierPlot;
         }
 
 

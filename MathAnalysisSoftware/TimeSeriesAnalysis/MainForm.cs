@@ -179,20 +179,28 @@ namespace TimeSeriesAnalysis {
             }
         }
 
-        private void poincareMapPBox_DoubleClick(object sender, EventArgs e) {
-            if (poincareMapPBox.Image != null) {
-                PreviewForm pf = new PreviewForm("Псевдосечение Пуанкаре");
+        private void poincareMapPBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (poincareMapPBox.Image != null)
+            {
+                int width = Convert.ToInt32(this.numPreviewWidth.Value);
+                int height = Convert.ToInt32(this.numPreviewHeight.Value);
+                PreviewForm pf = new PreviewForm("Псевдосечение Пуанкаре", width, height);
                 pf.Show();
 
-                MapPlot pp = routines.GetPoincarePlot(pf.previewPBox.Size, 2);
+                MapPlot pp = routines.GetPoincarePlot(pf.previewPBox.Size, 1);
                 pf.previewPBox.Image = pp.Plot();
                 pf.plotObject = pp;
             }
         }
 
-        private void signalPBox_DoubleClick(object sender, EventArgs e) {
-            if (signalPBox.Image != null) {
-                PreviewForm pf = new PreviewForm("Сигнал");
+        private void signalPBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (signalPBox.Image != null)
+            {
+                int width = Convert.ToInt32(this.numPreviewWidth.Value);
+                int height = Convert.ToInt32(this.numPreviewHeight.Value);
+                PreviewForm pf = new PreviewForm("Сигнал", width, height);
                 pf.Show();
 
                 SignalPlot sp = routines.GetSignalPlot(pf.previewPBox.Size, 1, useTimeCheckbox.Checked, (int)startPointNum.Value, (int)endPointNum.Value);
@@ -201,9 +209,13 @@ namespace TimeSeriesAnalysis {
             }
         }
 
-        private void lyapunovPBox_DoubleClick(object sender, EventArgs e) {
-            if (lyapunovPBox.Image != null) {
-                PreviewForm pf = new PreviewForm("Показатель Ляпунова во времени");
+        private void lyapunovPBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (lyapunovPBox.Image != null)
+            {
+                int width = Convert.ToInt32(this.numPreviewWidth.Value);
+                int height = Convert.ToInt32(this.numPreviewHeight.Value);
+                PreviewForm pf = new PreviewForm("Lyapunov exponent in time", width, height);
                 pf.Show();
                 string tmp;
 
@@ -213,8 +225,12 @@ namespace TimeSeriesAnalysis {
             }
         }
 
-        private void fourierPBox_DoubleClick(object sender, EventArgs e) {
-            PreviewForm pf = new PreviewForm("Спектр мощности Фурье");
+        private void fourierPBox_DoubleClick(object sender, EventArgs e)
+        {
+            int width = Convert.ToInt32(this.numPreviewWidth.Value);
+            int height = Convert.ToInt32(this.numPreviewHeight.Value);
+
+            PreviewForm pf = new PreviewForm("Fourier power spectrum", width, height);
             pf.Show();
 
             SignalPlot sp = routines.GetFourierPlot(pf.previewPBox.Size, 1, GetDoubleFromUI(fourierStartFreqNum), GetDoubleFromUI(fourierEndFreqNum), GetDoubleFromUI(fourier_dtNum), Convert.ToInt32(fourier_logCheckbox.Checked));
@@ -222,8 +238,12 @@ namespace TimeSeriesAnalysis {
             pf.plotObject = sp;
         }
 
-        private void waveletPBox_DoubleClick(object sender, EventArgs e) {
-            PreviewForm pf = new PreviewForm("Вейвлет");
+        private void waveletPBox_DoubleClick(object sender, EventArgs e)
+        {
+            int width = Convert.ToInt32(this.numPreviewWidth.Value);
+            int height = Convert.ToInt32(this.numPreviewHeight.Value);
+
+            PreviewForm pf = new PreviewForm(this.wav_nameCbox.Text + " wavelet", width, height);
             pf.Show();
             GetImageFromFile(pf.previewPBox, "wavelet.tmp");
         }

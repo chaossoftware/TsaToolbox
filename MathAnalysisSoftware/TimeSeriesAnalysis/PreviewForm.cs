@@ -16,6 +16,18 @@ namespace TimeSeriesAnalysis
             Text = caption;
         }
 
+        public PreviewForm(string caption, int width, int height)
+        {
+            InitializeComponent();
+            Text = caption;
+
+            int diffWidth = this.previewPBox.Width - width;
+            int diffHeight = this.previewPBox.Height - height;
+
+            this.Width -= diffWidth;
+            this.Height -= diffHeight;
+        }
+
 
         private void redraw() {
             if (plotObject != null) {
@@ -55,5 +67,9 @@ namespace TimeSeriesAnalysis
             redraw();
         }
 
+        private void copyItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetImage(previewPBox.Image);
+        }
     }
 }

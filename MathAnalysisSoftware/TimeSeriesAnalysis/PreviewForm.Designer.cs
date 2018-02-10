@@ -35,6 +35,7 @@ namespace TimeSeriesAnalysis
             this.previewPBox = new System.Windows.Forms.PictureBox();
             this.contextMenu = new System.Windows.Forms.ContextMenu();
             this.saveAsItem = new System.Windows.Forms.MenuItem();
+            this.copyItem = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.previewPBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,7 +57,8 @@ namespace TimeSeriesAnalysis
             // contextMenu
             // 
             this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.saveAsItem});
+            this.saveAsItem,
+            this.copyItem});
             // 
             // saveAsItem
             // 
@@ -64,12 +66,18 @@ namespace TimeSeriesAnalysis
             this.saveAsItem.Text = "Save as";
             this.saveAsItem.Click += new System.EventHandler(this.ContextMenuClick);
             // 
+            // copyItem
+            // 
+            this.copyItem.Index = 1;
+            this.copyItem.Text = "Copy";
+            this.copyItem.Click += new System.EventHandler(this.copyItem_Click);
+            // 
             // PreviewForm
             // 
             this.ClientSize = new System.Drawing.Size(1008, 561);
             this.Controls.Add(this.previewPBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(320, 240);
+            this.MinimumSize = new System.Drawing.Size(133, 100);
             this.Name = "PreviewForm";
             this.Text = "Preview Form";
             ((System.ComponentModel.ISupportInitialize)(this.previewPBox)).EndInit();
@@ -82,5 +90,6 @@ namespace TimeSeriesAnalysis
         public PictureBox previewPBox;
         public ContextMenu contextMenu;
         private MenuItem saveAsItem;
+        private MenuItem copyItem;
     }
 }

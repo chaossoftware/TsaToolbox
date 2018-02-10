@@ -114,6 +114,10 @@ namespace TimeSeriesAnalysis {
             this.label1 = new System.Windows.Forms.Label();
             this.pointsNum = new System.Windows.Forms.NumericUpDown();
             this.sourceColumnNum = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
+            this.numPreviewWidth = new System.Windows.Forms.NumericUpDown();
+            this.label21 = new System.Windows.Forms.Label();
+            this.numPreviewHeight = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.poincareMapPBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.signalPBox)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -153,6 +157,8 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.startPointNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointsNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourceColumnNum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPreviewWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPreviewHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileBtn
@@ -1262,11 +1268,11 @@ namespace TimeSeriesAnalysis {
             // sourceStepLbl
             // 
             this.sourceStepLbl.AutoSize = true;
-            this.sourceStepLbl.Location = new System.Drawing.Point(45, 51);
+            this.sourceStepLbl.Location = new System.Drawing.Point(60, 51);
             this.sourceStepLbl.Name = "sourceStepLbl";
-            this.sourceStepLbl.Size = new System.Drawing.Size(84, 13);
+            this.sourceStepLbl.Size = new System.Drawing.Size(64, 13);
             this.sourceStepLbl.TabIndex = 24;
-            this.sourceStepLbl.Text = "Шаг данных:";
+            this.sourceStepLbl.Text = "Step size:";
             // 
             // sourceStepTxt
             // 
@@ -1296,20 +1302,20 @@ namespace TimeSeriesAnalysis {
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(23, 136);
+            this.label7.Location = new System.Drawing.Point(59, 136);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(106, 13);
+            this.label7.Size = new System.Drawing.Size(65, 13);
             this.label7.TabIndex = 22;
-            this.label7.Text = "Конечная точка:";
+            this.label7.Text = "End point:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 107);
+            this.label6.Location = new System.Drawing.Point(52, 105);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(113, 13);
+            this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 21;
-            this.label6.Text = "Начальная точка:";
+            this.label6.Text = "Start point:";
             // 
             // endPointNum
             // 
@@ -1340,20 +1346,20 @@ namespace TimeSeriesAnalysis {
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 165);
+            this.label2.Location = new System.Drawing.Point(35, 165);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 13);
+            this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 19;
-            this.label2.Text = "Каждые N точек:";
+            this.label2.Text = "Each N points:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 78);
+            this.label1.Location = new System.Drawing.Point(17, 78);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 13);
+            this.label1.Size = new System.Drawing.Size(107, 13);
             this.label1.TabIndex = 18;
-            this.label1.Text = "Колонка с данными:";
+            this.label1.Text = "SIgnal column #:";
             // 
             // pointsNum
             // 
@@ -1397,10 +1403,78 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(932, 349);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(101, 14);
+            this.label20.TabIndex = 26;
+            this.label20.Text = "Preview width:";
+            // 
+            // numPreviewWidth
+            // 
+            this.numPreviewWidth.Location = new System.Drawing.Point(1047, 347);
+            this.numPreviewWidth.Maximum = new decimal(new int[] {
+            1920,
+            0,
+            0,
+            0});
+            this.numPreviewWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numPreviewWidth.Name = "numPreviewWidth";
+            this.numPreviewWidth.Size = new System.Drawing.Size(80, 22);
+            this.numPreviewWidth.TabIndex = 23;
+            this.numPreviewWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.numPreviewWidth.Value = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(929, 378);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(107, 14);
+            this.label21.TabIndex = 25;
+            this.label21.Text = "Preview Height:";
+            // 
+            // numPreviewHeight
+            // 
+            this.numPreviewHeight.Location = new System.Drawing.Point(1047, 375);
+            this.numPreviewHeight.Maximum = new decimal(new int[] {
+            1080,
+            0,
+            0,
+            0});
+            this.numPreviewHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numPreviewHeight.Name = "numPreviewHeight";
+            this.numPreviewHeight.Size = new System.Drawing.Size(80, 22);
+            this.numPreviewHeight.TabIndex = 24;
+            this.numPreviewHeight.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.numPreviewHeight.Value = new decimal(new int[] {
+            230,
+            0,
+            0,
+            0});
+            // 
             // mainForm
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1160, 635);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.numPreviewWidth);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.numPreviewHeight);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.fileNameLbl);
@@ -1459,6 +1533,8 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.startPointNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointsNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourceColumnNum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPreviewWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPreviewHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1554,6 +1630,10 @@ namespace TimeSeriesAnalysis {
         private Label label19;
         private Label label10;
         private ComboBox CboxColorMap;
+        private Label label20;
+        private NumericUpDown numPreviewWidth;
+        private Label label21;
+        private NumericUpDown numPreviewHeight;
     }
 }
 
