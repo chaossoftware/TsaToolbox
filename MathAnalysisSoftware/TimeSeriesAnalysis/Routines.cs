@@ -31,17 +31,27 @@ namespace TimeSeriesAnalysis
             PlotObject lyap;
             int range = endPoint - startPoint + 1;
             result = "";
+                
+            if (isWolf)
+            {
+                DataSeries plotSeries = new DataSeries();
 
-            DataSeries plotSeries = new DataSeries();
-            for (int i = startPoint; i < range; i++)
-                plotSeries.AddDataPoint(lyapunov.slope.ListDataPoints[i].X, lyapunov.slope.ListDataPoints[i].Y);
+                for (int i = startPoint; i < range; i++)
+                {
+                    plotSeries.AddDataPoint(lyapunov.slope.ListDataPoints[i].X, lyapunov.slope.ListDataPoints[i].Y);
+                }
 
-            lyap = new SignalPlot(plotSeries, size, 1);
-
-            if (isWolf) {
+                lyap = new SignalPlot(plotSeries, size, 1);
                 lyap.LabelY = "LE";
             }
-            else {
+            else
+            {
+                lyap = new MultiSignalPlot(size, 1);
+                ((MultiSignalPlot)lyap).AddDataSeries(lyapunov.slope, Color.SteelBlue);
+                DataSeries markerSeries = new DataSeries();
+                markerSeries.AddDataPoint(lyapunov.slope.ListDataPoints[startPoint].X, lyapunov.slope.ListDataPoints[startPoint].Y);
+                markerSeries.AddDataPoint(lyapunov.slope.ListDataPoints[range - 1].X, lyapunov.slope.ListDataPoints[range - 1].Y);
+                ((MultiSignalPlot)lyap).AddDataSeries(markerSeries, Color.Red);
                 lyap.LabelY = "Slope";
 
                 result = string.Format("{0:F5}",

@@ -313,15 +313,18 @@ namespace TimeSeriesAnalysis {
 
 
         private void setLyapunovResult() {
+
             resultText.BackColor = Color.Khaki;
             string result = "";
 
-            if (routines.lyapunov is WolfMethod) {
+            if (routines.lyapunov is WolfMethod)
+            {
                 result = string.Format("{0:F5}", ((WolfMethod)routines.lyapunov).rezult);
                 resultText.Text = result;
             }
 
-            if (routines.lyapunov is KantzMethod) {
+            if (routines.lyapunov is KantzMethod)
+            {
                 this.ComboKantzSlope.Items.Clear();
                 string[] items = new string[((KantzMethod)routines.lyapunov).SlopesList.Count];
                 ((KantzMethod)routines.lyapunov).SlopesList.Keys.CopyTo(items, 0);
@@ -330,24 +333,30 @@ namespace TimeSeriesAnalysis {
                 ((KantzMethod)routines.lyapunov).SetSlope(this.ComboKantzSlope.Text);
             }
 
-            if (routines.lyapunov.slope.Length > 1) {
+            if (routines.lyapunov.slope.Length > 1)
+            {
                 resultText.Text = routines.lyapunov.GetInfoShort();
                 lyapEndNum.Value = routines.lyapunov.slope.Length - 1;
-                try {
+
+                try
+                {
                     lyapunovPBox.Image = routines.GetLyapunovPlot(lyapunovPBox.Size, 1, (int)lyapStartNum.Value, (int)lyapEndNum.Value, lyap_calc_Rad_wolf.Checked, out result).Plot();
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
                     result = "No Value";
                 }
             }
-            else {
+            else
+            {
                 result = "No Value";
             }
                
-
             if (routines.lyapunov is KantzMethod || routines.lyapunov is RosensteinMethod)
+            {
                 resultText.Text = result;
+            }
         }
 
         #endregion
