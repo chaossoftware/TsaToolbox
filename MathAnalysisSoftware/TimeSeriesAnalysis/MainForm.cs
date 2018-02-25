@@ -107,7 +107,7 @@ namespace TimeSeriesAnalysis {
         }
 
         private void fillUiWithData() {
-            fileNameLbl.Text = routines.sourceData.GetInfo();
+            fileNameLbl.Text = routines.sourceData.GetInfo().Replace("\n", " ");
 
             sourceColumnNum.Maximum = routines.sourceData.columnsCount;
             sourceColumnNum.Minimum = 1;
@@ -152,9 +152,11 @@ namespace TimeSeriesAnalysis {
                 double tStart = routines.sourceData.TimeSeries.PointMin.X;
                 double tEnd = routines.sourceData.TimeSeries.PointMax.X;
 
-                try {
-                    routines.BuildWavelet(wav_nameCbox.Text, tStart, tEnd, GetDoubleFromUI(wav_startFreq), GetDoubleFromUI(wav_endFreq), GetDoubleFromUI(wav_dtNum), CboxColorMap.Text);
-                    GetImageFromFile(waveletPBox, "wavelet.tmp");
+                try
+                {
+                    string fName = "wavelet.tmp";
+                    routines.BuildWavelet(fName, wav_nameCbox.Text, tStart, tEnd, GetDoubleFromUI(wav_startFreq), GetDoubleFromUI(wav_endFreq), GetDoubleFromUI(wav_dtNum), CboxColorMap.Text, waveletPBox.Width, waveletPBox.Height);
+                    GetImageFromFile(waveletPBox, fName);
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Не удалось построить вейвлет:\n" + ex.Message);
@@ -245,7 +247,18 @@ namespace TimeSeriesAnalysis {
 
             PreviewForm pf = new PreviewForm(this.wav_nameCbox.Text + " wavelet", width, height);
             pf.Show();
-            GetImageFromFile(pf.previewPBox, "wavelet.tmp");
+            try
+            {
+                double tStart = routines.sourceData.TimeSeries.PointMin.X;
+                double tEnd = routines.sourceData.TimeSeries.PointMax.X;
+                string fName = "waveletPreview.tmp";
+                routines.BuildWavelet(fName, wav_nameCbox.Text, tStart, tEnd, GetDoubleFromUI(wav_startFreq), GetDoubleFromUI(wav_endFreq), GetDoubleFromUI(wav_dtNum), CboxColorMap.Text, waveletPBox.Width, waveletPBox.Height);
+                GetImageFromFile(pf.previewPBox, fName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось построить вейвлет:\n" + ex.Message);
+            }
         }
 
         private void GetImageFromFile(PictureBox pb, string fileName) {

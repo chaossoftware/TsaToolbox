@@ -17,7 +17,7 @@ namespace TimeSeriesAnalysis
         public LyapunovMethod lyapunov;
 
 
-        public SignalPlot GetSignalPlot(Size size, int thickness, bool withTime, int startPoint, int endPoint) {
+        public SignalPlot GetSignalPlot(Size size, float thickness, bool withTime, int startPoint, int endPoint) {
             return new SignalPlot(sourceData.TimeSeries, size, thickness);
         }
 
@@ -72,16 +72,16 @@ namespace TimeSeriesAnalysis
         }
 
 
-        public void BuildWavelet(string wName, double tStart, double tEnd, double startFreq, double endFreq, double dt, string colMap)
+        public void BuildWavelet(string tmpFileName, string wName, double tStart, double tEnd, double startFreq, double endFreq, double dt, string colMap, double width, double height)
         {
             MatlabEngine.MatlabEngine signalAnalysis = new MatlabEngine.MatlabEngine();
             MWCharArray mw_Folder = new MWCharArray("");
-            MWCharArray mw_fileName = new MWCharArray("wavelet.tmp");
+            MWCharArray mw_fileName = new MWCharArray(tmpFileName);
             MWCharArray mw_wname = new MWCharArray(wName);
             MWCharArray mw_colMap = new MWCharArray(colMap);
             MWNumericArray mw_signalArray = new MWNumericArray(sourceData.TimeSeries.ValY);
 
-            signalAnalysis.Get2DWavelet(mw_signalArray, mw_Folder, mw_fileName, mw_wname, tStart, tEnd, startFreq, endFreq, dt, mw_colMap);
+            signalAnalysis.Get2DWavelet(mw_signalArray, mw_Folder, mw_fileName, mw_wname, tStart, tEnd, startFreq, endFreq, dt, mw_colMap, width, height);
         }
 
 

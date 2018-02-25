@@ -32,14 +32,10 @@ namespace TimeSeriesAnalysis {
             this.signalPBox = new System.Windows.Forms.PictureBox();
             this.fileNameLbl = new System.Windows.Forms.Label();
             this.saveBtn = new System.Windows.Forms.Button();
-            this.sigPlotLbl = new System.Windows.Forms.Label();
-            this.phasePortraitLbl = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.waveletPBox = new System.Windows.Forms.PictureBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.fourierPBox = new System.Windows.Forms.PictureBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.waveletGroup = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.CboxColorMap = new System.Windows.Forms.ComboBox();
@@ -118,6 +114,8 @@ namespace TimeSeriesAnalysis {
             this.numPreviewWidth = new System.Windows.Forms.NumericUpDown();
             this.label21 = new System.Windows.Forms.Label();
             this.numPreviewHeight = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.poincareMapPBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.signalPBox)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -159,16 +157,18 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.sourceColumnNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPreviewWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPreviewHeight)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileBtn
             // 
-            this.openFileBtn.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.openFileBtn.Location = new System.Drawing.Point(15, 12);
+            this.openFileBtn.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.openFileBtn.Location = new System.Drawing.Point(1073, 12);
             this.openFileBtn.Name = "openFileBtn";
             this.openFileBtn.Size = new System.Drawing.Size(75, 23);
             this.openFileBtn.TabIndex = 0;
-            this.openFileBtn.Text = "Открыть";
+            this.openFileBtn.Text = "Open";
             this.openFileBtn.UseVisualStyleBackColor = true;
             this.openFileBtn.Click += new System.EventHandler(this.openFileBtn_Click);
             // 
@@ -177,7 +177,7 @@ namespace TimeSeriesAnalysis {
             this.poincareMapPBox.BackColor = System.Drawing.Color.White;
             this.poincareMapPBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.poincareMapPBox.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.poincareMapPBox.Location = new System.Drawing.Point(336, 30);
+            this.poincareMapPBox.Location = new System.Drawing.Point(9, 21);
             this.poincareMapPBox.Name = "poincareMapPBox";
             this.poincareMapPBox.Size = new System.Drawing.Size(320, 240);
             this.poincareMapPBox.TabIndex = 12;
@@ -186,12 +186,12 @@ namespace TimeSeriesAnalysis {
             // 
             // plotBtn
             // 
-            this.plotBtn.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.plotBtn.Location = new System.Drawing.Point(822, 30);
+            this.plotBtn.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.plotBtn.Location = new System.Drawing.Point(797, 6);
             this.plotBtn.Name = "plotBtn";
-            this.plotBtn.Size = new System.Drawing.Size(70, 23);
+            this.plotBtn.Size = new System.Drawing.Size(95, 23);
             this.plotBtn.TabIndex = 2;
-            this.plotBtn.Text = "Графики";
+            this.plotBtn.Text = "Build charts";
             this.plotBtn.UseVisualStyleBackColor = true;
             this.plotBtn.Click += new System.EventHandler(this.plotBtn_Click);
             // 
@@ -200,7 +200,7 @@ namespace TimeSeriesAnalysis {
             this.signalPBox.BackColor = System.Drawing.Color.White;
             this.signalPBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.signalPBox.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.signalPBox.Location = new System.Drawing.Point(6, 30);
+            this.signalPBox.Location = new System.Drawing.Point(9, 23);
             this.signalPBox.Name = "signalPBox";
             this.signalPBox.Size = new System.Drawing.Size(320, 240);
             this.signalPBox.TabIndex = 11;
@@ -212,123 +212,78 @@ namespace TimeSeriesAnalysis {
             this.fileNameLbl.AutoSize = true;
             this.fileNameLbl.BackColor = System.Drawing.Color.Khaki;
             this.fileNameLbl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.fileNameLbl.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.fileNameLbl.Location = new System.Drawing.Point(96, 12);
+            this.fileNameLbl.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.fileNameLbl.Location = new System.Drawing.Point(4, 5);
             this.fileNameLbl.Name = "fileNameLbl";
-            this.fileNameLbl.Size = new System.Drawing.Size(114, 15);
+            this.fileNameLbl.Size = new System.Drawing.Size(218, 16);
             this.fileNameLbl.TabIndex = 14;
-            this.fileNameLbl.Text = "ФАЙЛ НЕ ВЫБРАН";
+            this.fileNameLbl.Text = "Please, select file with timeseries";
             // 
             // saveBtn
             // 
-            this.saveBtn.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.saveBtn.Location = new System.Drawing.Point(1069, 84);
+            this.saveBtn.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.saveBtn.Location = new System.Drawing.Point(1069, 601);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(79, 23);
             this.saveBtn.TabIndex = 1;
-            this.saveBtn.Text = "Сохранить";
+            this.saveBtn.Text = "Save";
             this.saveBtn.UseVisualStyleBackColor = true;
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
-            // 
-            // sigPlotLbl
-            // 
-            this.sigPlotLbl.AutoSize = true;
-            this.sigPlotLbl.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.sigPlotLbl.Location = new System.Drawing.Point(3, 12);
-            this.sigPlotLbl.Name = "sigPlotLbl";
-            this.sigPlotLbl.Size = new System.Drawing.Size(54, 13);
-            this.sigPlotLbl.TabIndex = 16;
-            this.sigPlotLbl.Text = "Сигнал:";
-            // 
-            // phasePortraitLbl
-            // 
-            this.phasePortraitLbl.AutoSize = true;
-            this.phasePortraitLbl.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.phasePortraitLbl.Location = new System.Drawing.Point(333, 12);
-            this.phasePortraitLbl.Name = "phasePortraitLbl";
-            this.phasePortraitLbl.Size = new System.Drawing.Size(164, 13);
-            this.phasePortraitLbl.TabIndex = 17;
-            this.phasePortraitLbl.Text = "Псевдосечение Пуанкаре:";
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.tabControl1.Location = new System.Drawing.Point(0, 60);
+            this.tabControl1.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(906, 576);
+            this.tabControl1.Size = new System.Drawing.Size(906, 612);
             this.tabControl1.TabIndex = 19;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.waveletPBox);
-            this.tabPage1.Controls.Add(this.label13);
-            this.tabPage1.Controls.Add(this.fourierPBox);
-            this.tabPage1.Controls.Add(this.label12);
+            this.tabPage1.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.waveletGroup);
             this.tabPage1.Controls.Add(this.fourierGroup);
-            this.tabPage1.Controls.Add(this.sigPlotLbl);
             this.tabPage1.Controls.Add(this.plotBtn);
-            this.tabPage1.Controls.Add(this.poincareMapPBox);
-            this.tabPage1.Controls.Add(this.signalPBox);
-            this.tabPage1.Controls.Add(this.phasePortraitLbl);
             this.tabPage1.Font = new System.Drawing.Font("Calibri", 9.75F);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(898, 550);
+            this.tabPage1.Size = new System.Drawing.Size(898, 585);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Графики";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // waveletPBox
             // 
             this.waveletPBox.BackColor = System.Drawing.Color.White;
             this.waveletPBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.waveletPBox.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.waveletPBox.Location = new System.Drawing.Point(336, 300);
+            this.waveletPBox.Location = new System.Drawing.Point(6, 21);
             this.waveletPBox.Name = "waveletPBox";
             this.waveletPBox.Size = new System.Drawing.Size(320, 240);
             this.waveletPBox.TabIndex = 25;
             this.waveletPBox.TabStop = false;
             this.waveletPBox.DoubleClick += new System.EventHandler(this.waveletPBox_DoubleClick);
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.label13.Location = new System.Drawing.Point(333, 282);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(60, 13);
-            this.label13.TabIndex = 26;
-            this.label13.Text = "Вейвлет:";
-            // 
             // fourierPBox
             // 
             this.fourierPBox.BackColor = System.Drawing.Color.White;
             this.fourierPBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fourierPBox.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.fourierPBox.Location = new System.Drawing.Point(6, 300);
+            this.fourierPBox.Location = new System.Drawing.Point(6, 21);
             this.fourierPBox.Name = "fourierPBox";
             this.fourierPBox.Size = new System.Drawing.Size(320, 240);
             this.fourierPBox.TabIndex = 23;
             this.fourierPBox.TabStop = false;
             this.fourierPBox.DoubleClick += new System.EventHandler(this.fourierPBox_DoubleClick);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.label12.Location = new System.Drawing.Point(3, 282);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(114, 13);
-            this.label12.TabIndex = 24;
-            this.label12.Text = "Спектр мощности:";
-            // 
             // waveletGroup
             // 
+            this.waveletGroup.Controls.Add(this.waveletPBox);
             this.waveletGroup.Controls.Add(this.label10);
             this.waveletGroup.Controls.Add(this.CboxColorMap);
             this.waveletGroup.Controls.Add(this.wav_nameCbox);
@@ -340,22 +295,22 @@ namespace TimeSeriesAnalysis {
             this.waveletGroup.Controls.Add(this.wav_startFreq);
             this.waveletGroup.Controls.Add(this.waveletNameLbl);
             this.waveletGroup.Controls.Add(this.waveletCheckbox);
-            this.waveletGroup.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.waveletGroup.Location = new System.Drawing.Point(670, 326);
+            this.waveletGroup.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.waveletGroup.Location = new System.Drawing.Point(360, 309);
             this.waveletGroup.Name = "waveletGroup";
-            this.waveletGroup.Size = new System.Drawing.Size(222, 196);
+            this.waveletGroup.Size = new System.Drawing.Size(532, 268);
             this.waveletGroup.TabIndex = 22;
             this.waveletGroup.TabStop = false;
-            this.waveletGroup.Text = "Вейвлет";
+            this.waveletGroup.Text = "Wavelet";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(86, 163);
+            this.label10.Location = new System.Drawing.Point(354, 138);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(40, 13);
+            this.label10.Size = new System.Drawing.Size(76, 14);
             this.label10.TabIndex = 31;
-            this.label10.Text = "Цвет:";
+            this.label10.Text = "Color map:";
             // 
             // CboxColorMap
             // 
@@ -364,9 +319,9 @@ namespace TimeSeriesAnalysis {
             this.CboxColorMap.Items.AddRange(new object[] {
             "pink",
             "parula"});
-            this.CboxColorMap.Location = new System.Drawing.Point(131, 160);
+            this.CboxColorMap.Location = new System.Drawing.Point(436, 135);
             this.CboxColorMap.Name = "CboxColorMap";
-            this.CboxColorMap.Size = new System.Drawing.Size(80, 21);
+            this.CboxColorMap.Size = new System.Drawing.Size(90, 22);
             this.CboxColorMap.TabIndex = 30;
             this.CboxColorMap.Text = "pink";
             // 
@@ -379,9 +334,9 @@ namespace TimeSeriesAnalysis {
             "sym2",
             "gaus8",
             "cgau8"});
-            this.wav_nameCbox.Location = new System.Drawing.Point(131, 46);
+            this.wav_nameCbox.Location = new System.Drawing.Point(436, 21);
             this.wav_nameCbox.Name = "wav_nameCbox";
-            this.wav_nameCbox.Size = new System.Drawing.Size(80, 21);
+            this.wav_nameCbox.Size = new System.Drawing.Size(90, 22);
             this.wav_nameCbox.TabIndex = 29;
             this.wav_nameCbox.Text = "gaus8";
             // 
@@ -393,7 +348,7 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.wav_dtNum.Location = new System.Drawing.Point(132, 133);
+            this.wav_dtNum.Location = new System.Drawing.Point(437, 108);
             this.wav_dtNum.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -405,7 +360,7 @@ namespace TimeSeriesAnalysis {
             0,
             327680});
             this.wav_dtNum.Name = "wav_dtNum";
-            this.wav_dtNum.Size = new System.Drawing.Size(80, 21);
+            this.wav_dtNum.Size = new System.Drawing.Size(90, 22);
             this.wav_dtNum.TabIndex = 28;
             this.wav_dtNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.wav_dtNum.Value = new decimal(new int[] {
@@ -417,29 +372,29 @@ namespace TimeSeriesAnalysis {
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(20, 135);
+            this.label11.Location = new System.Drawing.Point(405, 110);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(106, 13);
+            this.label11.Size = new System.Drawing.Size(25, 14);
             this.label11.TabIndex = 27;
-            this.label11.Text = "Шаг по времени:";
+            this.label11.Text = "Δt:";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(9, 106);
+            this.label15.Location = new System.Drawing.Point(360, 81);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(117, 13);
+            this.label15.Size = new System.Drawing.Size(70, 14);
             this.label15.TabIndex = 25;
-            this.label15.Text = "Конечная частота:";
+            this.label15.Text = "Ending ω:";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(2, 77);
+            this.label14.Location = new System.Drawing.Point(354, 52);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(124, 13);
+            this.label14.Size = new System.Drawing.Size(77, 14);
             this.label14.TabIndex = 24;
-            this.label14.Text = "Начальная частота:";
+            this.label14.Text = "Starting ω:";
             // 
             // wav_endFreq
             // 
@@ -449,7 +404,7 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.wav_endFreq.Location = new System.Drawing.Point(132, 104);
+            this.wav_endFreq.Location = new System.Drawing.Point(437, 79);
             this.wav_endFreq.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -461,7 +416,7 @@ namespace TimeSeriesAnalysis {
             0,
             131072});
             this.wav_endFreq.Name = "wav_endFreq";
-            this.wav_endFreq.Size = new System.Drawing.Size(80, 21);
+            this.wav_endFreq.Size = new System.Drawing.Size(90, 22);
             this.wav_endFreq.TabIndex = 23;
             this.wav_endFreq.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.wav_endFreq.Value = new decimal(new int[] {
@@ -478,54 +433,55 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.wav_startFreq.Location = new System.Drawing.Point(131, 75);
+            this.wav_startFreq.Location = new System.Drawing.Point(436, 50);
             this.wav_startFreq.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
             this.wav_startFreq.Name = "wav_startFreq";
-            this.wav_startFreq.Size = new System.Drawing.Size(80, 21);
+            this.wav_startFreq.Size = new System.Drawing.Size(90, 22);
             this.wav_startFreq.TabIndex = 22;
             this.wav_startFreq.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             // 
             // waveletNameLbl
             // 
             this.waveletNameLbl.AutoSize = true;
-            this.waveletNameLbl.Location = new System.Drawing.Point(35, 49);
+            this.waveletNameLbl.Location = new System.Drawing.Point(335, 24);
             this.waveletNameLbl.Name = "waveletNameLbl";
-            this.waveletNameLbl.Size = new System.Drawing.Size(91, 13);
+            this.waveletNameLbl.Size = new System.Drawing.Size(95, 14);
             this.waveletNameLbl.TabIndex = 20;
-            this.waveletNameLbl.Text = "Тип вейвлета:";
+            this.waveletNameLbl.Text = "Wavelet type:";
             // 
             // waveletCheckbox
             // 
             this.waveletCheckbox.AutoSize = true;
             this.waveletCheckbox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.waveletCheckbox.Location = new System.Drawing.Point(16, 22);
+            this.waveletCheckbox.Location = new System.Drawing.Point(470, 244);
             this.waveletCheckbox.Name = "waveletCheckbox";
-            this.waveletCheckbox.Size = new System.Drawing.Size(136, 17);
+            this.waveletCheckbox.Size = new System.Drawing.Size(56, 18);
             this.waveletCheckbox.TabIndex = 14;
-            this.waveletCheckbox.Text = "Построить вейвлет";
+            this.waveletCheckbox.Text = "Build";
             this.waveletCheckbox.UseVisualStyleBackColor = true;
             // 
             // fourierGroup
             // 
             this.fourierGroup.Controls.Add(this.fourier_dtNum);
             this.fourierGroup.Controls.Add(this.fourier_logCheckbox);
+            this.fourierGroup.Controls.Add(this.fourierPBox);
             this.fourierGroup.Controls.Add(this.label16);
             this.fourierGroup.Controls.Add(this.label9);
             this.fourierGroup.Controls.Add(this.label8);
             this.fourierGroup.Controls.Add(this.fourierEndFreqNum);
             this.fourierGroup.Controls.Add(this.fourierStartFreqNum);
             this.fourierGroup.Controls.Add(this.fourierCheckbox);
-            this.fourierGroup.Font = new System.Drawing.Font("Verdana", 8.25F);
-            this.fourierGroup.Location = new System.Drawing.Point(670, 155);
+            this.fourierGroup.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.fourierGroup.Location = new System.Drawing.Point(360, 35);
             this.fourierGroup.Name = "fourierGroup";
-            this.fourierGroup.Size = new System.Drawing.Size(222, 165);
+            this.fourierGroup.Size = new System.Drawing.Size(532, 268);
             this.fourierGroup.TabIndex = 20;
             this.fourierGroup.TabStop = false;
-            this.fourierGroup.Text = "Спектр мощности Фурье";
+            this.fourierGroup.Text = "Fourier power spectrum";
             // 
             // fourier_dtNum
             // 
@@ -535,7 +491,7 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.fourier_dtNum.Location = new System.Drawing.Point(131, 105);
+            this.fourier_dtNum.Location = new System.Drawing.Point(436, 104);
             this.fourier_dtNum.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -547,7 +503,7 @@ namespace TimeSeriesAnalysis {
             0,
             327680});
             this.fourier_dtNum.Name = "fourier_dtNum";
-            this.fourier_dtNum.Size = new System.Drawing.Size(80, 21);
+            this.fourier_dtNum.Size = new System.Drawing.Size(90, 22);
             this.fourier_dtNum.TabIndex = 26;
             this.fourier_dtNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.fourier_dtNum.Value = new decimal(new int[] {
@@ -560,39 +516,39 @@ namespace TimeSeriesAnalysis {
             // 
             this.fourier_logCheckbox.AutoSize = true;
             this.fourier_logCheckbox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.fourier_logCheckbox.Location = new System.Drawing.Point(17, 132);
+            this.fourier_logCheckbox.Location = new System.Drawing.Point(352, 22);
             this.fourier_logCheckbox.Name = "fourier_logCheckbox";
-            this.fourier_logCheckbox.Size = new System.Drawing.Size(131, 17);
+            this.fourier_logCheckbox.Size = new System.Drawing.Size(98, 18);
             this.fourier_logCheckbox.TabIndex = 25;
-            this.fourier_logCheckbox.Text = "Логарифмический";
+            this.fourier_logCheckbox.Text = "Logarithmic";
             this.fourier_logCheckbox.UseVisualStyleBackColor = true;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(20, 107);
+            this.label16.Location = new System.Drawing.Point(405, 106);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(106, 13);
+            this.label16.Size = new System.Drawing.Size(25, 14);
             this.label16.TabIndex = 23;
-            this.label16.Text = "Шаг по времени:";
+            this.label16.Text = "Δt:";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(9, 78);
+            this.label9.Location = new System.Drawing.Point(360, 78);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(117, 13);
+            this.label9.Size = new System.Drawing.Size(70, 14);
             this.label9.TabIndex = 21;
-            this.label9.Text = "Конечная частота:";
+            this.label9.Text = "Ending ω:";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(2, 49);
+            this.label8.Location = new System.Drawing.Point(354, 49);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(124, 13);
+            this.label8.Size = new System.Drawing.Size(77, 14);
             this.label8.TabIndex = 20;
-            this.label8.Text = "Начальная частота:";
+            this.label8.Text = "Starting ω:";
             // 
             // fourierEndFreqNum
             // 
@@ -602,7 +558,7 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.fourierEndFreqNum.Location = new System.Drawing.Point(132, 76);
+            this.fourierEndFreqNum.Location = new System.Drawing.Point(436, 76);
             this.fourierEndFreqNum.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -614,7 +570,7 @@ namespace TimeSeriesAnalysis {
             0,
             131072});
             this.fourierEndFreqNum.Name = "fourierEndFreqNum";
-            this.fourierEndFreqNum.Size = new System.Drawing.Size(80, 21);
+            this.fourierEndFreqNum.Size = new System.Drawing.Size(90, 22);
             this.fourierEndFreqNum.TabIndex = 6;
             this.fourierEndFreqNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.fourierEndFreqNum.Value = new decimal(new int[] {
@@ -631,14 +587,14 @@ namespace TimeSeriesAnalysis {
             0,
             0,
             131072});
-            this.fourierStartFreqNum.Location = new System.Drawing.Point(132, 47);
+            this.fourierStartFreqNum.Location = new System.Drawing.Point(436, 47);
             this.fourierStartFreqNum.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
             this.fourierStartFreqNum.Name = "fourierStartFreqNum";
-            this.fourierStartFreqNum.Size = new System.Drawing.Size(80, 21);
+            this.fourierStartFreqNum.Size = new System.Drawing.Size(90, 22);
             this.fourierStartFreqNum.TabIndex = 5;
             this.fourierStartFreqNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             // 
@@ -646,11 +602,11 @@ namespace TimeSeriesAnalysis {
             // 
             this.fourierCheckbox.AutoSize = true;
             this.fourierCheckbox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.fourierCheckbox.Location = new System.Drawing.Point(20, 20);
+            this.fourierCheckbox.Location = new System.Drawing.Point(470, 244);
             this.fourierCheckbox.Name = "fourierCheckbox";
-            this.fourierCheckbox.Size = new System.Drawing.Size(128, 17);
+            this.fourierCheckbox.Size = new System.Drawing.Size(56, 18);
             this.fourierCheckbox.TabIndex = 0;
-            this.fourierCheckbox.Text = "Построить спектр";
+            this.fourierCheckbox.Text = "Build";
             this.fourierCheckbox.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -1257,22 +1213,22 @@ namespace TimeSeriesAnalysis {
             this.sourcePrefGBox.Controls.Add(this.label1);
             this.sourcePrefGBox.Controls.Add(this.pointsNum);
             this.sourcePrefGBox.Controls.Add(this.sourceColumnNum);
-            this.sourcePrefGBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sourcePrefGBox.Location = new System.Drawing.Point(912, 129);
+            this.sourcePrefGBox.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.sourcePrefGBox.Location = new System.Drawing.Point(912, 82);
             this.sourcePrefGBox.Name = "sourcePrefGBox";
             this.sourcePrefGBox.Size = new System.Drawing.Size(236, 202);
             this.sourcePrefGBox.TabIndex = 19;
             this.sourcePrefGBox.TabStop = false;
-            this.sourcePrefGBox.Text = "Настройки сигнала";
+            this.sourcePrefGBox.Text = "Signal settings";
             // 
             // sourceStepLbl
             // 
             this.sourceStepLbl.AutoSize = true;
-            this.sourceStepLbl.Location = new System.Drawing.Point(60, 51);
+            this.sourceStepLbl.Location = new System.Drawing.Point(105, 51);
             this.sourceStepLbl.Name = "sourceStepLbl";
-            this.sourceStepLbl.Size = new System.Drawing.Size(64, 13);
+            this.sourceStepLbl.Size = new System.Drawing.Size(25, 14);
             this.sourceStepLbl.TabIndex = 24;
-            this.sourceStepLbl.Text = "Step size:";
+            this.sourceStepLbl.Text = "Δt:";
             // 
             // sourceStepTxt
             // 
@@ -1283,7 +1239,7 @@ namespace TimeSeriesAnalysis {
             this.sourceStepTxt.ReadOnly = true;
             this.sourceStepTxt.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.sourceStepTxt.ShowSelectionMargin = true;
-            this.sourceStepTxt.Size = new System.Drawing.Size(80, 21);
+            this.sourceStepTxt.Size = new System.Drawing.Size(90, 21);
             this.sourceStepTxt.TabIndex = 23;
             this.sourceStepTxt.Text = "";
             // 
@@ -1293,9 +1249,9 @@ namespace TimeSeriesAnalysis {
             this.useTimeCheckbox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.useTimeCheckbox.Location = new System.Drawing.Point(6, 26);
             this.useTimeCheckbox.Name = "useTimeCheckbox";
-            this.useTimeCheckbox.Size = new System.Drawing.Size(144, 17);
+            this.useTimeCheckbox.Size = new System.Drawing.Size(142, 18);
             this.useTimeCheckbox.TabIndex = 3;
-            this.useTimeCheckbox.Text = "1-й столбец - время";
+            this.useTimeCheckbox.Text = "Time in 1st column";
             this.useTimeCheckbox.UseVisualStyleBackColor = true;
             this.useTimeCheckbox.CheckedChanged += new System.EventHandler(this.useTimeCheckbox_CheckedChanged);
             // 
@@ -1304,7 +1260,7 @@ namespace TimeSeriesAnalysis {
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(59, 136);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(65, 13);
+            this.label7.Size = new System.Drawing.Size(72, 14);
             this.label7.TabIndex = 22;
             this.label7.Text = "End point:";
             // 
@@ -1313,7 +1269,7 @@ namespace TimeSeriesAnalysis {
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(52, 105);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.Size = new System.Drawing.Size(79, 14);
             this.label6.TabIndex = 21;
             this.label6.Text = "Start point:";
             // 
@@ -1326,7 +1282,7 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             this.endPointNum.Name = "endPointNum";
-            this.endPointNum.Size = new System.Drawing.Size(80, 21);
+            this.endPointNum.Size = new System.Drawing.Size(90, 22);
             this.endPointNum.TabIndex = 6;
             this.endPointNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.endPointNum.Value = new decimal(new int[] {
@@ -1339,7 +1295,7 @@ namespace TimeSeriesAnalysis {
             // 
             this.startPointNum.Location = new System.Drawing.Point(135, 105);
             this.startPointNum.Name = "startPointNum";
-            this.startPointNum.Size = new System.Drawing.Size(80, 21);
+            this.startPointNum.Size = new System.Drawing.Size(90, 22);
             this.startPointNum.TabIndex = 5;
             this.startPointNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             // 
@@ -1348,7 +1304,7 @@ namespace TimeSeriesAnalysis {
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(35, 165);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.Size = new System.Drawing.Size(98, 14);
             this.label2.TabIndex = 19;
             this.label2.Text = "Each N points:";
             // 
@@ -1357,7 +1313,7 @@ namespace TimeSeriesAnalysis {
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(17, 78);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 13);
+            this.label1.Size = new System.Drawing.Size(114, 14);
             this.label1.TabIndex = 18;
             this.label1.Text = "SIgnal column #:";
             // 
@@ -1375,7 +1331,7 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             this.pointsNum.Name = "pointsNum";
-            this.pointsNum.Size = new System.Drawing.Size(80, 21);
+            this.pointsNum.Size = new System.Drawing.Size(90, 22);
             this.pointsNum.TabIndex = 7;
             this.pointsNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.pointsNum.Value = new decimal(new int[] {
@@ -1394,7 +1350,7 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             this.sourceColumnNum.Name = "sourceColumnNum";
-            this.sourceColumnNum.Size = new System.Drawing.Size(80, 21);
+            this.sourceColumnNum.Size = new System.Drawing.Size(90, 22);
             this.sourceColumnNum.TabIndex = 4;
             this.sourceColumnNum.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.sourceColumnNum.Value = new decimal(new int[] {
@@ -1406,7 +1362,7 @@ namespace TimeSeriesAnalysis {
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(932, 349);
+            this.label20.Location = new System.Drawing.Point(941, 349);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(101, 14);
             this.label20.TabIndex = 26;
@@ -1426,11 +1382,11 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             this.numPreviewWidth.Name = "numPreviewWidth";
-            this.numPreviewWidth.Size = new System.Drawing.Size(80, 22);
+            this.numPreviewWidth.Size = new System.Drawing.Size(90, 22);
             this.numPreviewWidth.TabIndex = 23;
             this.numPreviewWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.numPreviewWidth.Value = new decimal(new int[] {
-            320,
+            215,
             0,
             0,
             0});
@@ -1438,7 +1394,7 @@ namespace TimeSeriesAnalysis {
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(929, 378);
+            this.label21.Location = new System.Drawing.Point(935, 377);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(107, 14);
             this.label21.TabIndex = 25;
@@ -1458,18 +1414,40 @@ namespace TimeSeriesAnalysis {
             0,
             0});
             this.numPreviewHeight.Name = "numPreviewHeight";
-            this.numPreviewHeight.Size = new System.Drawing.Size(80, 22);
+            this.numPreviewHeight.Size = new System.Drawing.Size(90, 22);
             this.numPreviewHeight.TabIndex = 24;
             this.numPreviewHeight.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.numPreviewHeight.Value = new decimal(new int[] {
-            230,
+            160,
             0,
             0,
             0});
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.signalPBox);
+            this.groupBox1.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox1.Location = new System.Drawing.Point(8, 34);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(340, 269);
+            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Signal plot";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.poincareMapPBox);
+            this.groupBox2.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox2.Location = new System.Drawing.Point(8, 309);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(340, 268);
+            this.groupBox2.TabIndex = 24;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Attractor [x(n) vs x(n+1)]";
+            // 
             // mainForm
             // 
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.SystemColors.GrayText;
             this.ClientSize = new System.Drawing.Size(1160, 635);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.numPreviewWidth);
@@ -1483,13 +1461,12 @@ namespace TimeSeriesAnalysis {
             this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainForm";
-            this.Text = "Signal Analyser";
+            this.Text = "Timeseries analyser";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.poincareMapPBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.signalPBox)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.waveletPBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fourierPBox)).EndInit();
             this.waveletGroup.ResumeLayout(false);
@@ -1535,6 +1512,8 @@ namespace TimeSeriesAnalysis {
             ((System.ComponentModel.ISupportInitialize)(this.sourceColumnNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPreviewWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPreviewHeight)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1548,8 +1527,6 @@ namespace TimeSeriesAnalysis {
         private PictureBox signalPBox;
         private Label fileNameLbl;
         private Button saveBtn;
-        private Label sigPlotLbl;
-        private Label phasePortraitLbl;
         private TabControl tabControl1;
         private TabPage tabPage1;
         private GroupBox fourierGroup;
@@ -1587,9 +1564,7 @@ namespace TimeSeriesAnalysis {
         private Label waveletNameLbl;
         private CheckBox waveletCheckbox;
         private PictureBox fourierPBox;
-        private Label label12;
         private PictureBox waveletPBox;
-        private Label label13;
         private GroupBox leInTimeGroup;
         private Button lyapunovRedrawBtn;
         private Label label17;
@@ -1634,6 +1609,8 @@ namespace TimeSeriesAnalysis {
         private NumericUpDown numPreviewWidth;
         private Label label21;
         private NumericUpDown numPreviewHeight;
+        private GroupBox groupBox2;
+        private GroupBox groupBox1;
     }
 }
 
