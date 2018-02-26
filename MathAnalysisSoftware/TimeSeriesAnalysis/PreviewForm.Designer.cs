@@ -76,6 +76,7 @@ namespace TimeSeriesAnalysis
             // 
             this.ClientSize = new System.Drawing.Size(1008, 561);
             this.Controls.Add(this.previewPBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(133, 100);
             this.Name = "PreviewForm";

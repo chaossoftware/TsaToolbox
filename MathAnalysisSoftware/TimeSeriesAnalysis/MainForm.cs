@@ -49,8 +49,8 @@ namespace TimeSeriesAnalysis {
                 return;
             }
 
-            resultText.Text = "CALCULATING...";
-            resultText.BackColor = Color.Red;
+            resultText.Text = "Calculating...";
+            resultText.BackColor = Color.OrangeRed;
 
             Thread newThread = new Thread(calculateLyapunovExponent);
             newThread.Start();
