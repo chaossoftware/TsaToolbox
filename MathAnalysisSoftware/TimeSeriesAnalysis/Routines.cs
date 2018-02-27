@@ -1,4 +1,5 @@
 ﻿using MathLib;
+using MathLib.Data;
 using MathLib.DrawEngine;
 using MathLib.DrawEngine.Charts;
 using MathLib.IO;
@@ -23,7 +24,7 @@ namespace TimeSeriesAnalysis
 
 
         public MapPlot GetPoincarePlot(Size size, int thickness) {
-            return new MapPlot(Ext.GeneratePseudoPoincareMapData(sourceData.TimeSeries.ValY), size, thickness);
+            return new MapPlot(Ext.GeneratePseudoPoincareMapData(sourceData.TimeSeries.YValues), size, thickness);
         }
 
 
@@ -38,7 +39,7 @@ namespace TimeSeriesAnalysis
 
                 for (int i = startPoint; i < range; i++)
                 {
-                    plotSeries.AddDataPoint(lyapunov.slope.ListDataPoints[i].X, lyapunov.slope.ListDataPoints[i].Y);
+                    plotSeries.AddDataPoint(lyapunov.slope.DataPoints[i].X, lyapunov.slope.DataPoints[i].Y);
                 }
 
                 lyap = new SignalPlot(plotSeries, size, 1);
@@ -49,13 +50,13 @@ namespace TimeSeriesAnalysis
                 lyap = new MultiSignalPlot(size, 1);
                 ((MultiSignalPlot)lyap).AddDataSeries(lyapunov.slope, Color.SteelBlue);
                 DataSeries markerSeries = new DataSeries();
-                markerSeries.AddDataPoint(lyapunov.slope.ListDataPoints[startPoint].X, lyapunov.slope.ListDataPoints[startPoint].Y);
-                markerSeries.AddDataPoint(lyapunov.slope.ListDataPoints[range - 1].X, lyapunov.slope.ListDataPoints[range - 1].Y);
+                markerSeries.AddDataPoint(lyapunov.slope.DataPoints[startPoint].X, lyapunov.slope.DataPoints[startPoint].Y);
+                markerSeries.AddDataPoint(lyapunov.slope.DataPoints[range - 1].X, lyapunov.slope.DataPoints[range - 1].Y);
                 ((MultiSignalPlot)lyap).AddDataSeries(markerSeries, Color.Red);
                 lyap.LabelY = "Slope";
 
                 result = string.Format("{0:F5}",
-                    (lyapunov.slope.ListDataPoints[endPoint].Y - lyapunov.slope.ListDataPoints[startPoint].Y) / (lyapunov.slope.ListDataPoints[endPoint].X - lyapunov.slope.ListDataPoints[startPoint].X)
+                    (lyapunov.slope.DataPoints[endPoint].Y - lyapunov.slope.DataPoints[startPoint].Y) / (lyapunov.slope.DataPoints[endPoint].X - lyapunov.slope.DataPoints[startPoint].X)
                 );
             }
             return lyap;
@@ -64,7 +65,7 @@ namespace TimeSeriesAnalysis
 
         public SignalPlot GetFourierPlot(Size size, int thickness, double statrFreq, double endFreq, double dt, int logScale) {
 
-            DataSeries fourierSeries = Fourier.GetFourier(sourceData.TimeSeries.ValY, statrFreq, endFreq, dt, logScale);
+            DataSeries fourierSeries = Fourier.GetFourier(sourceData.TimeSeries.YValues, statrFreq, endFreq, dt, logScale);
             var fourierPlot = new SignalPlot(fourierSeries, size, thickness);
             fourierPlot.LabelY = "F(ω)";
             fourierPlot.LabelX = "ω";
@@ -79,7 +80,7 @@ namespace TimeSeriesAnalysis
             MWCharArray mw_fileName = new MWCharArray(tmpFileName);
             MWCharArray mw_wname = new MWCharArray(wName);
             MWCharArray mw_colMap = new MWCharArray(colMap);
-            MWNumericArray mw_signalArray = new MWNumericArray(sourceData.TimeSeries.ValY);
+            MWNumericArray mw_signalArray = new MWNumericArray(sourceData.TimeSeries.YValues);
 
             signalAnalysis.Get2DWavelet(mw_signalArray, mw_Folder, mw_fileName, mw_wname, tStart, tEnd, startFreq, endFreq, dt, mw_colMap, width, height);
         }

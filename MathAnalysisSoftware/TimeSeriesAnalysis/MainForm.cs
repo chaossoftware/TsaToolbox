@@ -107,7 +107,7 @@ namespace TimeSeriesAnalysis {
         }
 
         private void fillUiWithData() {
-            fileNameLbl.Text = routines.sourceData.GetInfo().Replace("\n", " ");
+            fileNameLbl.Text = routines.sourceData.ToString().Replace("\n", " ");
 
             sourceColumnNum.Maximum = routines.sourceData.columnsCount;
             sourceColumnNum.Minimum = 1;
@@ -149,8 +149,8 @@ namespace TimeSeriesAnalysis {
 
             if (waveletCheckbox.Checked == true) {
                 waveletPBox.Image = null;
-                double tStart = routines.sourceData.TimeSeries.PointMin.X;
-                double tEnd = routines.sourceData.TimeSeries.PointMax.X;
+                double tStart = routines.sourceData.TimeSeries.Min.X;
+                double tEnd = routines.sourceData.TimeSeries.Max.X;
 
                 try
                 {
@@ -249,8 +249,8 @@ namespace TimeSeriesAnalysis {
             pf.Show();
             try
             {
-                double tStart = routines.sourceData.TimeSeries.PointMin.X;
-                double tEnd = routines.sourceData.TimeSeries.PointMax.X;
+                double tStart = routines.sourceData.TimeSeries.Min.X;
+                double tEnd = routines.sourceData.TimeSeries.Max.X;
                 string fName = "waveletPreview.tmp";
                 routines.BuildWavelet(fName, wav_nameCbox.Text, tStart, tEnd, GetDoubleFromUI(wav_startFreq), GetDoubleFromUI(wav_endFreq), GetDoubleFromUI(wav_dtNum), CboxColorMap.Text, waveletPBox.Width, waveletPBox.Height);
                 GetImageFromFile(pf.previewPBox, fName);
@@ -282,7 +282,7 @@ namespace TimeSeriesAnalysis {
 
             if (lyap_calc_Rad_wolf.Checked)
                 routines.lyapunov = new WolfMethod(
-                    routines.sourceData.TimeSeries.ValY,
+                    routines.sourceData.TimeSeries.YValues,
                     dim,
                     tau,
                     GetDoubleFromUI(stepNum),
@@ -293,7 +293,7 @@ namespace TimeSeriesAnalysis {
 
             if (lyap_calc_Rad_rosenstein.Checked)
                 routines.lyapunov = new RosensteinMethod(
-                    routines.sourceData.TimeSeries.ValY,
+                    routines.sourceData.TimeSeries.YValues,
                     dim,
                     tau, 
                     (int)rosStepsNum.Value, 
@@ -303,7 +303,7 @@ namespace TimeSeriesAnalysis {
 
             if (lyap_calc_Rad_kantz.Checked)
                 routines.lyapunov = new KantzMethod(
-                    routines.sourceData.TimeSeries.ValY,
+                    routines.sourceData.TimeSeries.YValues,
                     dim,
                     tau,
                     (int)lyap_k_Num_maxiter.Value,
