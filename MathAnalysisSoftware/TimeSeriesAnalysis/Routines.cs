@@ -35,7 +35,7 @@ namespace TimeSeriesAnalysis
                 
             if (isWolf)
             {
-                DataSeries plotSeries = new DataSeries();
+                Timeseries plotSeries = new Timeseries();
 
                 for (int i = startPoint; i < range; i++)
                 {
@@ -49,7 +49,7 @@ namespace TimeSeriesAnalysis
             {
                 lyap = new MultiSignalPlot(size, 1);
                 ((MultiSignalPlot)lyap).AddDataSeries(lyapunov.slope, Color.SteelBlue);
-                DataSeries markerSeries = new DataSeries();
+                Timeseries markerSeries = new Timeseries();
                 markerSeries.AddDataPoint(lyapunov.slope.DataPoints[startPoint].X, lyapunov.slope.DataPoints[startPoint].Y);
                 markerSeries.AddDataPoint(lyapunov.slope.DataPoints[range - 1].X, lyapunov.slope.DataPoints[range - 1].Y);
                 ((MultiSignalPlot)lyap).AddDataSeries(markerSeries, Color.Red);
@@ -65,7 +65,7 @@ namespace TimeSeriesAnalysis
 
         public SignalPlot GetFourierPlot(Size size, int thickness, double statrFreq, double endFreq, double dt, int logScale) {
 
-            DataSeries fourierSeries = Fourier.GetFourier(sourceData.TimeSeries.YValues, statrFreq, endFreq, dt, logScale);
+            Timeseries fourierSeries = Fourier.GetFourier(sourceData.TimeSeries.YValues, statrFreq, endFreq, dt, logScale);
             var fourierPlot = new SignalPlot(fourierSeries, size, thickness);
             fourierPlot.LabelY = "F(ω)";
             fourierPlot.LabelX = "ω";

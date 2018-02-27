@@ -8,6 +8,7 @@ using MathLib.DrawEngine.Charts;
 using MathLib.IO;
 using MathLib.MathMethods.Lyapunov;
 using System.Globalization;
+using MathLib.Data;
 
 namespace TimeSeriesAnalysis {
     public partial class mainForm : Form {
@@ -32,8 +33,9 @@ namespace TimeSeriesAnalysis {
 
             cleanUp();
 
-            try {
-                routines.sourceData = DataReader.readTimeSeries(fName);
+            try
+            {
+                routines.sourceData = new SourceData(fName);
             }
             catch (ArgumentException ex) {
                 MessageBox.Show("Unable to read file file:" + ex.Message);
@@ -77,10 +79,10 @@ namespace TimeSeriesAnalysis {
                 return;
             }
 
-            string fName = routines.sourceData.folder + "\\" + routines.sourceData.fileName + "_rez" + "\\" + routines.sourceData.fileName;
+            string fName = routines.sourceData.Folder + "\\" + routines.sourceData.FileName + "_rez" + "\\" + routines.sourceData.FileName;
 
-            if (!Directory.Exists(routines.sourceData.folder + "\\" + routines.sourceData.fileName + "_rez")) {
-                Directory.CreateDirectory(routines.sourceData.folder + "\\" + routines.sourceData.fileName + "_rez");
+            if (!Directory.Exists(routines.sourceData.Folder + "\\" + routines.sourceData.FileName + "_rez")) {
+                Directory.CreateDirectory(routines.sourceData.Folder + "\\" + routines.sourceData.FileName + "_rez");
             }
 
             if (signalPBox.Image != null && poincareMapPBox.Image != null) {
@@ -109,13 +111,13 @@ namespace TimeSeriesAnalysis {
         private void fillUiWithData() {
             fileNameLbl.Text = routines.sourceData.ToString().Replace("\n", " ");
 
-            sourceColumnNum.Maximum = routines.sourceData.columnsCount;
+            sourceColumnNum.Maximum = routines.sourceData.ColumnsCount;
             sourceColumnNum.Minimum = 1;
 
-            startPointNum.Maximum = routines.sourceData.timeSeriesLength - 1;
+            startPointNum.Maximum = routines.sourceData.Length - 1;
 
-            endPointNum.Maximum = routines.sourceData.timeSeriesLength;
-            endPointNum.Value = routines.sourceData.timeSeriesLength;
+            endPointNum.Maximum = routines.sourceData.Length;
+            endPointNum.Value = routines.sourceData.Length;
         }
 
 
