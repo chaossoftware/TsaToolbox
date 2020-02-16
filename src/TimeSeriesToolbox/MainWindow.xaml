@@ -1,0 +1,130 @@
+﻿<Window x:Class="TimeSeriesToolbox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeSeriesToolbox"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="680" Width="1200">
+    <Grid>
+        <TabControl x:Name="toolboxTabs" TabStripPlacement="Left" Margin="0,0,0,23">
+            <TabItem x:Name="tabFile" Header="Timeseries" Height="60">
+                <Grid>
+                    <GroupBox Header="Data file" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                        <Grid>
+                            <CheckBox x:Name="ts_parameterizedOpenCbox" Margin="0,10,0,0" Content="Parameterized open" Height="18" VerticalAlignment="Top" FlowDirection="RightToLeft" Unchecked="ts_parameterizedOpenCbox_Unchecked" Checked="ts_parameterizedOpenCbox_Checked"/>
+                            <TextBlock Text="Lines to skip:" Margin="0,40,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_LinesToSkipTbox" Style="{StaticResource ParameterValue}" IsEnabled="False" Margin="0,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Lines to read:" Margin="0,70,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_LinesToReadTbox" Style="{StaticResource ParameterValue}" IsEnabled="False" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <Button x:Name="ts_btnOpenFile" Content="Open" HorizontalAlignment="Right" Margin="0,100,0,0" VerticalAlignment="Top" Width="75" Click="ts_btnOpenFile_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Timeseries settings" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                        <Grid>
+                            <CheckBox x:Name="ts_timestampColumnCbox" Margin="0,0,0,0" Content="Treat 1st column as timestamp" Height="18" VerticalAlignment="Top" FlowDirection="RightToLeft"/>
+                            <TextBlock Text="Timeseries column:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_tsColumnTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Start point:" Margin="0,60,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_startPointTbox" Style="{StaticResource ParameterValue}" Margin="0,60,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="End point:" Margin="0,90,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_endPointTbox" Style="{StaticResource ParameterValue}" Margin="0,90,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Each N points:" Margin="0,120,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_eachNPointsTbox" Style="{StaticResource ParameterValue}" Margin="0,120,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <Button x:Name="ts_setTimeseriesBtn" Content="Set timeseries" HorizontalAlignment="Right" Margin="0,150,0,0" VerticalAlignment="Top" Width="100" Click="ts_setTimeseriesBtn_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Pveview window settings" HorizontalAlignment="Left" Margin="10,408,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                        <Grid>
+                            <TextBlock Text="Preview width:" Margin="0,00,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_previewWidthTbox" Style="{StaticResource ParameterValue}" Margin="0,0,0,0" Text="215" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Preview Height:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_previewHeightTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="160" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabCharts" Header="Charts" Height="60">
+                <Grid/>
+            </TabItem>
+            <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
+                <Grid/>
+            </TabItem>
+            <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
+                <Grid>
+                    <Button x:Name="le_calculateBtn"  Content="Calculate" HorizontalAlignment="Left" Margin="66,270,0,0" VerticalAlignment="Top" Width="75"/>
+                    <TextBox x:Name="le_logTbox" Margin="0,10,10,10" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280"/>
+                    <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBox x:Name="le_eDimTbox" Style="{StaticResource ParameterValueWide}" Text="2" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Reconstr. delay:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_tauTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Min. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_epsMinTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <RadioButton x:Name="le_rosRad" Content="Rosenstein" HorizontalAlignment="Left" Margin="189,10,0,0" VerticalAlignment="Top" Checked="le_rosRad_Checked" Unchecked="le_rosRad_Unchecked"/>
+                    <GroupBox x:Name="le_rosGbox" Visibility="Hidden" HorizontalAlignment="Right" Margin="0,30,730,0" VerticalAlignment="Top" Width="140" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBox x:Name="le_r_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Theiler window:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_r_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <RadioButton x:Name="le_kantzRad" Content="Kantz" HorizontalAlignment="Left" Margin="334,10,0,0" VerticalAlignment="Top" Checked="le_kantzRad_Checked" Unchecked="le_kantzRad_Unchecked"/>
+                    <GroupBox x:Name="le_kantzGbox" Visibility="Hidden" HorizontalAlignment="Right" Margin="0,30,585,0" VerticalAlignment="Top" Width="140" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBox x:Name="le_k_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Theiler window:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_k_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Scales:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_k_scalesTbox" Style="{StaticResource ParameterValueWide}" Text="5" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_k_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <RadioButton x:Name="le_wolfRad" Content="Wolf" HorizontalAlignment="Left" Margin="479,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="6.651,0.733" Checked="le_wolfRad_Checked" Unchecked="le_wolfRad_Unchecked"/>
+                    <GroupBox x:Name="le_wolfGbox" Visibility="Hidden" HorizontalAlignment="Right" Margin="0,30,440,0" VerticalAlignment="Top" Width="140" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBox x:Name="le_w_dtTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Evolution steps:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_w_evolStepsTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_w_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <RadioButton x:Name="le_ssRad" Content="Sano-Sawada" HorizontalAlignment="Left" Margin="624,10,0,0" VerticalAlignment="Top" Checked="le_ssRad_Checked" Unchecked="le_ssRad_Unchecked"/>
+                    <GroupBox x:Name="le_ssGbox" Visibility="Hidden" Margin="0,30,295,0" VerticalAlignment="Top" Padding="10" HorizontalAlignment="Right" Width="140">
+                        <StackPanel>
+                            <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBox x:Name="le_ss_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Scale inc. factor:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_ss_scaleFactorTbox" Style="{StaticResource ParameterValueWide}" Text="1.20" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Min. neighbors:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="le_ss_minNeighbTbox" Style="{StaticResource ParameterValueWide}" Text="30" HorizontalAlignment="Center"/>
+                            <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom">
+            <TextBlock x:Name="statusFileInfoText" Width="500"/>
+            <Separator/>
+            <TextBlock x:Name="statusTsInfoText" Width="300"/>
+            <Separator/>
+            <TextBlock x:Name="statusDtText" Text="Δt:"/>
+            <TextBox x:Name="statusDtTbox" Width="80"/>
+            <Separator/>
+            <TextBlock HorizontalAlignment="Right" Width="Auto">
+                <Hyperlink NavigateUri="https://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/win64/MCR_R2016b_win64_installer.exe">
+                    MCR 2016b (for Fourier and Wavelets)
+                </Hyperlink>
+            </TextBlock>
+        </StatusBar>
+    </Grid>
+</Window>
