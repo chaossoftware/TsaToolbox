@@ -90,13 +90,13 @@ namespace TimeSeriesToolbox
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show("Unable to read file file:" + ex.Message);
+                MessageBox.Show("Unable to read file:" + ex.Message);
             }
         }
 
         private void CleanUp()
         {
-            //routines.SourceData = null;
+            sourceData = null;
             //chartSignal.ClearChart();
             //chartPoincare.ClearChart();
             //chartFft.ClearChart();

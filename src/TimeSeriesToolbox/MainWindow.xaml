@@ -34,7 +34,7 @@
                             <Button x:Name="ts_setTimeseriesBtn" Content="Set timeseries" HorizontalAlignment="Right" Margin="0,150,0,0" VerticalAlignment="Top" Width="100" Click="ts_setTimeseriesBtn_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Pveview window settings" HorizontalAlignment="Left" Margin="10,408,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                    <GroupBox Header="Pveview window settings" HorizontalAlignment="Left" Margin="10,420,0,0" VerticalAlignment="Top" Width="213" Padding="10">
                         <Grid>
                             <TextBlock Text="Preview width:" Margin="0,00,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                             <TextBox x:Name="ts_previewWidthTbox" Style="{StaticResource ParameterValue}" Margin="0,0,0,0" Text="215" VerticalAlignment="Top" HorizontalAlignment="Right"/>
@@ -45,15 +45,17 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
-                <Grid/>
+                <Grid>
+                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0"/>
+                </Grid>
             </TabItem>
             <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
                 <Grid/>
             </TabItem>
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
                 <Grid>
-                    <Button x:Name="le_calculateBtn"  Content="Calculate" HorizontalAlignment="Left" Margin="66,270,0,0" VerticalAlignment="Top" Width="75"/>
-                    <TextBox x:Name="le_logTbox" Margin="0,10,10,10" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280"/>
+                    <Button x:Name="le_calculateBtn"  Content="Calculate" HorizontalAlignment="Left" Margin="974,10,0,0" VerticalAlignment="Top" Width="75"/>
+                    <TextBox x:Name="le_logTbox" Margin="0,35,10,38" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545"/>
                     <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -109,6 +111,7 @@
                             <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
+                    <TextBox x:Name="le_resultTbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" Margin="769,587,0,0"/>
                 </Grid>
             </TabItem>
         </TabControl>
