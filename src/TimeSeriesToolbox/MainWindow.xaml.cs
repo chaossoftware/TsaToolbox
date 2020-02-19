@@ -23,37 +23,16 @@ namespace TimeSeriesToolbox
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly LyapunovExponents _lyapunov;
+        private SourceData sourceData;
+        private Charts charts;
+
         public MainWindow()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             InitializeComponent();
-        }
-
-        private SourceData sourceData;
-
-        private double GetDoubleParam(TextBox textBox)
-        {
-            try
-            {
-                return Convert.ToDouble(textBox.Text, CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                throw new ArgumentException($"Parameter {textBox.Name} should be specified as 'double'");
-            }
-        }
-
-        private int GetIntParam(TextBox textBox)
-        {
-            try
-            {
-                return Convert.ToInt32(textBox.Text, CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                throw new ArgumentException($"Parameter {textBox.Name} should be specified as 'integer'");
-            }
+            _lyapunov = new LyapunovExponents(this);
         }
 
         private void ts_btnOpenFile_Click(object sender, RoutedEventArgs e)
@@ -78,8 +57,8 @@ namespace TimeSeriesToolbox
                 {
                     sourceData = new SourceData(
                         openFileDialog.FileName,
-                        GetIntParam(ts_LinesToSkipTbox), 
-                        GetIntParam(ts_LinesToReadTbox));
+                        ts_LinesToSkipTbox.ReadInt(), 
+                        ts_LinesToReadTbox.ReadInt());
                 }
                 else
                 {
@@ -122,10 +101,10 @@ namespace TimeSeriesToolbox
             }
 
             sourceData.SetTimeSeries(
-                GetIntParam(ts_tsColumnTbox) - 1,
-                GetIntParam(ts_startPointTbox) - 1,
-                GetIntParam(ts_endPointTbox) - 1,
-                GetIntParam(ts_eachNPointsTbox),
+                ts_tsColumnTbox.ReadInt() - 1,
+                ts_startPointTbox.ReadInt() - 1,
+                ts_endPointTbox.ReadInt() - 1,
+                ts_eachNPointsTbox.ReadInt(),
                 ts_timestampColumnCbox.IsChecked.Value
             );
 
@@ -148,6 +127,15 @@ namespace TimeSeriesToolbox
         {
             ts_LinesToSkipTbox.IsEnabled = true;
             ts_LinesToReadTbox.IsEnabled = true;
+        }
+
+        private void ts_setTimeseriesBtn_Click(object sender, RoutedEventArgs e) =>
+            RefreshTimeSeries();
+
+        private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => _lyapunov.Calculate(sourceData.TimeSeries.YValues))
+                    .Start();
         }
 
         private void le_rosRad_Checked(object sender, RoutedEventArgs e) =>
@@ -174,7 +162,5 @@ namespace TimeSeriesToolbox
         private void le_ssRad_Unchecked(object sender, RoutedEventArgs e) =>
             le_ssGbox.Visibility = Visibility.Hidden;
 
-        private void ts_setTimeseriesBtn_Click(object sender, RoutedEventArgs e) =>
-            RefreshTimeSeries();
     }
 }

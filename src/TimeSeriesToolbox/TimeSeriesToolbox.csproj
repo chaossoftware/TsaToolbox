@@ -62,6 +62,7 @@
     <Compile Include="Charts.cs" />
     <Compile Include="LyapunovExponents.cs" />
     <Compile Include="StringData.cs" />
+    <Compile Include="TextBoxExtension.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

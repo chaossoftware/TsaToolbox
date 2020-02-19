@@ -54,7 +54,7 @@
             </TabItem>
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
                 <Grid>
-                    <Button x:Name="le_calculateBtn"  Content="Calculate" HorizontalAlignment="Left" Margin="974,10,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="le_calculateBtn"  Content="Calculate" HorizontalAlignment="Left" Margin="974,10,0,0" VerticalAlignment="Top" Width="75" Click="le_calculateBtn_Click"/>
                     <TextBox x:Name="le_logTbox" Margin="0,35,10,38" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545"/>
                     <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
