@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:TimeSeriesToolbox"
         mc:Ignorable="d"
         Title="MainWindow" Height="680" Width="1200">
@@ -47,6 +48,14 @@
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
                 <Grid>
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0"/>
+                    <lvc:CartesianChart Series="{Binding SeriesCollection}" HorizontalAlignment="Left" Width="373" Height="275" VerticalAlignment="Top" >
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                    </lvc:CartesianChart>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
