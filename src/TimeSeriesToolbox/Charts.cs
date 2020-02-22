@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TimeSeriesToolbox
 {
-    internal class Charts
+    internal class Charts1
     {
     }
 }

@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:TimeSeriesToolbox"
+        xmlns:charts="clr-namespace:TimeSeriesToolbox.Charts"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="680" Width="1200">
     <Grid>
@@ -47,19 +48,16 @@
             </TabItem>
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
                 <Grid>
-                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0"/>
-                    <lvc:CartesianChart Series="{Binding SeriesCollection}" HorizontalAlignment="Left" Width="373" Height="275" VerticalAlignment="Top" >
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                    </lvc:CartesianChart>
+                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0" Click="ch_buildBtn_Click"/>
+                    <charts:SciLineChart x:Name="ch_SignalChart" AxisX="t" AxisY="f(t)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" />
+                    <charts:SciScatterChart x:Name="ch_PseudoPoincareChart" AxisX="f(t)" AxisY="f(t+1)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="454,10,0,0" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
-                <Grid/>
+                <Grid>
+                    <Button x:Name="tsp_autocorBtn" Content="Autocorrelation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="10,10,0,0" Click="tsp_autocorBtn_Click"/>
+                    <charts:SciLineChart x:Name="tsp_autocorChart" AxisX="t" AxisY="autocorrelation" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,35,0,0" />
+                </Grid>
             </TabItem>
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
                 <Grid>

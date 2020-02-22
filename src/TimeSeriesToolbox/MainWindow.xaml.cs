@@ -1,4 +1,8 @@
-﻿using MathLib.Data;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using MathLib.Data;
+using MathLib.NumericalMethods;
+using MathLib.Transform;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -25,7 +29,7 @@ namespace TimeSeriesToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private SourceData sourceData;
-        private Charts charts;
+        //private Charts charts;
 
         public MainWindow()
         {
@@ -66,6 +70,8 @@ namespace TimeSeriesToolbox
                 }
 
                 FillUiWithData();
+
+                RefreshTimeSeries();
             }
             catch (ArgumentException ex)
             {
@@ -76,8 +82,9 @@ namespace TimeSeriesToolbox
         private void CleanUp()
         {
             sourceData = null;
-            //chartSignal.ClearChart();
-            //chartPoincare.ClearChart();
+            ch_SignalChart.Clear();
+            ch_PseudoPoincareChart.Clear();
+
             //chartFft.ClearChart();
             //chartLyapunov.ClearChart();
 
@@ -162,5 +169,23 @@ namespace TimeSeriesToolbox
         private void le_ssRad_Unchecked(object sender, RoutedEventArgs e) =>
             le_ssGbox.Visibility = Visibility.Hidden;
 
+        private void ch_buildBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ch_SignalChart.Clear();
+            ch_SignalChart.AddTimeSeries(sourceData.TimeSeries);
+
+            ch_PseudoPoincareChart.Clear();
+            var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
+            ch_PseudoPoincareChart.AddTimeSeries(pPoincare);
+        }
+
+        private void tsp_autocorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var autoCor = new AutoCorrelationFunction()
+                .GetAutoCorrelationOfSeries(sourceData.TimeSeries.YValues);
+
+            tsp_autocorChart.Clear();
+            tsp_autocorChart.AddTimeSeries(new Timeseries(autoCor));
+        }
     }
 }
