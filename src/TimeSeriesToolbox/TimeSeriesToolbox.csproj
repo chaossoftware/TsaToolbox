@@ -66,6 +66,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Charts.cs" />
+    <Compile Include="Charts\SciLineChartPreview.xaml.cs">
+      <DependentUpon>SciLineChartPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Charts\SciScatterChart.xaml.cs">
       <DependentUpon>SciScatterChart.xaml</DependentUpon>
     </Compile>
@@ -73,8 +76,15 @@
     <Compile Include="Charts\SciLineChart.xaml.cs">
       <DependentUpon>SciLineChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PreviewForm.xaml.cs">
+      <DependentUpon>PreviewForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StringData.cs" />
     <Compile Include="TextBoxExtension.cs" />
+    <Page Include="Charts\SciLineChartPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Charts\SciScatterChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +102,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Charts\SciLineChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PreviewForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

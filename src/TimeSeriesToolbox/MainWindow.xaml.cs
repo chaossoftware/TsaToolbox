@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeSeriesToolbox.Charts;
 
 namespace TimeSeriesToolbox
 {
@@ -186,6 +187,16 @@ namespace TimeSeriesToolbox
 
             tsp_autocorChart.Clear();
             tsp_autocorChart.AddTimeSeries(new Timeseries(autoCor));
+        }
+
+        private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            PreviewForm w = new PreviewForm();
+            var chart = new SciLineChartPreview();
+
+            chart.AddTimeSeries(sourceData.TimeSeries);
+            w.grid.Children.Add(chart);
+            w.ShowDialog();
         }
     }
 }

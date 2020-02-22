@@ -49,7 +49,7 @@
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
                 <Grid>
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0" Click="ch_buildBtn_Click"/>
-                    <charts:SciLineChart x:Name="ch_SignalChart" AxisX="t" AxisY="f(t)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" />
+                    <charts:SciLineChart x:Name="ch_SignalChart" AxisX="t" AxisY="f(t)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick" />
                     <charts:SciScatterChart x:Name="ch_PseudoPoincareChart" AxisX="f(t)" AxisY="f(t+1)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="454,10,0,0" />
                 </Grid>
             </TabItem>
