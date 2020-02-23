@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         xmlns:local="clr-namespace:TimeSeriesToolbox"
-        xmlns:charts="clr-namespace:TimeSeriesToolbox.Charts"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="680" Width="1200">
     <Grid>
@@ -49,14 +48,31 @@
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
                 <Grid>
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0" Click="ch_buildBtn_Click"/>
-                    <charts:SciLineChart x:Name="ch_SignalChart" AxisX="t" AxisY="f(t)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick" />
-                    <charts:SciScatterChart x:Name="ch_PseudoPoincareChart" AxisX="f(t)" AxisY="f(t+1)" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="454,10,0,0" />
+                    <d3:Chart BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick">
+                        <d3:Chart.Title>
+                            <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Signal</TextBlock>
+                        </d3:Chart.Title>
+                        <d3:LineGraph x:Name="ch_SignalChart" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
+                    </d3:Chart>
+                    <d3:Chart BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="454,10,0,0">
+                        <d3:Chart.Title>
+                            <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Pseudo-Poincare</TextBlock>
+                        </d3:Chart.Title>
+                        <d3:Plot>
+                            <d3:CircleMarkerGraph Name="ch_PseudoPoincareChart" Stroke="Blue" Min="1" Max="4"/>
+                        </d3:Plot>
+                    </d3:Chart>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
                 <Grid>
                     <Button x:Name="tsp_autocorBtn" Content="Autocorrelation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="10,10,0,0" Click="tsp_autocorBtn_Click"/>
-                    <charts:SciLineChart x:Name="tsp_autocorChart" AxisX="t" AxisY="autocorrelation" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,35,0,0" />
+                    <d3:Chart BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,35,0,0">
+                        <d3:Chart.Title>
+                            <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Autocorrelation function</TextBlock>
+                        </d3:Chart.Title>
+                        <d3:LineGraph x:Name="tsp_autocorChart" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
+                    </d3:Chart>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">

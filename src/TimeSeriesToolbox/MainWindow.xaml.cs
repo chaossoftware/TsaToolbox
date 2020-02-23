@@ -1,6 +1,4 @@
-﻿using LiveCharts;
-using LiveCharts.Wpf;
-using MathLib.Data;
+﻿using MathLib.Data;
 using MathLib.NumericalMethods;
 using MathLib.Transform;
 using Microsoft.Win32;
@@ -19,7 +17,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TimeSeriesToolbox.Charts;
 
 namespace TimeSeriesToolbox
 {
@@ -83,8 +80,8 @@ namespace TimeSeriesToolbox
         private void CleanUp()
         {
             sourceData = null;
-            ch_SignalChart.Clear();
-            ch_PseudoPoincareChart.Clear();
+            //ch_SignalChart.Clear();
+            //ch_PseudoPoincareChart.Clear();
 
             //chartFft.ClearChart();
             //chartLyapunov.ClearChart();
@@ -172,12 +169,10 @@ namespace TimeSeriesToolbox
 
         private void ch_buildBtn_Click(object sender, RoutedEventArgs e)
         {
-            ch_SignalChart.Clear();
-            ch_SignalChart.AddTimeSeries(sourceData.TimeSeries);
+            ch_SignalChart.Plot(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues);
 
-            ch_PseudoPoincareChart.Clear();
             var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
-            ch_PseudoPoincareChart.AddTimeSeries(pPoincare);
+            ch_PseudoPoincareChart.Plot(pPoincare.XValues, pPoincare.YValues);
         }
 
         private void tsp_autocorBtn_Click(object sender, RoutedEventArgs e)
@@ -185,17 +180,16 @@ namespace TimeSeriesToolbox
             var autoCor = new AutoCorrelationFunction()
                 .GetAutoCorrelationOfSeries(sourceData.TimeSeries.YValues);
 
-            tsp_autocorChart.Clear();
-            tsp_autocorChart.AddTimeSeries(new Timeseries(autoCor));
+            tsp_autocorChart.PlotY(autoCor);
         }
 
         private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             PreviewForm w = new PreviewForm();
-            var chart = new SciLineChartPreview();
+            //var chart = new SciLineChartPreview();
 
-            chart.AddTimeSeries(sourceData.TimeSeries);
-            w.grid.Children.Add(chart);
+            //chart.AddTimeSeries(sourceData.TimeSeries);
+            //w.grid.Children.Add(chart);
             w.ShowDialog();
         }
     }
