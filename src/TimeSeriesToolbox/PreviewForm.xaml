@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         xmlns:local="clr-namespace:TimeSeriesToolbox"
         mc:Ignorable="d"
         Title="PreviewForm" Height="600" Width="1024" WindowStartupLocation="CenterScreen">
     <Grid x:Name="grid">
-        
+        <d3:Chart x:Name="previewChart" LegendVisibility="Hidden" >
+            <d3:Plot>
+                <d3:LineGraph x:Name="lineChart" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="1"/>
+                <d3:CircleMarkerGraph x:Name="markerChart" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="1" Min="1" Max="6"/>
+            </d3:Plot>
+        </d3:Chart>
     </Grid>
 </Window>
