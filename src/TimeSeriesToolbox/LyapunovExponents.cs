@@ -67,6 +67,8 @@ namespace TimeSeriesToolbox
 
         public void CleanUp(MainWindow wnd)
         {
+            Method = null;
+
             wnd.le_mainSlopeChart.Plot(_zero, _zero);
             wnd.le_secondarySlopeChart.Plot(_zero, _zero);
 

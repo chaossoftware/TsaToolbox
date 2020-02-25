@@ -1,15 +1,18 @@
 ﻿using MathLib;
 using MathLib.Data;
+using MathLib.IO;
 using MathLib.NumericalMethods;
 using MathLib.NumericalMethods.Lyapunov;
 using MathLib.Transform;
 using Microsoft.Win32;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace TimeSeriesToolbox
 {
@@ -264,5 +267,60 @@ namespace TimeSeriesToolbox
 
         private void le_k_adjustBtn_Click(object sender, RoutedEventArgs e) =>
             _lyapunov.AdjustSlope(this);
+
+        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (sourceData == null)
+            {
+                MessageBox.Show(StringData.MsgEmptyFile);
+                return;
+            }
+
+            var outDir = Path.Combine(sourceData.Folder, sourceData.FileName + "_out");
+            string fName = Path.Combine(outDir, sourceData.FileName);
+
+            if (!Directory.Exists(outDir))
+            {
+                Directory.CreateDirectory(outDir);
+            }
+
+            //if (chartSignal.HasData && chartPoincare.HasData)
+            //{
+            //    chartSignal.SaveImage(fName + "_plot", ImageFormat.Png);
+            //    chartPoincare.SaveImage(fName + "_poincare", ImageFormat.Png);
+            //    DataWriter.CreateDataFile(fName + "_signal", routines.SourceData.GetTimeSeriesString());
+            //}
+
+            //if (chartFft.HasData)
+            //{
+            //    chartFft.SaveImage(fName + "_fourier", ImageFormat.Png);
+            //}
+
+            //if (wav_plotPBox.Image != null)
+            //{
+            //    wav_plotPBox.Image.Save(fName + "_wavelet.png", ImageFormat.Png);
+            //}
+
+            if (_lyapunov.Method != null)
+            {
+                DataWriter.CreateDataFile(fName + "_lyapunov.txt", _lyapunov.Method.ToString());
+            }
+
+            //if (chartLyapunov.HasData)
+            //{
+            //    chartLyapunov.SaveImage(fName + "_lyapunovSlope", ImageFormat.Png);
+            //}
+        }
+
+        private void SaveChartToFile()
+        {
+            //RenderTargetBitmap bmp = new RenderTargetBitmap(200, 300, 96, 96, PixelFormats.Pbgra32);
+            //bmp.Render(plotter);
+
+            //var encoder = new PngBitmapEncoder();
+            //encoder.Frames.Add(BitmapFrame.Create(bmp));
+
+            //using (Stream stm = File.Create(@"c:\MyCustomPath\test.png")) { encoder.Save(stm); }
+        }
     }
 }

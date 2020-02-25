@@ -150,6 +150,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button x:Name="saveBtn" Content="Save results" HorizontalAlignment="Left" Width="75" Margin="10,0,0,27" Height="20" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
         <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom">
             <TextBlock x:Name="statusFileInfoText" Width="500"/>
             <Separator/>
