@@ -36,43 +36,22 @@
                             <Button x:Name="ts_setTimeseriesBtn" Content="Set timeseries" HorizontalAlignment="Right" Margin="0,150,0,0" VerticalAlignment="Top" Width="100" Click="ts_setTimeseriesBtn_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Pveview window settings" HorizontalAlignment="Left" Margin="10,420,0,0" VerticalAlignment="Top" Width="213" Padding="10">
-                        <Grid>
-                            <TextBlock Text="Preview width:" Margin="0,00,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                            <TextBox x:Name="ts_previewWidthTbox" Style="{StaticResource ParameterValue}" Margin="0,0,0,0" Text="215" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                            <TextBlock Text="Preview Height:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                            <TextBox x:Name="ts_previewHeightTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="160" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabCharts" Header="Charts" Height="60">
                 <Grid>
-                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="974,10,0,0" Click="ch_buildBtn_Click"/>
-                    <d3:Chart BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick">
-                        <d3:Chart.Title>
-                            <TextBlock Text="{x:Static properties:Resources.Signal}" HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5" />
-                        </d3:Chart.Title>
+                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,10,0,0" Click="ch_buildBtn_Click"/>
+                    <CheckBox x:Name="ch_signalCbox" Height="23" Content="{x:Static properties:Resources.Signal}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,50,0,0"/>
+                    <d3:Chart BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,80,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick">
                         <d3:LineGraph x:Name="ch_SignalChart" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="454,10,0,0" MouseDoubleClick="ch_PseudoPoincareChart_MouseDoubleClick">
-                        <d3:Chart.Title>
-                            <TextBlock Text="{x:Static properties:Resources.PseudoPoincare}" HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5" />
-                        </d3:Chart.Title>
-                        <d3:Plot>
-                            <d3:CircleMarkerGraph Name="ch_PseudoPoincareChart" IsAutoFitEnabled="True" Stroke="Blue" Min="1" Max="4"/>
-                        </d3:Plot>
+                    <CheckBox x:Name="ch_poincareCbox" Height="23" Content="{x:Static properties:Resources.PseudoPoincare}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="468,50,0,0"/>
+                    <d3:Chart BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="360,80,0,0" MouseDoubleClick="ch_PseudoPoincareChart_MouseDoubleClick">
+                        <d3:CircleMarkerGraph Name="ch_PseudoPoincareChart" IsAutoFitEnabled="True" Stroke="Blue" Min="1" Max="4"/>
                     </d3:Chart>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tabTsProps" Header="Timeseries properties" Height="60">
-                <Grid>
-                    <Button x:Name="tsp_autocorBtn" Content="Autocorrelation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="10,10,0,0" Click="tsp_autocorBtn_Click"/>
-                    <d3:Chart BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,35,0,0" MouseDoubleClick="tsp_autocorChart_MouseDoubleClick">
-                        <d3:Chart.Title>
-                            <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Autocorrelation function</TextBlock>
-                        </d3:Chart.Title>
-                        <d3:LineGraph x:Name="tsp_autocorChart" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="0.5"/>
+                    <CheckBox x:Name="ch_acfCbox" Height="23" Content="{x:Static properties:Resources.Acf}" IsChecked="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="816,50,0,0"/>
+                    <d3:Chart BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="710,80,0,0" MouseDoubleClick="tsp_autocorChart_MouseDoubleClick">
+                        <d3:LineGraph x:Name="ch_acfChart" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="0.5"/>
                     </d3:Chart>
                 </Grid>
             </TabItem>
@@ -90,7 +69,6 @@
                             <TextBox x:Name="le_epsMinTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <RadioButton x:Name="le_rosRad" Content="Rosenstein" HorizontalAlignment="Left" Margin="185,10,0,0" VerticalAlignment="Top" Checked="le_rosRad_Checked" Unchecked="le_rosRad_Unchecked"/>
                     <GroupBox x:Name="le_rosGbox" Visibility="Hidden" HorizontalAlignment="Left" Margin="185,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -99,6 +77,7 @@
                             <TextBox x:Name="le_r_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
+                    <RadioButton x:Name="le_rosRad" IsChecked="True" Content="Rosenstein" HorizontalAlignment="Left" Margin="185,10,0,0" VerticalAlignment="Top" Checked="le_rosRad_Checked" Unchecked="le_rosRad_Unchecked"/>
                     <RadioButton x:Name="le_kantzRad" Content="Kantz" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Checked="le_kantzRad_Checked" Unchecked="le_kantzRad_Unchecked"/>
                     <GroupBox x:Name="le_kantzGbox" Visibility="Hidden" HorizontalAlignment="Left" Margin="330,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
@@ -156,6 +135,18 @@
                             <d3:LineGraph x:Name="le_secondarySlopeChart" IsAutoFitEnabled="True" Stroke="Red" StrokeThickness="2"/>
                         </d3:Plot>
                     </d3:Chart>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabSettings" Header="Timeseries properties" Height="60">
+                <Grid>
+                    <GroupBox Header="Pveview window settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                        <Grid>
+                            <TextBlock Text="Preview width:" Margin="0,00,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_previewWidthTbox" Style="{StaticResource ParameterValue}" Margin="0,0,0,0" Text="215" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Preview Height:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="ts_previewHeightTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="160" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>

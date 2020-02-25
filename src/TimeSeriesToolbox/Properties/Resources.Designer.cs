@@ -61,7 +61,16 @@ namespace TimeSeriesToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pseudo-Poincare section.
+        ///   Looks up a localized string similar to Autocorrelation function.
+        /// </summary>
+        public static string Acf {
+            get {
+                return ResourceManager.GetString("Acf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poincare pseudo section.
         /// </summary>
         public static string PseudoPoincare {
             get {

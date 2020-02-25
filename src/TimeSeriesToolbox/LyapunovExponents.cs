@@ -1,4 +1,6 @@
-﻿using MathLib.NumericalMethods.Lyapunov;
+﻿using MathLib;
+using MathLib.Data;
+using MathLib.NumericalMethods.Lyapunov;
 using System;
 using System.Windows;
 using System.Windows.Media;
@@ -7,126 +9,175 @@ namespace TimeSeriesToolbox
 {
     internal class LyapunovExponents
     {
-        private readonly MainWindow _window;
-
-        private LyapunovMethod method;
-
-        public LyapunovExponents(MainWindow window)
+        private readonly double[] _zero = new double[] { 0 };
+        
+        public LyapunovExponents()
         {
-            _window = window;
         }
 
+        public LyapunovMethod Method { get; set; }
 
-        public void Calculate(double[] series)
+        public void ExecuteLyapunovMethod(MainWindow wnd)
         {
-            //SetLyapunovMethod(series);
+            try
+            {
+                wnd.Dispatcher.Invoke(() =>
+                {
+                    wnd.le_mainSlopeChart.Plot(_zero, _zero);
+                    wnd.le_secondarySlopeChart.Plot(_zero, _zero);
+                    wnd.le_resultTbox.Background = Brushes.Gold;
+                    wnd.le_resultTbox.Text = StringData.Calculating;
+                });
 
-            //try
-            //{
-            //    _window.Dispatcher.Invoke(new Action(_window.le_resultTbox.Background = Brushes.OrangeRed);
-            //    _window.Dispatcher.Invoke(() => _window.le_resultTbox.Text = StringData.Calculating);
-
-            //    method.Calculate();
-            //    //_window.Dispatcher.Invoke(() => { SetLyapunovResult(); });
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Unable to calculate LE:\n" + ex);
-            //    _window.le_resultTbox.Text = "Error";
-            //}
+                Method.Calculate();
+                wnd.Dispatcher.Invoke(() => SetLyapunovResult(wnd));
+            }
+            catch (Exception ex)
+            {
+                wnd.Dispatcher.Invoke(() =>
+                {
+                    wnd.le_logTbox.Text = ex.ToString();
+                    wnd.le_resultTbox.Background = Brushes.Coral;
+                    wnd.le_resultTbox.Text = StringData.Error;
+                });
+            }
         }
 
-        //private void SetLyapunovMethod(double[] series)
-        //{
-        //    var dim = _window.le_eDimTbox.ReadInt();
-        //    var tau = _window.le_tauTbox.ReadInt();
-        //    var scaleMin = _window.le_epsMinTbox.ReadDouble();
+        public void AdjustSlope(MainWindow wnd)
+        {
+            try
+            {
+                if (Method is KantzMethod)
+                {
+                    ((KantzMethod)Method).SetSlope(wnd.le_k_epsCombo.Text);
+                }
 
-        //    if (_window.le_wolfRad.IsChecked.Value)
-        //    {
-        //        var dt = _window.le_w_dtTbox.ReadDouble();
-        //        var scaleMax = _window.le_w_epsMaxTbox.ReadDouble();
-        //        var evolSteps = _window.le_w_evolStepsTbox.ReadInt();
+                var res = FillLyapunovChart(wnd);
 
-        //        method = new WolfMethod(series, dim, tau, dt, scaleMin, scaleMax, evolSteps);
-        //    }
-        //    else if (_window.le_rosRad.IsChecked.Value)
-        //    {
-        //        var iter = _window.le_r_iterTbox.ReadInt();
-        //        var window = _window.le_r_windowTbox.ReadInt();
+                if (Method is KantzMethod || Method is RosensteinMethod)
+                {
+                    wnd.le_resultTbox.Text = res;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
+            }
+        }
 
-        //        method = new RosensteinMethod(series, dim, tau, iter, window, scaleMin);
-        //    }
-        //    else if (_window.le_kantzRad.IsChecked.Value)
-        //    {
-        //        var iter = _window.le_k_iterTbox.ReadInt();
-        //        var window = _window.le_k_windowTbox.ReadInt();
-        //        var scaleMax = _window.le_k_epsMaxTbox.ReadDouble();
-        //        var scales = _window.le_k_scalesTbox.ReadInt();
+        public void CleanUp(MainWindow wnd)
+        {
+            wnd.le_mainSlopeChart.Plot(_zero, _zero);
+            wnd.le_secondarySlopeChart.Plot(_zero, _zero);
 
-        //        method = new KantzMethod(series, dim, tau, iter, window, scaleMin, scaleMax, scales);
-        //    }
-        //    else if (_window.le_ssRad.IsChecked.Value)
-        //    {
-        //        var inverse = _window.le_ss_inverseCbox.IsChecked.Value;
-        //        var scaleFactor = _window.le_ss_scaleFactorTbox.ReadDouble();
-        //        var minNeigh = _window.le_ss_minNeighbTbox.ReadInt();
+            wnd.le_logTbox.Text = string.Empty;
+            wnd.le_resultTbox.Text = string.Empty;
+            wnd.le_resultTbox.Background = Brushes.LightGray;
+        }
 
-        //        method = new SanoSawadaMethod(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
-        //    }
-        //}
+        private void SetLyapunovResult(MainWindow wnd)
+        {
+            wnd.le_resultTbox.Background = Brushes.LightGreen;
+            string result;
 
-        //private void SetLyapunovResult()
-        //{
-        //    le_resultText.BackColor = Color.Khaki;
-        //    string result = string.Empty;
+            wnd.le_resultTbox.Text = Method.GetResult();
+            wnd.le_logTbox.Text = Method.ToString() + "\n\n" + Method.Log.ToString();
 
-        //    le_resultText.Text = routines.Lyapunov.GetResult();
-        //    lyap_log_text.Text = routines.Lyapunov.ToString() + "\n\n" + routines.Lyapunov.Log.ToString();
+            if (wnd.le_kantzRad.IsChecked.Value || wnd.le_rosRad.IsChecked.Value)
+            {
+                wnd.le_kantzResultGbox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                wnd.le_kantzResultGbox.Visibility = Visibility.Hidden;
+            }
 
-        //    if (routines.Lyapunov is KantzMethod)
-        //    {
-        //        this.le_kantz_slopeCombo.Items.Clear();
-        //        string[] items = new string[((KantzMethod)routines.Lyapunov).SlopesList.Count];
-        //        ((KantzMethod)routines.Lyapunov).SlopesList.Keys.CopyTo(items, 0);
-        //        this.le_kantz_slopeCombo.Items.AddRange(items);
-        //        this.le_kantz_slopeCombo.SelectedIndex = 0;
-        //        ((KantzMethod)routines.Lyapunov).SetSlope(this.le_kantz_slopeCombo.Text);
-        //    }
+            if (wnd.le_kantzRad.IsChecked.Value)
+            {
+                wnd.le_k_epsCombo.ItemsSource = ((KantzMethod)Method).SlopesList.Keys;
+                wnd.le_k_epsCombo.SelectedIndex = 0;
+                ((KantzMethod)Method).SetSlope(wnd.le_k_epsCombo.Text);
+            }
 
-        //    if (routines.Lyapunov.Slope.Length > 1)
-        //    {
-        //        le_pEndNum.Value = routines.Lyapunov.Slope.Length - 1;
+            if (Method.Slope.Length > 1)
+            {
+                wnd.le_k_startTbox.Text = "1";
+                wnd.le_k_endTbox.Text = (Method.Slope.Length - 1).ToString();
 
-        //        try
-        //        {
-        //            if (!le_wolf_radio.Checked)
-        //            {
-        //                var leSectorEnd = Ext.SlopeChangePointIndex(routines.Lyapunov.Slope, 2, routines.Lyapunov.Slope.Amplitude.Y / 30);
+                try
+                {
+                    if (!wnd.le_wolfRad.IsChecked.Value)
+                    {
+                        var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 2, Method.Slope.Amplitude.Y / 30);
 
-        //                if (leSectorEnd > 0)
-        //                {
-        //                    le_pEndNum.Value = leSectorEnd;
-        //                }
-        //            }
+                        if (leSectorEnd > 0)
+                        {
+                            wnd.le_k_endTbox.Text = leSectorEnd.ToString();
+                        }
+                    }
 
-        //            result = routines.FillLyapunovChart(chartLyapunov, le_pStartNum.ToInt(), le_pEndNum.ToInt(), le_wolf_radio.Checked);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
-        //            result = StringData.NoValue;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        result = StringData.NoValue;
-        //    }
+                    result = FillLyapunovChart(wnd);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
+                    result = StringData.NoValue;
+                }
+            }
+            else
+            {
+                result = StringData.NoValue;
+            }
 
-        //    if (routines.Lyapunov is KantzMethod || routines.Lyapunov is RosensteinMethod)
-        //    {
-        //        le_resultText.Text = result;
-        //    }
-        //}
+            if (Method is KantzMethod || Method is RosensteinMethod)
+            {
+                wnd.le_resultTbox.Text = result;
+            }
+        }
+
+        private string FillLyapunovChart(MainWindow wnd)
+        {
+            var startPoint = wnd.le_k_startTbox.ReadInt();
+            var endPoint = wnd.le_k_endTbox.ReadInt();
+
+            wnd.le_mainSlopeChart.Plot(_zero, _zero);
+            wnd.le_secondarySlopeChart.Plot(_zero, _zero);
+
+            int range = endPoint - startPoint + 1;
+            var result = string.Empty;
+
+            if (wnd.le_wolfRad.IsChecked.Value)
+            {
+                var timeseries = new Timeseries();
+
+                for (int i = startPoint; i < range; i++)
+                {
+                    timeseries.AddDataPoint(Method.Slope.DataPoints[i].X, Method.Slope.DataPoints[i].Y);
+                }
+
+                wnd.le_slopeChart.BottomTitle = "t";
+                wnd.le_slopeChart.LeftTitle = "LE";
+                wnd.le_slopeChartTitle.Text = "Lyapunov Exponent in Time";
+                wnd.le_mainSlopeChart.Plot(timeseries.XValues, timeseries.YValues);
+            }
+            else
+            {
+                var tsSector = new Timeseries();
+
+                tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint].X, Method.Slope.DataPoints[startPoint].Y);
+                tsSector.AddDataPoint(Method.Slope.DataPoints[range - 1].X, Method.Slope.DataPoints[range - 1].Y);
+
+                wnd.le_slopeChart.BottomTitle = "t";
+                wnd.le_slopeChart.LeftTitle = "Slope";
+                wnd.le_slopeChartTitle.Text = "Lyapunov Function";
+                wnd.le_mainSlopeChart.Plot(Method.Slope.XValues, Method.Slope.YValues);
+                wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
+
+                var slope = (Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y) / (Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
+                result = string.Format("{0:F5}", slope);
+            }
+
+            return result;
+        }
     }
 }
