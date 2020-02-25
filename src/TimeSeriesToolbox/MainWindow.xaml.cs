@@ -20,7 +20,6 @@ namespace TimeSeriesToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private SourceData sourceData;
-        private LyapunovMethod le;
         //private Charts charts;
         private readonly double[] _zero = new double[] { 0 };
 
@@ -217,6 +216,7 @@ namespace TimeSeriesToolbox
         private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
         {
             SetLyapunovMethod(sourceData.TimeSeries.YValues);
+            _lyapunov.CleanUp(this);
 
             new Thread(() => _lyapunov.ExecuteLyapunovMethod(this))
                     .Start();

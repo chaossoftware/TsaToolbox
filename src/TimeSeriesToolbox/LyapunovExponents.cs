@@ -9,6 +9,8 @@ namespace TimeSeriesToolbox
 {
     internal class LyapunovExponents
     {
+        private const string DefaultStartPoint = "1";
+
         private readonly double[] _zero = new double[] { 0 };
         
         public LyapunovExponents()
@@ -23,8 +25,6 @@ namespace TimeSeriesToolbox
             {
                 wnd.Dispatcher.Invoke(() =>
                 {
-                    wnd.le_mainSlopeChart.Plot(_zero, _zero);
-                    wnd.le_secondarySlopeChart.Plot(_zero, _zero);
                     wnd.le_resultTbox.Background = Brushes.Gold;
                     wnd.le_resultTbox.Text = StringData.Calculating;
                 });
@@ -38,7 +38,7 @@ namespace TimeSeriesToolbox
                 {
                     wnd.le_logTbox.Text = ex.ToString();
                     wnd.le_resultTbox.Background = Brushes.Coral;
-                    wnd.le_resultTbox.Text = StringData.Error;
+                    wnd.le_resultTbox.Text = Properties.Resources.Error;
                 });
             }
         }
@@ -61,7 +61,7 @@ namespace TimeSeriesToolbox
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
+                MessageBox.Show(Properties.Resources.LePlotError + Environment.NewLine + ex.Message);
             }
         }
 
@@ -101,7 +101,7 @@ namespace TimeSeriesToolbox
 
             if (Method.Slope.Length > 1)
             {
-                wnd.le_k_startTbox.Text = "1";
+                wnd.le_k_startTbox.Text = DefaultStartPoint;
                 wnd.le_k_endTbox.Text = (Method.Slope.Length - 1).ToString();
 
                 try
@@ -120,13 +120,13 @@ namespace TimeSeriesToolbox
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error plotting Lyapunov slope: " + ex.Message);
-                    result = StringData.NoValue;
+                    MessageBox.Show(Properties.Resources.LePlotError + Environment.NewLine + ex.Message);
+                    result = Properties.Resources.Nda;
                 }
             }
             else
             {
-                result = StringData.NoValue;
+                result = Properties.Resources.Nda;
             }
 
             if (Method is KantzMethod || Method is RosensteinMethod)
@@ -174,7 +174,7 @@ namespace TimeSeriesToolbox
                 wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
 
                 var slope = (Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y) / (Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
-                result = string.Format("{0:F5}", slope);
+                result = string.Format("{0:G5}", slope);
             }
 
             return result;

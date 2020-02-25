@@ -70,6 +70,42 @@ namespace TimeSeriesToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fourier power spectrum.
+        /// </summary>
+        public static string Fft {
+            get {
+                return ResourceManager.GetString("Fft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error plotting Lyapunov slope:.
+        /// </summary>
+        public static string LePlotError {
+            get {
+                return ResourceManager.GetString("LePlotError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Data Available.
+        /// </summary>
+        public static string Nda {
+            get {
+                return ResourceManager.GetString("Nda", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Poincare pseudo section.
         /// </summary>
         public static string PseudoPoincare {
@@ -84,6 +120,15 @@ namespace TimeSeriesToolbox.Properties {
         public static string Signal {
             get {
                 return ResourceManager.GetString("Signal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wavelet.
+        /// </summary>
+        public static string Wavelet {
+            get {
+                return ResourceManager.GetString("Wavelet", resourceCulture);
             }
         }
     }
