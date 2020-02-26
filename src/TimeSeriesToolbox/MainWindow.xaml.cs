@@ -211,15 +211,15 @@ namespace TimeSeriesToolbox
             var autoCor = new AutoCorrelationFunction()
                 .GetFromSeries(sourceData.TimeSeries.YValues);
 
-            new PreviewForm(Properties.Resources.PseudoPoincare, "t", "ACF")
+            new PreviewForm(Properties.Resources.Acf, "t", "ACF")
                 .PlotLine(autoCor)
                 .ShowDialog();
         }
 
         private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
         {
-            SetLyapunovMethod(sourceData.TimeSeries.YValues);
             _lyapunov.CleanUp(this);
+            SetLyapunovMethod(sourceData.TimeSeries.YValues);
 
             new Thread(() => _lyapunov.ExecuteLyapunovMethod(this))
                     .Start();
