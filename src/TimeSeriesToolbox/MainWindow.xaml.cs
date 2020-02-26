@@ -75,9 +75,9 @@ namespace TimeSeriesToolbox
         private void CleanUp()
         {
             sourceData = null;
-            ch_SignalChart.Plot(_zero, _zero);
-            ch_PseudoPoincareChart.Plot(_zero, _zero);
-            ch_acfChart.Plot(_zero, _zero);
+            ch_SignalGraph.Plot(_zero, _zero);
+            ch_PseudoPoincareGraph.Plot(_zero, _zero);
+            ch_acfGraph.Plot(_zero, _zero);
 
             _lyapunov.CleanUp(this);
             //chartFft.ClearChart();
@@ -176,19 +176,19 @@ namespace TimeSeriesToolbox
         {
             if (ch_signalCbox.IsChecked.Value)
             {
-                ch_SignalChart.Plot(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues);
+                ch_SignalGraph.Plot(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues);
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
                 var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
-                ch_PseudoPoincareChart.Plot(pPoincare.XValues, pPoincare.YValues);
+                ch_PseudoPoincareGraph.Plot(pPoincare.XValues, pPoincare.YValues);
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
                 var autoCor = new AutoCorrelationFunction().GetFromSeries(sourceData.TimeSeries.YValues);
-                ch_acfChart.PlotY(autoCor);
+                ch_acfGraph.PlotY(autoCor);
             }
         }
 
@@ -284,12 +284,21 @@ namespace TimeSeriesToolbox
                 Directory.CreateDirectory(outDir);
             }
 
-            //if (chartSignal.HasData && chartPoincare.HasData)
-            //{
-            //    chartSignal.SaveImage(fName + "_plot", ImageFormat.Png);
-            //    chartPoincare.SaveImage(fName + "_poincare", ImageFormat.Png);
-            //    DataWriter.CreateDataFile(fName + "_signal", routines.SourceData.GetTimeSeriesString());
-            //}
+            if (ch_signalCbox.IsChecked.Value)
+            {
+                DataWriter.CreateDataFile(fName + "_signal.dat", sourceData.GetTimeSeriesString());
+                SaveChartToFile(ch_SignalChart, fName + "_plot.png");
+            }
+
+            if (ch_poincareCbox.IsChecked.Value)
+            {
+                SaveChartToFile(ch_PseudoPoincareChart, fName + "_poincare.png");
+            }
+
+            if (ch_acfCbox.IsChecked.Value)
+            {
+                SaveChartToFile(ch_acfChart, fName + "_acf.png");
+            }
 
             //if (chartFft.HasData)
             //{
@@ -312,15 +321,39 @@ namespace TimeSeriesToolbox
             //}
         }
 
-        private void SaveChartToFile()
+        private void SaveChartToFile(InteractiveDataDisplay.WPF.Chart plot, string path)
         {
-            //RenderTargetBitmap bmp = new RenderTargetBitmap(200, 300, 96, 96, PixelFormats.Pbgra32);
-            //bmp.Render(plotter);
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(plot);
 
-            //var encoder = new PngBitmapEncoder();
-            //encoder.Frames.Add(BitmapFrame.Create(bmp));
+            var scaleX = set_chartSaveWidthTbox.ReadDouble() / plot.Width;
+            var scaleY = set_chartSaveHeightTbox.ReadDouble() / plot.Height;
 
-            //using (Stream stm = File.Create(@"c:\MyCustomPath\test.png")) { encoder.Save(stm); }
+            var width = (bounds.Width + bounds.X) * scaleX;
+            var height = (bounds.Height + bounds.Y) * scaleY;
+
+            RenderTargetBitmap rtb =
+                new RenderTargetBitmap((int)Math.Round(width, MidpointRounding.AwayFromZero),
+                (int)Math.Round(height, MidpointRounding.AwayFromZero),
+                96, 96, PixelFormats.Pbgra32);
+
+            DrawingVisual dv = new DrawingVisual();
+            
+            using (DrawingContext ctx = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(plot);
+                ctx.DrawRectangle(vb, null,
+                    new Rect(new Point(bounds.X, bounds.Y), new Point(width, height)));
+            }
+
+            rtb.Render(dv);
+            var iSource = (BitmapSource)rtb.GetAsFrozen();
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(iSource));
+                encoder.Save(fileStream);
+            }
         }
     }
 }
