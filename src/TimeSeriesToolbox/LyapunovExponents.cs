@@ -85,7 +85,7 @@ namespace TimeSeriesToolbox
             wnd.le_resultTbox.Text = Method.GetResult();
             wnd.le_logTbox.Text = Method.ToString() + "\n\n" + Method.Log.ToString();
 
-            if (wnd.le_kantzRad.IsChecked.Value || wnd.le_rosRad.IsChecked.Value)
+            if (Method is KantzMethod || Method is RosensteinMethod)
             {
                 wnd.le_kantzResultGbox.Visibility = Visibility.Visible;
             }
@@ -94,7 +94,7 @@ namespace TimeSeriesToolbox
                 wnd.le_kantzResultGbox.Visibility = Visibility.Hidden;
             }
 
-            if (wnd.le_kantzRad.IsChecked.Value)
+            if (Method is KantzMethod)
             {
                 wnd.le_k_epsCombo.ItemsSource = ((KantzMethod)Method).SlopesList.Keys;
                 wnd.le_k_epsCombo.SelectedIndex = 0;
@@ -103,19 +103,19 @@ namespace TimeSeriesToolbox
 
             if (Method.Slope.Length > 1)
             {
-                wnd.le_k_startTbox.Text = DefaultStartPoint;
-                wnd.le_k_endTbox.Text = (Method.Slope.Length - 1).ToString();
-
                 try
                 {
-                    if (!wnd.le_wolfRad.IsChecked.Value)
+                    if (Method is KantzMethod || Method is RosensteinMethod)
                     {
                         var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 2, Method.Slope.Amplitude.Y / 30);
 
-                        if (leSectorEnd > 0)
+                        if (leSectorEnd <= 0)
                         {
-                            wnd.le_k_endTbox.Text = leSectorEnd.ToString();
+                            leSectorEnd = Method.Slope.Length;
                         }
+
+                        wnd.le_k_endTbox.Text = leSectorEnd.ToString();
+                        wnd.le_k_startTbox.Text = DefaultStartPoint;
                     }
 
                     result = FillLyapunovChart(wnd);
@@ -145,34 +145,25 @@ namespace TimeSeriesToolbox
             wnd.le_mainSlopeChart.Plot(_zero, _zero);
             wnd.le_secondarySlopeChart.Plot(_zero, _zero);
 
-            int range = endPoint - startPoint + 1;
             var result = string.Empty;
 
-            if (wnd.le_wolfRad.IsChecked.Value)
+            wnd.le_slopeChart.BottomTitle = "t";
+            wnd.le_mainSlopeChart.Plot(Method.Slope.XValues, Method.Slope.YValues);
+
+            if (Method is WolfMethod)
             {
-                var timeseries = new Timeseries();
-
-                for (int i = startPoint; i < range; i++)
-                {
-                    timeseries.AddDataPoint(Method.Slope.DataPoints[i].X, Method.Slope.DataPoints[i].Y);
-                }
-
-                wnd.le_slopeChart.BottomTitle = "t";
                 wnd.le_slopeChart.LeftTitle = "LE";
                 wnd.le_slopeChartTitle.Text = "Lyapunov Exponent in Time";
-                wnd.le_mainSlopeChart.Plot(timeseries.XValues, timeseries.YValues);
             }
             else
             {
                 var tsSector = new Timeseries();
 
-                tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint].X, Method.Slope.DataPoints[startPoint].Y);
-                tsSector.AddDataPoint(Method.Slope.DataPoints[range - 1].X, Method.Slope.DataPoints[range - 1].Y);
+                tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint - 1].X, Method.Slope.DataPoints[startPoint - 1].Y);
+                tsSector.AddDataPoint(Method.Slope.DataPoints[endPoint - 1].X, Method.Slope.DataPoints[endPoint - 1].Y);
 
-                wnd.le_slopeChart.BottomTitle = "t";
                 wnd.le_slopeChart.LeftTitle = "Slope";
                 wnd.le_slopeChartTitle.Text = "Lyapunov Function";
-                wnd.le_mainSlopeChart.Plot(Method.Slope.XValues, Method.Slope.YValues);
                 wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
 
                 var slope = (Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y) / (Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);

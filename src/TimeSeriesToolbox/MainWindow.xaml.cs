@@ -1,5 +1,4 @@
-﻿using MathLib;
-using MathLib.Data;
+﻿using MathLib.Data;
 using MathLib.IO;
 using MathLib.NumericalMethods;
 using MathLib.NumericalMethods.Lyapunov;
