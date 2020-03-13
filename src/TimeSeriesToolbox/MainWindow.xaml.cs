@@ -106,7 +106,7 @@ namespace TimeSeriesToolbox
         {
             if (sourceData == null)
             {
-                MessageBox.Show(StringData.MsgEmptyFile);
+                MessageBox.Show(Properties.Resources.MsgEmptyFile);
                 return false;
             }
 
@@ -271,7 +271,7 @@ namespace TimeSeriesToolbox
         {
             if (sourceData == null)
             {
-                MessageBox.Show(StringData.MsgEmptyFile);
+                MessageBox.Show(Properties.Resources.MsgEmptyFile);
                 return;
             }
 

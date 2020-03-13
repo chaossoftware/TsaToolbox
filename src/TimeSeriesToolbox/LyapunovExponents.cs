@@ -107,7 +107,7 @@ namespace TimeSeriesToolbox
                 {
                     if (Method is KantzMethod || Method is RosensteinMethod)
                     {
-                        var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 2, Method.Slope.Amplitude.Y / 30);
+                        var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
 
                         if (leSectorEnd <= 0)
                         {

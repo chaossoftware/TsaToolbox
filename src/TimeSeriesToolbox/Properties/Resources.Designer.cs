@@ -97,6 +97,15 @@ namespace TimeSeriesToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select file first.
+        /// </summary>
+        public static string MsgEmptyFile {
+            get {
+                return ResourceManager.GetString("MsgEmptyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Data Available.
         /// </summary>
         public static string Nda {
