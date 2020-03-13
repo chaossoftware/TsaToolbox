@@ -193,6 +193,7 @@ namespace TimeSeriesToolbox
 
         private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e) =>
             new PreviewForm(Properties.Resources.Signal, "t", "f(t)")
+                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
                 .PlotLine(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues)
                 .ShowDialog();
 
@@ -201,6 +202,7 @@ namespace TimeSeriesToolbox
             var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
 
             new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
+                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
                 .PlotMap(pPoincare.XValues, pPoincare.YValues)
                 .ShowDialog();
         }
@@ -211,6 +213,7 @@ namespace TimeSeriesToolbox
                 .GetFromSeries(sourceData.TimeSeries.YValues);
 
             new PreviewForm(Properties.Resources.Acf, "t", "ACF")
+                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
                 .PlotLine(autoCor)
                 .ShowDialog();
         }

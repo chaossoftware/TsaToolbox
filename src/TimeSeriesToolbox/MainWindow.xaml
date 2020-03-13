@@ -147,6 +147,14 @@
                             <TextBox x:Name="set_chartSaveHeightTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="160" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                         </Grid>
                     </GroupBox>
+                    <GroupBox Header="Preview form settings" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                        <Grid>
+                            <TextBlock Text="Window width:" Margin="0,00,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="set_previewWidthTbox" Style="{StaticResource ParameterValue}" Margin="0,0,0,0" Text="1024" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Window height:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <TextBox x:Name="set_previewHeightTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="600" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
