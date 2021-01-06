@@ -1,6 +1,7 @@
 ﻿using MathLib.Data;
 using MathLib.IO;
 using MathLib.NumericalMethods;
+using MathLib.NumericalMethods.EmbeddingDimension;
 using MathLib.NumericalMethods.Lyapunov;
 using MathLib.Transform;
 using Microsoft.Win32;
@@ -53,7 +54,7 @@ namespace TimeSeriesToolbox
                 {
                     sourceData = new SourceData(
                         openFileDialog.FileName,
-                        ts_LinesToSkipTbox.ReadInt(), 
+                        ts_LinesToSkipTbox.ReadInt(),
                         ts_LinesToReadTbox.ReadInt());
                 }
                 else
@@ -191,31 +192,43 @@ namespace TimeSeriesToolbox
             }
         }
 
-        private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e) =>
-            new PreviewForm(Properties.Resources.Signal, "t", "f(t)")
+        private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                new PreviewForm(Properties.Resources.Signal, "t", "f(t)")
                 .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
                 .PlotLine(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues)
                 .ShowDialog();
+            }
+        }
+            
 
         private void ch_PseudoPoincareChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
 
-            new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
-                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
-                .PlotMap(pPoincare.XValues, pPoincare.YValues)
-                .ShowDialog();
+                new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
+                    .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
+                    .PlotMap(pPoincare.XValues, pPoincare.YValues)
+                    .ShowDialog();
+            }
         }
 
         private void tsp_autocorChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var autoCor = new AutoCorrelationFunction()
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                var autoCor = new AutoCorrelationFunction()
                 .GetFromSeries(sourceData.TimeSeries.YValues);
 
-            new PreviewForm(Properties.Resources.Acf, "t", "ACF")
-                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
-                .PlotLine(autoCor)
-                .ShowDialog();
+                new PreviewForm(Properties.Resources.Acf, "t", "ACF")
+                    .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
+                    .PlotLine(autoCor)
+                    .ShowDialog();
+            }
         }
 
         private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
@@ -356,6 +369,13 @@ namespace TimeSeriesToolbox
                 encoder.Frames.Add(BitmapFrame.Create(iSource));
                 encoder.Save(fileStream);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var fnn = new FalseNearestNeighbors(sourceData.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
+            fnn.Calculate();
+            an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
         }
     }
 }

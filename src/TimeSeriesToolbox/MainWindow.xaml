@@ -42,17 +42,41 @@
                 <Grid>
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,10,0,0" Click="ch_buildBtn_Click"/>
                     <CheckBox x:Name="ch_signalCbox" Height="23" Content="{x:Static properties:Resources.Signal}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,50,0,0"/>
-                    <d3:Chart x:Name="ch_SignalChart" BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,80,0,0" MouseDoubleClick="ch_SignalChart_MouseDoubleClick">
+                    <d3:Chart x:Name="ch_SignalChart" BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,80,0,0" MouseDown="ch_SignalChart_MouseDoubleClick">
                         <d3:LineGraph x:Name="ch_SignalGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
                     </d3:Chart>
                     <CheckBox x:Name="ch_poincareCbox" Height="23" Content="{x:Static properties:Resources.PseudoPoincare}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="468,50,0,0"/>
-                    <d3:Chart x:Name="ch_PseudoPoincareChart"  BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="360,80,0,0" MouseDoubleClick="ch_PseudoPoincareChart_MouseDoubleClick">
+                    <d3:Chart x:Name="ch_PseudoPoincareChart"  BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="360,80,0,0" MouseDown="ch_PseudoPoincareChart_MouseDoubleClick">
                         <d3:CircleMarkerGraph Name="ch_PseudoPoincareGraph" IsAutoFitEnabled="True" Stroke="Blue" Min="1" Max="4"/>
                     </d3:Chart>
                     <CheckBox x:Name="ch_acfCbox" Height="23" Content="{x:Static properties:Resources.Acf}" IsChecked="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="816,50,0,0"/>
-                    <d3:Chart x:Name="ch_acfChart" BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="710,80,0,0" MouseDoubleClick="tsp_autocorChart_MouseDoubleClick">
+                    <d3:Chart x:Name="ch_acfChart" BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="710,80,0,0" MouseDown="tsp_autocorChart_MouseDoubleClick">
                         <d3:LineGraph x:Name="ch_acfGraph" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="0.5"/>
                     </d3:Chart>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabAnalysis" Header="Analysis" Height="60">
+                <Grid>
+                    <GroupBox Margin="0,0,550,345">
+                        <Grid>
+                            <d3:Chart x:Name="an_FnnChart" BottomTitle="d" LeftTitle="fnn" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0">
+                                <d3:LineGraph x:Name="an_FnnGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
+                            </d3:Chart>
+                            <StackPanel HorizontalAlignment="Right" Width="122" Margin="0,0,10,0">
+                                <TextBlock Text="Min. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBox x:Name="fnn_minDim" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+                                <TextBlock Text="Max. dimension:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="fnn_maxDim" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Width="120"/>
+                                <TextBlock Text="Delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="fnn_tau" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+                                <TextBlock Text="Escape factor:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="fnn_rt" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="120"/>
+                                <TextBlock Text="Theiler window:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="fnn_theiler" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="120"/>
+                                <Button Content="Build" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
