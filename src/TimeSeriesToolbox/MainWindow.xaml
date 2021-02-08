@@ -10,9 +10,9 @@
         Title="MainWindow" Height="680" Width="1200">
     <Grid>
         <TabControl x:Name="toolboxTabs" TabStripPlacement="Left" Margin="0,0,0,23">
-            <TabItem x:Name="tabFile" Header="Timeseries" Height="60">
+            <TabItem x:Name="tabFile" Header="Data source" Height="40">
                 <Grid>
-                    <GroupBox Header="Data file" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                    <GroupBox Header="Data file" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="184" Padding="10">
                         <Grid>
                             <CheckBox x:Name="ts_parameterizedOpenCbox" Margin="0,10,0,0" Content="Parameterized open" Height="18" VerticalAlignment="Top" FlowDirection="RightToLeft" Unchecked="ts_parameterizedOpenCbox_Unchecked" Checked="ts_parameterizedOpenCbox_Checked"/>
                             <TextBlock Text="Lines to skip:" Margin="0,40,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
@@ -22,10 +22,10 @@
                             <Button x:Name="ts_btnOpenFile" Content="Open" HorizontalAlignment="Right" Margin="0,100,0,0" VerticalAlignment="Top" Width="75" Click="ts_btnOpenFile_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Timeseries settings" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Width="213" Padding="10">
+                    <GroupBox Header="Timeseries settings" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Width="184" Padding="10">
                         <Grid>
-                            <CheckBox x:Name="ts_timestampColumnCbox" Margin="0,0,0,0" Content="Treat 1st column as timestamp" Height="18" VerticalAlignment="Top" FlowDirection="RightToLeft"/>
-                            <TextBlock Text="Timeseries column:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <CheckBox x:Name="ts_timestampColumnCbox" Margin="0,0,0,0" Content="1st column is timestamp" Height="18" VerticalAlignment="Top" FlowDirection="RightToLeft"/>
+                            <TextBlock Text="Signal column:" Margin="0,30,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                             <TextBox x:Name="ts_tsColumnTbox" Style="{StaticResource ParameterValue}" Margin="0,30,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                             <TextBlock Text="Start point:" Margin="0,60,70,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                             <TextBox x:Name="ts_startPointTbox" Style="{StaticResource ParameterValue}" Margin="0,60,0,0" Text="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
@@ -38,51 +38,57 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabCharts" Header="Charts" Height="60">
+            <TabItem x:Name="tabCharts" Header="Charts" Height="40">
                 <Grid>
-                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,10,0,0" Click="ch_buildBtn_Click"/>
-                    <CheckBox x:Name="ch_signalCbox" Height="23" Content="{x:Static properties:Resources.Signal}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,50,0,0"/>
-                    <d3:Chart x:Name="ch_SignalChart" BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,80,0,0" MouseDown="ch_SignalChart_MouseDoubleClick">
-                        <d3:LineGraph x:Name="ch_SignalGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
-                    </d3:Chart>
-                    <CheckBox x:Name="ch_poincareCbox" Height="23" Content="{x:Static properties:Resources.PseudoPoincare}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="468,50,0,0"/>
-                    <d3:Chart x:Name="ch_PseudoPoincareChart"  BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="360,80,0,0" MouseDown="ch_PseudoPoincareChart_MouseDoubleClick">
-                        <d3:CircleMarkerGraph Name="ch_PseudoPoincareGraph" IsAutoFitEnabled="True" Stroke="Blue" Min="1" Max="4"/>
-                    </d3:Chart>
-                    <CheckBox x:Name="ch_acfCbox" Height="23" Content="{x:Static properties:Resources.Acf}" IsChecked="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="816,50,0,0"/>
-                    <d3:Chart x:Name="ch_acfChart" BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="710,80,0,0" MouseDown="tsp_autocorChart_MouseDoubleClick">
-                        <d3:LineGraph x:Name="ch_acfGraph" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="0.5"/>
-                    </d3:Chart>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tabAnalysis" Header="Analysis" Height="60">
-                <Grid>
-                    <GroupBox Margin="0,0,550,345">
+                    <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="978,10,0,0" Click="ch_buildBtn_Click"/>
+
+                    <GroupBox Header="{x:Static properties:Resources.Signal}" Margin="10,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <d3:Chart x:Name="ch_SignalChart" BottomTitle="t" LeftTitle="f(t)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="260" Height="200" VerticalAlignment="Top" Margin="0,10,0,0" MouseDown="ch_SignalChart_MouseDoubleClick">
+                            <d3:LineGraph x:Name="ch_SignalGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
+                        </d3:Chart>
+                    </GroupBox>
+
+                    <GroupBox Header="{x:Static properties:Resources.PseudoPoincare}" Margin="290,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <d3:Chart x:Name="ch_PseudoPoincareChart"  BottomTitle="f(t)" LeftTitle="f(t+1)" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="260" Height="200" VerticalAlignment="Top" Margin="0,10,0,0" MouseDown="ch_PseudoPoincareChart_MouseDoubleClick">
+                            <d3:CircleMarkerGraph Name="ch_PseudoPoincareGraph" IsAutoFitEnabled="True" Stroke="Blue" Min="1" Max="4"/>
+                        </d3:Chart>
+                    </GroupBox>
+
+                    <GroupBox Header="{x:Static properties:Resources.Acf}" Margin="570,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <d3:Chart x:Name="ch_acfChart" BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="260" Height="200" VerticalAlignment="Top" Margin="0,10,0,0" MouseDown="tsp_autocorChart_MouseDoubleClick">
+                            <d3:LineGraph x:Name="ch_acfGraph" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="0.5"/>
+                        </d3:Chart>
+                    </GroupBox>
+
+                    <GroupBox Header="{x:Static properties:Resources.Fnn}" Margin="10,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left">
                         <Grid>
-                            <d3:Chart x:Name="an_FnnChart" BottomTitle="d" LeftTitle="fnn" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="10,10,0,0">
+                            <d3:Chart x:Name="an_FnnChart" BottomTitle="d" LeftTitle="fnn" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="10,10,0,0">
                                 <d3:LineGraph x:Name="an_FnnGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
                             </d3:Chart>
-                            <StackPanel HorizontalAlignment="Right" Width="122" Margin="0,0,10,0">
+                            <StackPanel Margin="310,0,10,0">
                                 <TextBlock Text="Min. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                                <TextBox x:Name="fnn_minDim" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+                                <TextBox x:Name="fnn_minDim" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
                                 <TextBlock Text="Max. dimension:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fnn_maxDim" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Width="120"/>
+                                <TextBox x:Name="fnn_maxDim" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top"/>
                                 <TextBlock Text="Delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fnn_tau" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+                                <TextBox x:Name="fnn_tau" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
                                 <TextBlock Text="Escape factor:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fnn_rt" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="120"/>
+                                <TextBox x:Name="fnn_rt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
                                 <TextBlock Text="Theiler window:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fnn_theiler" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="120"/>
-                                <Button Content="Build" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+                                <TextBox x:Name="fnn_theiler" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" />
                             </StackPanel>
                         </Grid>
                     </GroupBox>
+                    <CheckBox x:Name="ch_signalCbox" Content="{x:Static properties:Resources.Signal}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1001,40,0,0" FlowDirection="RightToLeft"/>
+                    <CheckBox x:Name="ch_poincareCbox" Content="{x:Static properties:Resources.PseudoPoincare}" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="904,60,0,0" FlowDirection="RightToLeft"/>
+                    <CheckBox x:Name="ch_acfCbox" Content="{x:Static properties:Resources.Acf}" IsChecked="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="903,80,0,0" FlowDirection="RightToLeft"/>
+                    <CheckBox x:Name="ch_fnnCbox" Content="{x:Static properties:Resources.Fnn}" IsChecked="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="909,100,0,0" FlowDirection="RightToLeft"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="60">
+            <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="40">
                 <Grid>
                     <Button x:Name="le_calculateBtn"  Content="Calculate" Margin="0,10,10,0" VerticalAlignment="Top" Click="le_calculateBtn_Click" HorizontalAlignment="Right" Width="75"/>
-                    <TextBox x:Name="le_logTbox" Margin="0,35,10,38" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545"/>
+                    <TextBox x:Name="le_logTbox" Margin="0,35,10,40" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545" FontFamily="Courier New"/>
                     <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -149,8 +155,8 @@
                             <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="23" VerticalAlignment="Bottom"/>
-                    <d3:Chart x:Name="le_slopeChart" BottomTitle="t" LeftTitle="ACF" LegendVisibility="Hidden" Margin="10,280,450,10">
+                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom"/>
+                    <d3:Chart x:Name="le_slopeChart" BottomTitle="t" LeftTitle="Slope" LegendVisibility="Hidden" Margin="10,0,0,10" Width="600" HorizontalAlignment="Left" Height="330" VerticalAlignment="Bottom">
                         <d3:Chart.Title>
                             <TextBlock x:Name="le_slopeChartTitle" HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Lyapunov slope</TextBlock>
                         </d3:Chart.Title>
@@ -161,7 +167,7 @@
                     </d3:Chart>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabSettings" Header="Settings" Height="60">
+            <TabItem x:Name="tabSettings" Header="Settings" Height="40">
                 <Grid>
                     <GroupBox Header="Save charts settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="213" Padding="10">
                         <Grid>
@@ -181,8 +187,15 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="tabConsole" Header="Console" Height="40">
+                <Grid x:Name="gridConsole">
+                    <RichTextBox x:Name="tboxConsole" AcceptsReturn="False" Margin="0,0,0,0" HorizontalAlignment="Left" FontFamily="Courier New" Background="#FF464545" Foreground="#FFC7C7C7" PreviewKeyDown="tboxConsole_PreviewKeyDown">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
         </TabControl>
-        <Button x:Name="saveBtn" Content="Save results" HorizontalAlignment="Left" Width="75" Margin="10,0,0,27" Height="20" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
+        <Button x:Name="saveBtn" Content="Save results" HorizontalAlignment="Left" Width="105" Margin="10,0,0,27" Height="20" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
         <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom">
             <TextBlock x:Name="statusFileInfoText" Width="500"/>
             <Separator/>

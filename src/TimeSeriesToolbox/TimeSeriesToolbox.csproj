@@ -84,7 +84,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Charts.cs" />
+    <Compile Include="CommandProcessor.cs" />
     <Compile Include="LyapunovExponents.cs" />
     <Compile Include="PreviewForm.xaml.cs">
       <DependentUpon>PreviewForm.xaml</DependentUpon>

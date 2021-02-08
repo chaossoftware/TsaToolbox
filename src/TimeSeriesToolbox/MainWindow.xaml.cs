@@ -8,8 +8,12 @@ using Microsoft.Win32;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,8 +26,8 @@ namespace TimeSeriesToolbox
     public partial class MainWindow : Window
     {
         private readonly LyapunovExponents _lyapunov;
-        private SourceData sourceData;
-        //private Charts charts;
+        private readonly CommandProcessor _commandProcessor;
+        internal SourceData sourceData;
         private readonly double[] _zero = new double[] { 0 };
 
         public MainWindow()
@@ -32,6 +36,7 @@ namespace TimeSeriesToolbox
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             InitializeComponent();
             _lyapunov = new LyapunovExponents();
+            _commandProcessor = new CommandProcessor(tboxConsole, this);
         }
 
         private void ts_btnOpenFile_Click(object sender, RoutedEventArgs e)
@@ -41,35 +46,38 @@ namespace TimeSeriesToolbox
                 Filter = "All files|*.*|Time series data|*.dat *.txt *.csv"
             };
 
-            if (!openFileDialog.ShowDialog().Value)
+            if (openFileDialog.ShowDialog().Value)
             {
-                return;
-            }
-
-            try
-            {
-                CleanUp();
-
-                if (ts_parameterizedOpenCbox.IsChecked.Value)
+                try
                 {
-                    sourceData = new SourceData(
-                        openFileDialog.FileName,
-                        ts_LinesToSkipTbox.ReadInt(),
-                        ts_LinesToReadTbox.ReadInt());
+                    OpenFile(openFileDialog.FileName);
                 }
-                else
+                catch (ArgumentException ex)
                 {
-                    sourceData = new SourceData(openFileDialog.FileName);
+                    MessageBox.Show("Unable to read file:" + ex.Message);
                 }
-
-                FillUiWithData();
-
-                RefreshTimeSeries();
             }
-            catch (ArgumentException ex)
+        }
+
+        public void OpenFile(string fileName)
+        {
+            CleanUp();
+
+            if (ts_parameterizedOpenCbox.IsChecked.Value)
             {
-                MessageBox.Show("Unable to read file:" + ex.Message);
+                sourceData = new SourceData(
+                    fileName,
+                    ts_LinesToSkipTbox.ReadInt(),
+                    ts_LinesToReadTbox.ReadInt());
             }
+            else
+            {
+                sourceData = new SourceData(fileName);
+            }
+
+            FillUiWithData();
+
+            RefreshTimeSeries();
         }
 
         private void CleanUp()
@@ -190,6 +198,13 @@ namespace TimeSeriesToolbox
                 var autoCor = new AutoCorrelationFunction().GetFromSeries(sourceData.TimeSeries.YValues);
                 ch_acfGraph.PlotY(autoCor);
             }
+
+            if (ch_fnnCbox.IsChecked.Value)
+            {
+                var fnn = new FalseNearestNeighbors(sourceData.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
+                fnn.Calculate();
+                an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
+            }
         }
 
         private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -302,7 +317,7 @@ namespace TimeSeriesToolbox
             if (ch_signalCbox.IsChecked.Value)
             {
                 DataWriter.CreateDataFile(fName + "_signal.dat", sourceData.GetTimeSeriesString());
-                SaveChartToFile(ch_SignalChart, fName + "_plot.png");
+                SaveChartToFile(ch_SignalChart, fName + "_signal.png");
             }
 
             if (ch_poincareCbox.IsChecked.Value)
@@ -327,17 +342,29 @@ namespace TimeSeriesToolbox
 
             if (_lyapunov.Method != null)
             {
-                DataWriter.CreateDataFile(fName + "_lyapunov.txt", _lyapunov.Method.ToString());
+                GenerateLeFile(fName);
+                SaveChartToFile(le_slopeChart, fName + "_lyapunovSlope.png");
             }
+        }
 
-            //if (chartLyapunov.HasData)
-            //{
-            //    chartLyapunov.SaveImage(fName + "_lyapunovSlope", ImageFormat.Png);
-            //}
+        private void GenerateLeFile(string baseFileName)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(_lyapunov.Method.ToString())
+                .AppendLine()
+                .AppendLine("Result:")
+                .AppendLine(le_resultTbox.Text)
+                .AppendLine()
+                .AppendLine("Execution log:")
+                .AppendLine()
+                .AppendLine(_lyapunov.Method.Log.ToString());
+            DataWriter.CreateDataFile(baseFileName + "_lyapunov.txt", sb.ToString());
         }
 
         private void SaveChartToFile(InteractiveDataDisplay.WPF.Chart plot, string path)
         {
+            plot.Arrange(new Rect(plot.RenderSize));
+            plot.Measure(plot.RenderSize);
             Rect bounds = VisualTreeHelper.GetDescendantBounds(plot);
 
             var scaleX = set_chartSaveWidthTbox.ReadDouble() / plot.Width;
@@ -371,11 +398,43 @@ namespace TimeSeriesToolbox
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private string lastCommand = string.Empty;
+
+        private void tboxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var fnn = new FalseNearestNeighbors(sourceData.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
-            fnn.Calculate();
-            an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
+            if (e.Key == Key.Enter)
+            {
+                lastCommand = ((tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run).Text.Trim();
+                _commandProcessor.ProcessCommand(lastCommand);
+            }
+
+            if (Keyboard.IsKeyDown(Key.Up))
+            {
+                var lastInline = LastInline();
+                lastInline.Text = lastCommand;
+                tboxConsole.CaretPosition = lastInline.ContentEnd;
+            }
+
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                var lastInline = LastInline();
+
+                var matchingCommands = _commandProcessor.Commands.Keys.Where(c => c.StartsWith(lastInline.Text));
+
+                if (matchingCommands.Any())
+                {
+                    lastInline.Text = matchingCommands.First();
+                    
+                    tboxConsole.CaretPosition = lastInline.ContentEnd;
+                    new Thread(() => { Thread.Sleep(500); Dispatcher.BeginInvoke(new Action(() => tboxConsole.Focus())); })
+                    {
+                        ApartmentState = ApartmentState.STA
+                    }
+                    .Start();
+                }
+            }
+
+            Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using MathLib;
 using MathLib.Data;
+using MathLib.IO;
 using MathLib.NumericalMethods.Lyapunov;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -82,8 +84,16 @@ namespace TimeSeriesToolbox
             wnd.le_resultTbox.Background = Brushes.LightGreen;
             string result;
 
-            wnd.le_resultTbox.Text = Method.GetResult();
-            wnd.le_logTbox.Text = Method.ToString() + "\n\n" + Method.Log.ToString();
+            if (Method is SanoSawadaMethod)
+            {
+                wnd.le_resultTbox.Text = string.Join(" ", (Method as SanoSawadaMethod).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
+            }
+            else
+            {
+                wnd.le_resultTbox.Text = Method.GetResult();
+            }
+           
+            wnd.le_logTbox.Text = Method.ToString() + "\n\nResult:\n" + Method.GetResult() + "\n\nLog:\n" + Method.Log.ToString();
 
             if (Method is KantzMethod || Method is RosensteinMethod)
             {

@@ -70,6 +70,15 @@ namespace TimeSeriesToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to command &gt; .
+        /// </summary>
+        public static string Cmd {
+            get {
+                return ResourceManager.GetString("Cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -84,6 +93,15 @@ namespace TimeSeriesToolbox.Properties {
         public static string Fft {
             get {
                 return ResourceManager.GetString("Fft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to False nearest neighbors.
+        /// </summary>
+        public static string Fnn {
+            get {
+                return ResourceManager.GetString("Fnn", resourceCulture);
             }
         }
         
