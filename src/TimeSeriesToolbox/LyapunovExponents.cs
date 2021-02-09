@@ -49,14 +49,14 @@ namespace TimeSeriesToolbox
         {
             try
             {
-                if (Method is KantzMethod)
+                if (Method is LleKantz)
                 {
-                    ((KantzMethod)Method).SetSlope(wnd.le_k_epsCombo.Text);
+                    ((LleKantz)Method).SetSlope(wnd.le_k_epsCombo.Text);
                 }
 
                 var res = FillLyapunovChart(wnd);
 
-                if (Method is KantzMethod || Method is RosensteinMethod)
+                if (Method is LleKantz || Method is LleRosenstein)
                 {
                     wnd.le_resultTbox.Text = res;
                 }
@@ -84,9 +84,9 @@ namespace TimeSeriesToolbox
             wnd.le_resultTbox.Background = Brushes.LightGreen;
             string result;
 
-            if (Method is SanoSawadaMethod)
+            if (Method is LesSanoSawada)
             {
-                wnd.le_resultTbox.Text = string.Join(" ", (Method as SanoSawadaMethod).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
+                wnd.le_resultTbox.Text = string.Join(" ", (Method as LesSanoSawada).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
             }
             else
             {
@@ -95,7 +95,7 @@ namespace TimeSeriesToolbox
            
             wnd.le_logTbox.Text = Method.ToString() + "\n\nResult:\n" + Method.GetResult() + "\n\nLog:\n" + Method.Log.ToString();
 
-            if (Method is KantzMethod || Method is RosensteinMethod)
+            if (Method is LleKantz || Method is LleRosenstein)
             {
                 wnd.le_kantzResultGbox.Visibility = Visibility.Visible;
             }
@@ -104,18 +104,18 @@ namespace TimeSeriesToolbox
                 wnd.le_kantzResultGbox.Visibility = Visibility.Hidden;
             }
 
-            if (Method is KantzMethod)
+            if (Method is LleKantz)
             {
-                wnd.le_k_epsCombo.ItemsSource = ((KantzMethod)Method).SlopesList.Keys;
+                wnd.le_k_epsCombo.ItemsSource = ((LleKantz)Method).SlopesList.Keys;
                 wnd.le_k_epsCombo.SelectedIndex = 0;
-                ((KantzMethod)Method).SetSlope(wnd.le_k_epsCombo.Text);
+                ((LleKantz)Method).SetSlope(wnd.le_k_epsCombo.Text);
             }
 
             if (Method.Slope.Length > 1)
             {
                 try
                 {
-                    if (Method is KantzMethod || Method is RosensteinMethod)
+                    if (Method is LleKantz || Method is LleRosenstein)
                     {
                         var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
 
@@ -141,7 +141,7 @@ namespace TimeSeriesToolbox
                 result = Properties.Resources.Nda;
             }
 
-            if (Method is KantzMethod || Method is RosensteinMethod)
+            if (Method is LleKantz || Method is LleRosenstein)
             {
                 wnd.le_resultTbox.Text = result;
             }
@@ -160,7 +160,7 @@ namespace TimeSeriesToolbox
             wnd.le_slopeChart.BottomTitle = "t";
             wnd.le_mainSlopeChart.Plot(Method.Slope.XValues, Method.Slope.YValues);
 
-            if (Method is WolfMethod)
+            if (Method is LleWolf)
             {
                 wnd.le_slopeChart.LeftTitle = "LE";
                 wnd.le_slopeChartTitle.Text = "Lyapunov Exponent in Time";

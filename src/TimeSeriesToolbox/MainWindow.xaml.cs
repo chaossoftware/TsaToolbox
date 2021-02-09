@@ -267,14 +267,14 @@ namespace TimeSeriesToolbox
                 var scaleMax = le_w_epsMaxTbox.ReadDouble();
                 var evolSteps = le_w_evolStepsTbox.ReadInt();
 
-                _lyapunov.Method = new WolfMethod(series, dim, tau, dt, scaleMin, scaleMax, evolSteps);
+                _lyapunov.Method = new LleWolf(series, dim, tau, dt, scaleMin, scaleMax, evolSteps);
             }
             else if (le_rosRad.IsChecked.Value)
             {
                 var iter = le_r_iterTbox.ReadInt();
                 var window = le_r_windowTbox.ReadInt();
 
-                _lyapunov.Method = new RosensteinMethod(series, dim, tau, iter, window, scaleMin);
+                _lyapunov.Method = new LleRosenstein(series, dim, tau, iter, window, scaleMin);
             }
             else if (le_kantzRad.IsChecked.Value)
             {
@@ -283,7 +283,7 @@ namespace TimeSeriesToolbox
                 var scaleMax = le_k_epsMaxTbox.ReadDouble();
                 var scales = le_k_scalesTbox.ReadInt();
 
-                _lyapunov.Method = new KantzMethod(series, dim, tau, iter, window, scaleMin, scaleMax, scales);
+                _lyapunov.Method = new LleKantz(series, dim, tau, iter, window, scaleMin, scaleMax, scales);
             }
             else if (le_ssRad.IsChecked.Value)
             {
@@ -291,7 +291,7 @@ namespace TimeSeriesToolbox
                 var scaleFactor = le_ss_scaleFactorTbox.ReadDouble();
                 var minNeigh = le_ss_minNeighbTbox.ReadInt();
 
-                _lyapunov.Method = new SanoSawadaMethod(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
+                _lyapunov.Method = new LesSanoSawada(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
             }
         }
 

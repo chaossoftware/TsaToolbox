@@ -88,7 +88,7 @@
             <TabItem x:Name="tabLe" Header="Lyapunov exponents" Height="40">
                 <Grid>
                     <Button x:Name="le_calculateBtn"  Content="Calculate" Margin="0,10,10,0" VerticalAlignment="Top" Click="le_calculateBtn_Click" HorizontalAlignment="Right" Width="75"/>
-                    <TextBox x:Name="le_logTbox" Margin="0,35,10,40" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545" FontFamily="Courier New"/>
+                    <TextBox x:Name="le_logTbox" Margin="0,35,10,40" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545" FontFamily="Consolas"/>
                     <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -155,7 +155,7 @@
                             <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom" FontFamily="Consolas"/>
                     <d3:Chart x:Name="le_slopeChart" BottomTitle="t" LeftTitle="Slope" LegendVisibility="Hidden" Margin="10,0,0,10" Width="600" HorizontalAlignment="Left" Height="330" VerticalAlignment="Bottom">
                         <d3:Chart.Title>
                             <TextBlock x:Name="le_slopeChartTitle" HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Lyapunov slope</TextBlock>
@@ -189,7 +189,7 @@
             </TabItem>
             <TabItem x:Name="tabConsole" Header="Console" Height="40">
                 <Grid x:Name="gridConsole">
-                    <RichTextBox x:Name="tboxConsole" AcceptsReturn="False" Margin="0,0,0,0" HorizontalAlignment="Left" FontFamily="Courier New" Background="#FF464545" Foreground="#FFC7C7C7" PreviewKeyDown="tboxConsole_PreviewKeyDown">
+                    <RichTextBox x:Name="tboxConsole" AcceptsReturn="False" Margin="0,0,0,0" HorizontalAlignment="Left" FontFamily="Consolas" Background="#FF464545" Foreground="#FFC7C7C7" PreviewKeyDown="tboxConsole_PreviewKeyDown">
                         <FlowDocument/>
                     </RichTextBox>
                 </Grid>
