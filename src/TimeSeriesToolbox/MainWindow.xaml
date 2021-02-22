@@ -189,6 +189,7 @@
             </TabItem>
             <TabItem x:Name="tabConsole" Header="Console" Height="40">
                 <Grid x:Name="gridConsole">
+                    <TextBox x:Name="tboxConsoleSecondary" IsTabStop="False" Panel.ZIndex="1" TextWrapping="Wrap" Text="" Margin="0,10,10,10" FontFamily="Consolas" HorizontalAlignment="Right" Width="300" Background="Transparent" Foreground="#FFC7C7C7" BorderBrush="Transparent"/>
                     <RichTextBox x:Name="tboxConsole" AcceptsReturn="False" Margin="0,0,0,0" HorizontalAlignment="Left" FontFamily="Consolas" Background="#FF464545" Foreground="#FFC7C7C7" PreviewKeyDown="tboxConsole_PreviewKeyDown">
                         <FlowDocument/>
                     </RichTextBox>

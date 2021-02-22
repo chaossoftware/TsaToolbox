@@ -1,5 +1,6 @@
 ﻿using InteractiveDataDisplay.WPF;
 using MathLib.NumericalMethods;
+using MathLib.NumericalMethods.Lyapunov;
 using MathLib.Transform;
 using System;
 using System.Collections.Generic;
@@ -18,34 +19,52 @@ namespace TimeSeriesToolbox
         private const string OpenCmd = "open";
         private const string ClearCmd = "clear";
         private const string HelpCmd = "help";
+        private const string LleR = "lle_r";
+        private const string LleK = "lle_k";
+        private const string LleW = "lle_w";
+        private const string LeSpec = "le_spec";
+
+        private readonly List<Chart> _chartsList;
 
         public Dictionary<string, string> Commands { get; } = new Dictionary<string, string>()
         {
-            { PlotCmd, PlotCmd + " [A-z]+" },
             { OpenCmd, OpenCmd + " .+" },
+            { PlotCmd, PlotCmd + " [A-z]+" },
+            { LeSpec, LeSpec },
+            { LleW, LleW },
             { ClearCmd, ClearCmd },
             { HelpCmd, HelpCmd },
         };
 
         private MainWindow window;
         private RichTextBox _console;
-        private SolidColorBrush consoleBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#FFC7C7C7");
-        private readonly double[] _zero = new double[] { 0 };
-
-        private List<Chart> chartsList = new List<Chart>();
+        private readonly SolidColorBrush consoleBrush;
 
         public CommandProcessor(RichTextBox console, MainWindow window)
         {
             this.window = window;
             _console = console;
+            _chartsList = new List<Chart>();
+            consoleBrush = new BrushConverter().ConvertFromString("#FFC7C7C7") as SolidColorBrush;
             AddParagraph();
         }
 
+        public string LastCommand { get; protected set; }
+
         public void ProcessCommand(string command)
         {
+            LastCommand = command;
+
             if (Commands.Values.Any(c => Regex.IsMatch(command, c)))
             {
-                CommandSwitch(command);
+                try
+                {
+                    CommandSwitch(command);
+                }
+                catch (Exception ex)
+                {
+                    PrintError(ex.Message);
+                }
             }
             else
             {
@@ -73,26 +92,31 @@ namespace TimeSeriesToolbox
             {
                 Clear();
             }
+            else if (command.Equals(LeSpec))
+            {
+                CalculateLeSpec();
+            }
+            else if (command.Equals(LleW))
+            {
+                CalculateLleWolf();
+            }
         }
 
         private void PrintHelp() =>
-            PrintResult("Available commands:\n - " + string.Join("\n - ", Commands.Keys));
+            PrintInfo("Available commands:\n - " + string.Join("\n - ", Commands.Keys));
 
         private void Clear()
         {
-            foreach(var plot in chartsList)
-            {
-                var markerPlot = plot.Content as CircleMarkerGraph;
+            var markerCharts = _chartsList.Where(c => c.Content is CircleMarkerGraph);
 
-                if (markerPlot != null)
-                {
-                    markerPlot.Plot(_zero, _zero);
-                    plot.Content = null;
-                }
+            foreach (var chart in markerCharts)
+            {
+               chart.Content = null;
             }
 
-            chartsList.Clear();
+            _chartsList.Clear();
             _console.Document.Blocks.Clear();
+            window.tboxConsoleSecondary.Clear();
         }
 
         private void OpenFile(string file)
@@ -109,30 +133,22 @@ namespace TimeSeriesToolbox
 
         private void Plot(string chart)
         {
-            try
+            switch (chart)
             {
-                switch (chart)
-                {
-                    case "signal":
-                        AddLineChart().Plot(window.sourceData.TimeSeries.XValues, window.sourceData.TimeSeries.YValues);
-                        break;
-                    case "poincare":
-                        var pPoincare = PseudoPoincareMap.GetMapDataFrom(window.sourceData.TimeSeries.YValues, 1);
-                        AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
-                        break;
-                    case "acf":
-                        var autoCor = new AutoCorrelationFunction().GetFromSeries(window.sourceData.TimeSeries.YValues);
-                        AddLineChart().PlotY(autoCor);
-                        break;
-                    default:
-                        PrintError($"unknown chart type '{chart}'");
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                PrintError(ex.Message);
+                case "signal":
+                    AddLineChart().Plot(window.sourceData.TimeSeries.XValues, window.sourceData.TimeSeries.YValues);
+                    break;
+                case "attractor":
+                    var pPoincare = PseudoPoincareMap.GetMapDataFrom(window.sourceData.TimeSeries.YValues, 1);
+                    AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
+                    break;
+                case "acf":
+                    var autoCor = new AutoCorrelationFunction().GetFromSeries(window.sourceData.TimeSeries.YValues);
+                    AddLineChart().PlotY(autoCor);
+                    break;
+                default:
+                    PrintError($"unknown chart type '{chart}'");
+                    break;
             }
         }
 
@@ -158,7 +174,9 @@ namespace TimeSeriesToolbox
             _console.Document.Blocks.Add(paragraph);
         }
 
-        private void PrintResult(string result) => PrintResult(result, consoleBrush);
+        private void PrintResult(string result) => PrintResult(result, Brushes.YellowGreen);
+
+        private void PrintInfo(string result) => PrintResult(result, consoleBrush);
 
         private void PrintError(string result) => PrintResult(result, Brushes.Red);
 
@@ -170,7 +188,7 @@ namespace TimeSeriesToolbox
             {
                 IsAutoFitEnabled = true,
                 Stroke = consoleBrush,
-                StrokeThickness = 0.5
+                StrokeThickness = 0.5,
             };
 
             chart.Content = linePlot;
@@ -208,8 +226,30 @@ namespace TimeSeriesToolbox
             var paragraph = new Paragraph();
             paragraph.Inlines.Add(new InlineUIContainer(chart));
             _console.Document.Blocks.Add(paragraph);
-            chartsList.Add(chart);
+            _chartsList.Add(chart);
             return chart;
+        }
+    
+        private void CalculateLeSpec()
+        {
+            window.tboxConsoleSecondary.Clear();
+            var leSpec = new LesSanoSawada(window.sourceData.TimeSeries.YValues);
+            window.tboxConsoleSecondary.AppendText(leSpec.ToString());
+            leSpec.Calculate();
+            PrintResult(leSpec.GetResult());
+            window.tboxConsoleSecondary.AppendText("\nLog:\n");
+            window.tboxConsoleSecondary.AppendText(leSpec.Log.ToString());
+        }
+
+        private void CalculateLleWolf()
+        {
+            window.tboxConsoleSecondary.Clear();
+            var leSpec = new LleWolf(window.sourceData.TimeSeries.YValues);
+            window.tboxConsoleSecondary.AppendText(leSpec.ToString());
+            leSpec.Calculate();
+            PrintResult(leSpec.GetResult());
+            window.tboxConsoleSecondary.AppendText("\nLog:\n");
+            window.tboxConsoleSecondary.AppendText(leSpec.Log.ToString());
         }
     }
 }

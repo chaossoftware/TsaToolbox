@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -398,40 +397,48 @@ namespace TimeSeriesToolbox
             }
         }
 
-        private string lastCommand = string.Empty;
-
         private void tboxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                lastCommand = ((tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run).Text.Trim();
-                _commandProcessor.ProcessCommand(lastCommand);
-            }
+                case Key.Back:
+                    var restOfCommand = LastInline().Text;
 
-            if (Keyboard.IsKeyDown(Key.Up))
-            {
-                var lastInline = LastInline();
-                lastInline.Text = lastCommand;
-                tboxConsole.CaretPosition = lastInline.ContentEnd;
-            }
-
-            if (Keyboard.IsKeyDown(Key.Tab))
-            {
-                var lastInline = LastInline();
-
-                var matchingCommands = _commandProcessor.Commands.Keys.Where(c => c.StartsWith(lastInline.Text));
-
-                if (matchingCommands.Any())
-                {
-                    lastInline.Text = matchingCommands.First();
-                    
-                    tboxConsole.CaretPosition = lastInline.ContentEnd;
-                    new Thread(() => { Thread.Sleep(500); Dispatcher.BeginInvoke(new Action(() => tboxConsole.Focus())); })
+                    if (string.IsNullOrEmpty(restOfCommand))
                     {
-                        ApartmentState = ApartmentState.STA
+                        e.Handled = true;
+                        return;
                     }
-                    .Start();
-                }
+
+                    break;
+
+                case Key.Enter:
+                    var commandToProcess = LastInline().Text.Trim();
+                    _commandProcessor.ProcessCommand(commandToProcess);
+                    break;
+
+                case Key.Up:
+                    var lastInline = LastInline();
+                    lastInline.Text = _commandProcessor.LastCommand;
+                    tboxConsole.CaretPosition = lastInline.ContentEnd;
+                    e.Handled = true;
+                    break;
+
+                case Key.Tab:
+                    var lastInline1 = LastInline();
+                    var matchingCommands = _commandProcessor.Commands.Keys.Where(c => c.StartsWith(lastInline1.Text));
+
+                    if (matchingCommands.Any())
+                    {
+                        lastInline1.Text = matchingCommands.First();
+
+                        tboxConsole.CaretPosition = lastInline1.ContentEnd;
+                        var thread = new Thread(() => { Thread.Sleep(500); Dispatcher.BeginInvoke(new Action(() => tboxConsole.Focus())); });
+                        thread.SetApartmentState(ApartmentState.STA);
+                        thread.Start();
+                    }
+
+                    break;
             }
 
             Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
