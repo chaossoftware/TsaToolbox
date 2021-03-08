@@ -1,7 +1,7 @@
 ﻿using InteractiveDataDisplay.WPF;
-using MathLib.NumericalMethods;
-using MathLib.NumericalMethods.Lyapunov;
-using MathLib.Transform;
+using ChaosSoft.Core.NumericalMethods;
+using ChaosSoft.Core.NumericalMethods.Lyapunov;
+using ChaosSoft.Core.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -233,7 +233,7 @@ namespace TimeSeriesToolbox
         private void CalculateLeSpec()
         {
             window.tboxConsoleSecondary.Clear();
-            var leSpec = new LesSanoSawada(window.sourceData.TimeSeries.YValues);
+            var leSpec = new LeSpecSanoSawada(window.sourceData.TimeSeries.YValues);
             window.tboxConsoleSecondary.AppendText(leSpec.ToString());
             leSpec.Calculate();
             PrintResult(leSpec.GetResult());

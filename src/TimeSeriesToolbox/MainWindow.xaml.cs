@@ -1,9 +1,9 @@
-﻿using MathLib.Data;
-using MathLib.IO;
-using MathLib.NumericalMethods;
-using MathLib.NumericalMethods.EmbeddingDimension;
-using MathLib.NumericalMethods.Lyapunov;
-using MathLib.Transform;
+﻿using ChaosSoft.Core.Data;
+using ChaosSoft.Core.IO;
+using ChaosSoft.Core.NumericalMethods;
+using ChaosSoft.Core.NumericalMethods.EmbeddingDimension;
+using ChaosSoft.Core.NumericalMethods.Lyapunov;
+using ChaosSoft.Core.Transform;
 using Microsoft.Win32;
 using System;
 using System.Globalization;
@@ -290,7 +290,7 @@ namespace TimeSeriesToolbox
                 var scaleFactor = le_ss_scaleFactorTbox.ReadDouble();
                 var minNeigh = le_ss_minNeighbTbox.ReadInt();
 
-                _lyapunov.Method = new LesSanoSawada(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
+                _lyapunov.Method = new LeSpecSanoSawada(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
             }
         }
 

@@ -1,7 +1,7 @@
-﻿using MathLib;
-using MathLib.Data;
-using MathLib.IO;
-using MathLib.NumericalMethods.Lyapunov;
+﻿using ChaosSoft.Core;
+using ChaosSoft.Core.Data;
+using ChaosSoft.Core.IO;
+using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using System;
 using System.Linq;
 using System.Windows;
@@ -84,9 +84,9 @@ namespace TimeSeriesToolbox
             wnd.le_resultTbox.Background = Brushes.LightGreen;
             string result;
 
-            if (Method is LesSanoSawada)
+            if (Method is LeSpecSanoSawada)
             {
-                wnd.le_resultTbox.Text = string.Join(" ", (Method as LesSanoSawada).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
+                wnd.le_resultTbox.Text = string.Join(" ", (Method as LeSpecSanoSawada).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
             }
             else
             {
