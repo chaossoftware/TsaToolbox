@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using TsaToolbox.Properties;
 
 namespace TsaToolbox
 {
@@ -28,7 +29,7 @@ namespace TsaToolbox
                 wnd.Dispatcher.Invoke(() =>
                 {
                     wnd.le_resultTbox.Background = Brushes.Gold;
-                    wnd.le_resultTbox.Text = StringData.Calculating;
+                    wnd.le_resultTbox.Text = Resources.Calculating;
                 });
 
                 Method.Calculate();
@@ -40,7 +41,7 @@ namespace TsaToolbox
                 {
                     wnd.le_logTbox.Text = ex.ToString();
                     wnd.le_resultTbox.Background = Brushes.Coral;
-                    wnd.le_resultTbox.Text = Properties.Resources.Error;
+                    wnd.le_resultTbox.Text = Resources.Error;
                 });
             }
         }
@@ -63,7 +64,7 @@ namespace TsaToolbox
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Properties.Resources.LePlotError + Environment.NewLine + ex.Message);
+                MessageBox.Show(Resources.LePlotError + Environment.NewLine + ex.Message);
             }
         }
 
@@ -132,13 +133,13 @@ namespace TsaToolbox
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(Properties.Resources.LePlotError + Environment.NewLine + ex.Message);
-                    result = Properties.Resources.Nda;
+                    MessageBox.Show(Resources.LePlotError + Environment.NewLine + ex.Message);
+                    result = Resources.Nda;
                 }
             }
             else
             {
-                result = Properties.Resources.Nda;
+                result = Resources.Nda;
             }
 
             if (Method is LleKantz || Method is LleRosenstein)

@@ -70,6 +70,15 @@ namespace TsaToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculating....
+        /// </summary>
+        public static string Calculating {
+            get {
+                return ResourceManager.GetString("Calculating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to command &gt;.
         /// </summary>
         public static string Cmd {

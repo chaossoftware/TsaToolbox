@@ -120,6 +120,9 @@
   <data name="Acf" xml:space="preserve">
     <value>Autocorrelation function</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>Calculating...</value>
+  </data>
   <data name="Cmd" xml:space="preserve">
     <value>command &gt;</value>
   </data>
