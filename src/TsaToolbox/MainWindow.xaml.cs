@@ -208,7 +208,18 @@ namespace TsaToolbox
 
             if (ch_fftCbox.IsChecked.Value)
             {
-                ch_FftGraph.PlotY(GetFftData());
+                var data = GetFftData();
+                double rate = fft_sRate.ReadDouble();
+
+                if (rate == 0)
+                {
+                    ch_FftGraph.PlotY(data);
+                }
+                else
+                {
+                    double[] freq = FftSharp.Transform.FFTfreq(rate, data.Count());
+                    ch_FftGraph.Plot(freq, data);
+                }
             }
         }
 
@@ -454,10 +465,23 @@ namespace TsaToolbox
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
-                new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
-                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
-                .PlotLine(GetFftData())
-                .ShowDialog();
+                var previewForm = new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
+                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble());
+
+                var data = GetFftData();
+                double rate = fft_sRate.ReadDouble();
+
+                if (rate == 0)
+                {
+                    previewForm.PlotLine(data);
+                }
+                else
+                {
+                    double[] freq = FftSharp.Transform.FFTfreq(rate, data.Count());
+                    previewForm.PlotLine(freq, data);
+                }
+
+                previewForm.ShowDialog();
             }
         }
 
@@ -466,7 +490,6 @@ namespace TsaToolbox
             var index = (int)Math.Log(sourceData.TimeSeries.YValues.Length, 2);
             var valuesForFft = sourceData.TimeSeries.YValues.Take((int)Math.Pow(2, index));
             IEnumerable<double> fft = FftSharp.Transform.FFTpower(valuesForFft.ToArray());
-            //double[] freq = FftSharp.Transform.FFTfreq(sampleRate, fft.Count());
 
             if (ch_logScaleCbox.IsChecked.Value)
             {
