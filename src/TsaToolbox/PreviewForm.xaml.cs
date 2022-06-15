@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Windows;
 
-namespace TimeSeriesToolbox
+namespace TsaToolbox
 {
     /// <summary>
     /// Interaction logic for PreviewForm.xaml

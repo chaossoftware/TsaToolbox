@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Controls;
 
-namespace TimeSeriesToolbox
+namespace TsaToolbox
 {
     public static class TextBoxExtension
     {

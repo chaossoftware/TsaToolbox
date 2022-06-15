@@ -6,6 +6,7 @@ using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using ChaosSoft.Core.Transform;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,7 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace TimeSeriesToolbox
+namespace TsaToolbox
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -87,7 +88,7 @@ namespace TimeSeriesToolbox
             ch_acfGraph.Plot(_zero, _zero);
 
             _lyapunov.CleanUp(this);
-            //chartFft.ClearChart();
+            ch_FftGraph.Plot(_zero, _zero);
             //wav_plotPBox.Image = null;
             //routines.DeleteTempFiles();
         }
@@ -203,6 +204,11 @@ namespace TimeSeriesToolbox
                 var fnn = new FalseNearestNeighbors(sourceData.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
                 fnn.Calculate();
                 an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
+            }
+
+            if (ch_fftCbox.IsChecked.Value)
+            {
+                ch_FftGraph.PlotY(GetFftData());
             }
         }
 
@@ -442,6 +448,32 @@ namespace TimeSeriesToolbox
             }
 
             Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
+        }
+
+        private void ch_FftChart_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
+                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
+                .PlotLine(GetFftData())
+                .ShowDialog();
+            }
+        }
+
+        private IEnumerable<double> GetFftData()
+        {
+            var index = (int)Math.Log(sourceData.TimeSeries.YValues.Length, 2);
+            var valuesForFft = sourceData.TimeSeries.YValues.Take((int)Math.Pow(2, index));
+            IEnumerable<double> fft = FftSharp.Transform.FFTpower(valuesForFft.ToArray());
+            //double[] freq = FftSharp.Transform.FFTfreq(sampleRate, fft.Count());
+
+            if (ch_logScaleCbox.IsChecked.Value)
+            {
+                fft = fft.Select(x => -Math.Log(-x));
+            }
+
+            return fft;
         }
     }
 }

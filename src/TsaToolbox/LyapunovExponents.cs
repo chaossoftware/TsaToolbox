@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace TimeSeriesToolbox
+namespace TsaToolbox
 {
     internal class LyapunovExponents
     {
