@@ -86,6 +86,7 @@ namespace TsaToolbox
             ch_SignalGraph.Plot(_zero, _zero);
             ch_PseudoPoincareGraph.Plot(_zero, _zero);
             ch_acfGraph.Plot(_zero, _zero);
+            an_FnnGraph.Plot(_zero, _zero);
 
             _lyapunov.CleanUp(this);
             ch_FftGraph.Plot(_zero, _zero);
@@ -498,5 +499,11 @@ namespace TsaToolbox
 
             return fft;
         }
+
+        private void ts_timestampColumnCbox_Checked(object sender, RoutedEventArgs e) =>
+            ts_tsColumnTbox.Text = "2";
+
+        private void le_k_epsCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
+            _lyapunov.AdjustSlope(this);
     }
 }

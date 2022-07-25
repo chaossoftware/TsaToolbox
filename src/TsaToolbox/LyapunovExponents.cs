@@ -52,6 +52,11 @@ namespace TsaToolbox
             {
                 if (Method is LleKantz)
                 {
+                    if (string.IsNullOrEmpty(wnd.le_k_epsCombo.Text))
+                    {
+                        return;
+                    }
+
                     ((LleKantz)Method).SetSlope(wnd.le_k_epsCombo.Text);
                 }
 
@@ -150,9 +155,6 @@ namespace TsaToolbox
 
         private string FillLyapunovChart(MainWindow wnd)
         {
-            var startPoint = wnd.le_k_startTbox.ReadInt();
-            var endPoint = wnd.le_k_endTbox.ReadInt();
-
             wnd.le_mainSlopeChart.Plot(_zero, _zero);
             wnd.le_secondarySlopeChart.Plot(_zero, _zero);
 
@@ -168,16 +170,19 @@ namespace TsaToolbox
             }
             else
             {
+                var startPoint = wnd.le_k_startTbox.ReadInt() - 1;
+                var endPoint = wnd.le_k_endTbox.ReadInt() - 1;
+
                 var tsSector = new Timeseries();
 
-                tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint - 1].X, Method.Slope.DataPoints[startPoint - 1].Y);
-                tsSector.AddDataPoint(Method.Slope.DataPoints[endPoint - 1].X, Method.Slope.DataPoints[endPoint - 1].Y);
+                tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint].X, Method.Slope.DataPoints[startPoint].Y);
+                tsSector.AddDataPoint(Method.Slope.DataPoints[endPoint].X, Method.Slope.DataPoints[endPoint].Y);
 
                 wnd.le_slopeChart.LeftTitle = "Slope";
                 wnd.le_slopeChartTitle.Text = "Lyapunov Function";
                 wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
 
-                var slope = (Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y) / (Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
+                var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
                 result = string.Format("{0:G5}", slope);
             }
 
