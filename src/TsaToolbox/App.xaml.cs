@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using TsaToolbox.Models;
+using TsaToolbox.ViewModels;
 
 namespace TsaToolbox
 {
@@ -9,9 +11,17 @@ namespace TsaToolbox
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindow = new MainWindow();
-            MainWindow.Show();
+            Settings settigns = new Settings();
+            DataSource source = new DataSource();
 
+            MainWindow = new MainWindow
+            {
+                DataContext = new MainViewModel(settigns, source),
+                Settings = settigns,
+                Source = source
+            };
+
+            MainWindow.Show();
             base.OnStartup(e);
         }
     }

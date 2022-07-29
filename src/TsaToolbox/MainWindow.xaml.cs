@@ -1,10 +1,8 @@
-﻿using ChaosSoft.Core.Data;
-using ChaosSoft.Core.IO;
+﻿using ChaosSoft.Core.IO;
 using ChaosSoft.Core.NumericalMethods;
 using ChaosSoft.Core.NumericalMethods.EmbeddingDimension;
 using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using ChaosSoft.Core.Transform;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,6 +15,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using TsaToolbox.Models;
 
 namespace TsaToolbox
 {
@@ -27,7 +26,6 @@ namespace TsaToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private readonly CommandProcessor _commandProcessor;
-        internal SourceData sourceData;
         private readonly double[] _zero = new double[] { 0 };
 
         public MainWindow()
@@ -37,52 +35,19 @@ namespace TsaToolbox
             InitializeComponent();
             _lyapunov = new LyapunovExponents();
             _commandProcessor = new CommandProcessor(tboxConsole, this);
+
+            Instance = this;
         }
 
-        private void ts_btnOpenFile_Click(object sender, RoutedEventArgs e)
+        public static MainWindow Instance { get; set; }
+
+        public Settings Settings { get; set; }
+
+        public DataSource Source { get; set; }
+
+        public void CleanUp()
         {
-            var openFileDialog = new OpenFileDialog()
-            {
-                Filter = "All files|*.*|Time series data|*.dat *.txt *.csv"
-            };
-
-            if (openFileDialog.ShowDialog().Value)
-            {
-                try
-                {
-                    OpenFile(openFileDialog.FileName);
-                }
-                catch (ArgumentException ex)
-                {
-                    MessageBox.Show("Unable to read file:" + ex.Message);
-                }
-            }
-        }
-
-        public void OpenFile(string fileName)
-        {
-            CleanUp();
-
-            if (ts_parameterizedOpenCbox.IsChecked.Value)
-            {
-                sourceData = new SourceData(
-                    fileName,
-                    ts_LinesToSkipTbox.ReadInt(),
-                    ts_LinesToReadTbox.ReadInt());
-            }
-            else
-            {
-                sourceData = new SourceData(fileName);
-            }
-
-            FillUiWithData();
-
-            RefreshTimeSeries();
-        }
-
-        private void CleanUp()
-        {
-            sourceData = null;
+            Source.Data = null;
             ch_SignalGraph.Plot(_zero, _zero);
             ch_PseudoPoincareGraph.Plot(_zero, _zero);
             ch_acfGraph.Plot(_zero, _zero);
@@ -93,69 +58,6 @@ namespace TsaToolbox
             //wav_plotPBox.Image = null;
             //routines.DeleteTempFiles();
         }
-
-        private void FillUiWithData()
-        {
-            if (ts_tsColumnTbox.ReadInt() > sourceData.ColumnsCount)
-            {
-                ts_timestampColumnCbox.IsChecked = false;
-                ts_tsColumnTbox.Text = "1";
-            }
-
-            if (ts_endPointTbox.ReadInt() > sourceData.LinesCount)
-            {
-                ts_startPointTbox.Text = "1";
-                ts_endPointTbox.Text = sourceData.LinesCount.ToString();
-            }
-
-            statusFileInfoText.Text = sourceData.ToString().Replace("\n", " | ");
-            ts_endPointTbox.Text = sourceData.LinesCount.ToString();
-        }
-
-        private bool RefreshTimeSeries()
-        {
-            if (sourceData == null)
-            {
-                MessageBox.Show(Properties.Resources.MsgEmptyFile);
-                return false;
-            }
-
-            sourceData.SetTimeSeries(
-                ts_tsColumnTbox.ReadInt() - 1,
-                ts_startPointTbox.ReadInt() - 1,
-                ts_endPointTbox.ReadInt() - 1,
-                ts_eachNPointsTbox.ReadInt(),
-                ts_timestampColumnCbox.IsChecked.Value
-            );
-
-            statusTsInfoText.Text = $"Range [{ts_startPointTbox.Text}; {ts_endPointTbox.Text}] | Signal column: {ts_tsColumnTbox.Text}";
-
-            if (ts_timestampColumnCbox.IsChecked.Value)
-            {
-                statusTsInfoText.Text += " (1st column is timestamp)";
-            }
-
-            statusDtTbox.Text = ts_timestampColumnCbox.IsChecked.Value ?
-                string.Format(CultureInfo.InvariantCulture, "{0:G8}", sourceData.Step) :
-                "NaN";
-
-            return true;
-        }
-
-        private void ts_parameterizedOpenCbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ts_LinesToSkipTbox.IsEnabled = false;
-            ts_LinesToReadTbox.IsEnabled = false;
-        }
-
-        private void ts_parameterizedOpenCbox_Checked(object sender, RoutedEventArgs e)
-        {
-            ts_LinesToSkipTbox.IsEnabled = true;
-            ts_LinesToReadTbox.IsEnabled = true;
-        }
-
-        private void ts_setTimeseriesBtn_Click(object sender, RoutedEventArgs e) =>
-            RefreshTimeSeries();
 
         private void le_rosRad_Checked(object sender, RoutedEventArgs e) =>
             le_rosGbox.Visibility = Visibility.Visible;
@@ -185,24 +87,24 @@ namespace TsaToolbox
         {
             if (ch_signalCbox.IsChecked.Value)
             {
-                ch_SignalGraph.Plot(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues);
+                ch_SignalGraph.Plot(Source.Data.TimeSeries.XValues, Source.Data.TimeSeries.YValues);
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
-                var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
+                var pPoincare = PseudoPoincareMap.GetMapDataFrom(Source.Data.TimeSeries.YValues, 1);
                 ch_PseudoPoincareGraph.Plot(pPoincare.XValues, pPoincare.YValues);
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
-                var autoCor = new AutoCorrelationFunction().GetFromSeries(sourceData.TimeSeries.YValues);
+                var autoCor = new AutoCorrelationFunction().GetFromSeries(Source.Data.TimeSeries.YValues);
                 ch_acfGraph.PlotY(autoCor);
             }
 
             if (ch_fnnCbox.IsChecked.Value)
             {
-                var fnn = new FalseNearestNeighbors(sourceData.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
+                var fnn = new FalseNearestNeighbors(Source.Data.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
                 fnn.Calculate();
                 an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
             }
@@ -229,21 +131,20 @@ namespace TsaToolbox
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 new PreviewForm(Properties.Resources.Signal, "t", "f(t)")
-                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
-                .PlotLine(sourceData.TimeSeries.XValues, sourceData.TimeSeries.YValues)
+                .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
+                .PlotLine(Source.Data.TimeSeries.XValues, Source.Data.TimeSeries.YValues)
                 .ShowDialog();
             }
         }
-            
 
         private void ch_PseudoPoincareChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
-                var pPoincare = PseudoPoincareMap.GetMapDataFrom(sourceData.TimeSeries.YValues, 1);
+                var pPoincare = PseudoPoincareMap.GetMapDataFrom(Source.Data.TimeSeries.YValues, 1);
 
                 new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
-                    .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
+                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
                     .PlotMap(pPoincare.XValues, pPoincare.YValues)
                     .ShowDialog();
             }
@@ -254,10 +155,10 @@ namespace TsaToolbox
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 var autoCor = new AutoCorrelationFunction()
-                .GetFromSeries(sourceData.TimeSeries.YValues);
+                .GetFromSeries(Source.Data.TimeSeries.YValues);
 
                 new PreviewForm(Properties.Resources.Acf, "t", "ACF")
-                    .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble())
+                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
                     .PlotLine(autoCor)
                     .ShowDialog();
             }
@@ -266,7 +167,7 @@ namespace TsaToolbox
         private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
         {
             _lyapunov.CleanUp(this);
-            SetLyapunovMethod(sourceData.TimeSeries.YValues);
+            SetLyapunovMethod(Source.Data.TimeSeries.YValues);
 
             new Thread(() => _lyapunov.ExecuteLyapunovMethod(this))
                     .Start();
@@ -317,14 +218,14 @@ namespace TsaToolbox
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (sourceData == null)
+            if (Source.Data == null)
             {
                 MessageBox.Show(Properties.Resources.MsgEmptyFile);
                 return;
             }
 
-            var outDir = Path.Combine(sourceData.Folder, sourceData.FileName + "_out");
-            string fName = Path.Combine(outDir, sourceData.FileName);
+            var outDir = Path.Combine(Source.Data.Folder, Source.Data.FileName + "_out");
+            string fName = Path.Combine(outDir, Source.Data.FileName);
 
             if (!Directory.Exists(outDir))
             {
@@ -333,7 +234,7 @@ namespace TsaToolbox
 
             if (ch_signalCbox.IsChecked.Value)
             {
-                DataWriter.CreateDataFile(fName + "_signal.dat", sourceData.GetTimeSeriesString());
+                DataWriter.CreateDataFile(fName + "_signal.dat", Source.Data.GetTimeSeriesString());
                 SaveChartToFile(ch_SignalChart, fName + "_signal.png");
             }
 
@@ -384,8 +285,8 @@ namespace TsaToolbox
             plot.Measure(plot.RenderSize);
             Rect bounds = VisualTreeHelper.GetDescendantBounds(plot);
 
-            var scaleX = set_chartSaveWidthTbox.ReadDouble() / plot.Width;
-            var scaleY = set_chartSaveHeightTbox.ReadDouble() / plot.Height;
+            var scaleX = Settings.SaveChartWidth / plot.Width;
+            var scaleY = Settings.SaveChartHeight / plot.Height;
 
             var width = (bounds.Width + bounds.X) * scaleX;
             var height = (bounds.Height + bounds.Y) * scaleY;
@@ -467,7 +368,7 @@ namespace TsaToolbox
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 var previewForm = new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
-                .SetSize(set_previewWidthTbox.ReadDouble(), set_previewHeightTbox.ReadDouble());
+                .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
 
                 var data = GetFftData();
                 double rate = fft_sRate.ReadDouble();
@@ -488,8 +389,8 @@ namespace TsaToolbox
 
         private IEnumerable<double> GetFftData()
         {
-            var index = (int)Math.Log(sourceData.TimeSeries.YValues.Length, 2);
-            var valuesForFft = sourceData.TimeSeries.YValues.Take((int)Math.Pow(2, index));
+            var index = (int)Math.Log(Source.Data.TimeSeries.YValues.Length, 2);
+            var valuesForFft = Source.Data.TimeSeries.YValues.Take((int)Math.Pow(2, index));
             IEnumerable<double> fft = FftSharp.Transform.FFTpower(valuesForFft.ToArray());
 
             if (ch_logScaleCbox.IsChecked.Value)
@@ -499,9 +400,6 @@ namespace TsaToolbox
 
             return fft;
         }
-
-        private void ts_timestampColumnCbox_Checked(object sender, RoutedEventArgs e) =>
-            ts_tsColumnTbox.Text = "2";
 
         private void le_k_epsCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
             _lyapunov.AdjustSlope(this);

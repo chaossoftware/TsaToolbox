@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using TsaToolbox.Commands;
+using TsaToolbox.ViewModels;
 
 namespace TsaToolbox
 {
@@ -123,7 +125,7 @@ namespace TsaToolbox
         {
             try
             {
-                window.OpenFile(file);
+                new LoadDataCommand(window.Source, window.SettingsView.DataContext as SourceAndSettingsViewModel).OpenFile(file, false);
             }
             catch (Exception ex)
             {
@@ -136,14 +138,14 @@ namespace TsaToolbox
             switch (chart)
             {
                 case "signal":
-                    AddLineChart().Plot(window.sourceData.TimeSeries.XValues, window.sourceData.TimeSeries.YValues);
+                    AddLineChart().Plot(window.Source.Data.TimeSeries.XValues, window.Source.Data.TimeSeries.YValues);
                     break;
                 case "attractor":
-                    var pPoincare = PseudoPoincareMap.GetMapDataFrom(window.sourceData.TimeSeries.YValues, 1);
+                    var pPoincare = PseudoPoincareMap.GetMapDataFrom(window.Source.Data.TimeSeries.YValues, 1);
                     AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
                     break;
                 case "acf":
-                    var autoCor = new AutoCorrelationFunction().GetFromSeries(window.sourceData.TimeSeries.YValues);
+                    var autoCor = new AutoCorrelationFunction().GetFromSeries(window.Source.Data.TimeSeries.YValues);
                     AddLineChart().PlotY(autoCor);
                     break;
                 default:
@@ -233,7 +235,7 @@ namespace TsaToolbox
         private void CalculateLeSpec()
         {
             window.tboxConsoleSecondary.Clear();
-            var leSpec = new LeSpecSanoSawada(window.sourceData.TimeSeries.YValues);
+            var leSpec = new LeSpecSanoSawada(window.Source.Data.TimeSeries.YValues);
             window.tboxConsoleSecondary.AppendText(leSpec.ToString());
             leSpec.Calculate();
             PrintResult(leSpec.GetResult());
@@ -244,7 +246,7 @@ namespace TsaToolbox
         private void CalculateLleWolf()
         {
             window.tboxConsoleSecondary.Clear();
-            var leSpec = new LleWolf(window.sourceData.TimeSeries.YValues);
+            var leSpec = new LleWolf(window.Source.Data.TimeSeries.YValues);
             window.tboxConsoleSecondary.AppendText(leSpec.ToString());
             leSpec.Calculate();
             PrintResult(leSpec.GetResult());
