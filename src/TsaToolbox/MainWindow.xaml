@@ -169,18 +169,22 @@
         </TabControl>
         <Button x:Name="saveBtn" Content="Save results" HorizontalAlignment="Left" Width="105" Margin="10,0,0,27" Height="20" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
         <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom">
-            <TextBlock x:Name="statusFileInfoText" Width="640" Text="{Binding FileInfo}"/>
-            <Separator/>
-            <TextBlock x:Name="statusTsInfoText" Width="260" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
-            <Separator/>
-            <TextBlock x:Name="statusDtText" Text="Δt:"/>
-            <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
-            <Separator/>
-            <TextBlock HorizontalAlignment="Right" Width="Auto">
-                <Hyperlink NavigateUri="https://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/win64/MCR_R2016b_win64_installer.exe">
-                    MCR 2016b (for Wavelets)
-                </Hyperlink>
-            </TextBlock>
+            <TextBlock x:Name="statusFileInfoText" Width="Auto" Text="{Binding FileInfo}"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Separator/>
+                    <TextBlock x:Name="statusTsInfoText" Width="260" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
+                    <Separator/>
+                    <TextBlock x:Name="statusDtText" Text="Δt:"/>
+                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
+                    <Separator/>
+                    <TextBlock HorizontalAlignment="Right" Width="140">
+                        <Hyperlink NavigateUri="https://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/win64/MCR_R2016b_win64_installer.exe">
+                            MCR 2016b (for Wavelets)
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </Window>
