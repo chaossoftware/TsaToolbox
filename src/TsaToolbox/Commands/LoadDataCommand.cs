@@ -49,7 +49,10 @@ namespace TsaToolbox.Commands
                 new SourceData(fileName, _source.LinesToSkip, _source.LinesToRead) :
                 new SourceData(fileName);
 
-            _viewModel.DataColumnsCount = ArrayUtil.GenerateArray(_source.Data.ColumnsCount, 1, 1);
+            int[] columnsCount = ArrayUtil.GenerateArray(_source.Data.ColumnsCount, 1, 1);
+
+            _viewModel.DataColumnsCount = columnsCount;
+            _viewModel.MultilineData = columnsCount.Length > 1;
 
             if (_source.SignalColumn > _source.Data.ColumnsCount || _source.SignalColumn == 0)
             {

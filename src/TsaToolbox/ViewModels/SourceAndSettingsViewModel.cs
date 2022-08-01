@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using TsaToolbox.Commands;
 using TsaToolbox.Models;
 
@@ -12,10 +10,10 @@ namespace TsaToolbox.ViewModels
         private readonly Settings _settings;
         private readonly DataSource _source;
 
-        private Brush setButtonColor;
         private IEnumerable<int> dataColumnsCount;
         private bool dataLoaded;
         private bool timeSeriesStale;
+        private bool multilineData;
 
         public SourceAndSettingsViewModel(Settings settings, DataSource source)
         {
@@ -33,7 +31,6 @@ namespace TsaToolbox.ViewModels
             EachNPoints = "1";
 
             TimeSeriesStale = false;
-            //ResetSetButton();
         }
 
         public ICommand LoadDataCommand { get; }
@@ -107,8 +104,11 @@ namespace TsaToolbox.ViewModels
 
             set
             {
-                _source.StartPoint = int.Parse(value);
-                OnTsPropertyChanged(nameof(StartPoint));
+                if (int.TryParse(value, out int sp))
+                {
+                    _source.StartPoint = sp > 0 && sp < _source.Data.LinesCount ? sp : 0;
+                    OnTsPropertyChanged(nameof(StartPoint));
+                }
             }
         }
 
@@ -118,8 +118,11 @@ namespace TsaToolbox.ViewModels
 
             set
             {
-                _source.EndPoint = int.Parse(value);
-                OnTsPropertyChanged(nameof(EndPoint));
+                if (int.TryParse(value, out int ep))
+                {
+                    _source.EndPoint = ep > 0 && ep < _source.Data?.LinesCount ? ep : _source.Data.LinesCount;
+                    OnTsPropertyChanged(nameof(EndPoint));
+                }
             }
         }
 
@@ -129,22 +132,13 @@ namespace TsaToolbox.ViewModels
 
             set
             {
-                _source.EachNPoints = int.Parse(value);
-                OnTsPropertyChanged(nameof(EachNPoints));
+                if (int.TryParse(value, out int np))
+                {
+                    _source.EachNPoints = np > 0 && np < _source.Data?.LinesCount ? np : 1;
+                    OnTsPropertyChanged(nameof(EachNPoints));
+                }
             }
         }
-
-        public Brush SetButtonColor
-        {
-            get => setButtonColor;
-
-            set
-            {
-                setButtonColor = value;
-                OnPropertyChanged(nameof(SetButtonColor));
-            }
-        }
-
 
         public string PreviewWindowWidth
         {
@@ -210,9 +204,19 @@ namespace TsaToolbox.ViewModels
                 if (timeSeriesStale != value)
                 {
                     timeSeriesStale = value;
-                    SetButtonColor = value ? Brushes.IndianRed : SystemColors.ControlLightBrush;
                     OnPropertyChanged(nameof(TimeSeriesStale));
                 }
+            }
+        }
+
+        public bool MultilineData
+        {
+            get => multilineData;
+
+            set
+            {
+                multilineData = value;
+                OnPropertyChanged(nameof(MultilineData));
             }
         }
 

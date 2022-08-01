@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:TsaToolbox.Views"
+             xmlns:converters="clr-namespace:TsaToolbox.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -21,6 +22,7 @@
         </Style>
         <s:Boolean x:Key="BoolTrue">True</s:Boolean>
         <s:Boolean x:Key="BoolFalse">False</s:Boolean>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
     </UserControl.Resources>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
@@ -56,9 +58,9 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Label Content="Time in first column:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding TimeInFirstColumn}"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsEnabled="{Binding MultilineData}" IsChecked="{Binding TimeInFirstColumn}"/>
                     <Label Content="Signal column:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <ComboBox x:Name="comboSignalColumn" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DataColumnsCount}" SelectedItem="{Binding SignalColumn}" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
+                    <ComboBox x:Name="comboSignalColumn" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding MultilineData}" ItemsSource="{Binding DataColumnsCount}" SelectedItem="{Binding SignalColumn}" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
                     <Label Content="Start point:" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                     <TextBox x:Name="set_startPoint" Grid.Row="2" Grid.Column="1" Text="{Binding StartPoint}" Style="{StaticResource TextBoxStyle}"/>
                     <Label Content="End point:" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
@@ -66,7 +68,7 @@
                     <Label Content="Each N point:" Grid.Row="4" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                     <TextBox x:Name="set_eachNPoint" Grid.Row="4" Grid.Column="1" Text="{Binding EachNPoints}" Style="{StaticResource TextBoxStyle}"/>
                     <Label Content="" Grid.Row="5" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <Button Content="Set" Grid.Row="5" Grid.Column="1" Command="{Binding SetTimeseriesCommand}" Background="{Binding SetButtonColor}" VerticalAlignment="Center" />
+                    <Button Content="Set" Grid.Row="5" Grid.Column="1" Command="{Binding SetTimeseriesCommand}" Background="{Binding TimeSeriesStale, Converter={StaticResource BoolToColorConverter}, ConverterParameter='button'}" VerticalAlignment="Center" />
                 </Grid>
             </GroupBox>
         </StackPanel>
