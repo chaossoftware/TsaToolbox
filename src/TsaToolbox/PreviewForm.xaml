@@ -14,5 +14,6 @@
                 <d3:CircleMarkerGraph x:Name="markerChart" IsAutoFitEnabled="True" Stroke="Blue" StrokeThickness="1" Min="1" Max="6"/>
             </d3:Plot>
         </d3:Chart>
+        <Image x:Name="imagePreview" Visibility="Hidden" Stretch="Fill"/>
     </Grid>
 </Window>

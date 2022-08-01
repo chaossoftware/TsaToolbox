@@ -1,13 +1,14 @@
-﻿using ChaosSoft.Core.IO;
+﻿using ChaosSoft.Core.Data;
+using ChaosSoft.Core.IO;
 using ChaosSoft.Core.NumericalMethods;
 using ChaosSoft.Core.NumericalMethods.EmbeddingDimension;
 using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using ChaosSoft.Core.Transform;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -55,8 +56,8 @@ namespace TsaToolbox
 
             _lyapunov.CleanUp(this);
             ch_FftGraph.Plot(_zero, _zero);
-            //wav_plotPBox.Image = null;
-            //routines.DeleteTempFiles();
+            wav_pic.Source = null;
+            DeleteTempFiles();
         }
 
         private void le_rosRad_Checked(object sender, RoutedEventArgs e) =>
@@ -108,23 +109,25 @@ namespace TsaToolbox
                 fnn.Calculate();
                 an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
             }
+        }
 
+        private void ch_buildMlBtn_Click(object sender, RoutedEventArgs e)
+        {
             if (ch_fftCbox.IsChecked.Value)
             {
-                var data = GetFftData();
-                double rate = fft_sRate.ReadDouble();
+                var fftTs = GetFft();
+                ch_FftGraph.Plot(fftTs.XValues, fftTs.YValues);
+            }
 
-                if (rate == 0)
-                {
-                    ch_FftGraph.PlotY(data);
-                }
-                else
-                {
-                    double[] freq = FftSharp.Transform.FFTfreq(rate, data.Count());
-                    ch_FftGraph.Plot(freq, data);
-                }
+            if (ch_WaveletCbox.IsChecked.Value)
+            {
+                wav_pic.Source = null;
+                DeleteWaveletTempChart();
+                var image = GetWavelet(wav_pic.Width * 1.6, wav_pic.Height * 1.6, Properties.Resources.WaveletFile);
+                wav_pic.Source = image;
             }
         }
+
 
         private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -368,40 +371,101 @@ namespace TsaToolbox
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 var previewForm = new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
-                .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
+                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
 
-                var data = GetFftData();
-                double rate = fft_sRate.ReadDouble();
+                var data = GetFft();
 
-                if (rate == 0)
-                {
-                    previewForm.PlotLine(data);
-                }
-                else
-                {
-                    double[] freq = FftSharp.Transform.FFTfreq(rate, data.Count());
-                    previewForm.PlotLine(freq, data);
-                }
+                previewForm.PlotLine(data.XValues, data.YValues);
 
                 previewForm.ShowDialog();
             }
         }
 
-        private IEnumerable<double> GetFftData()
+        private void ch_WavChart_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var index = (int)Math.Log(Source.Data.TimeSeries.YValues.Length, 2);
-            var valuesForFft = Source.Data.TimeSeries.YValues.Take((int)Math.Pow(2, index));
-            IEnumerable<double> fft = FftSharp.Transform.FFTpower(valuesForFft.ToArray());
-
-            if (ch_logScaleCbox.IsChecked.Value)
+            if (e.RightButton == MouseButtonState.Pressed)
             {
-                fft = fft.Select(x => -Math.Log(-x));
-            }
+                try
+                {
+                    DeleteWaveletPreviewTempChart();
 
-            return fft;
+                    var previewForm = new PreviewForm(Properties.Resources.Wavelet, "", "")
+                        .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
+
+
+                    previewForm.Show();
+
+                    previewForm.previewChart.Visibility = Visibility.Hidden;
+                    previewForm.imagePreview.Visibility = Visibility.Visible;
+                    var data = GetWavelet(previewForm.grid.ActualWidth, previewForm.grid.ActualHeight, Properties.Resources.WaveletPreviewFile);
+                    previewForm.imagePreview.Source = data;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error previewing wavelet:\n" + ex);
+                }
+
+            }
+        }
+
+        private Timeseries GetFft()
+        {
+            int logScale = ch_logScaleCbox.IsChecked.Value ? 1 : 0;
+            double dt = fft_dt.ReadDouble();
+            double omStart = fft_omLeft.ReadDouble();
+            double omEnd = fft_omRight.ReadDouble();
+            
+            return Fourier.GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
+        }
+
+        private BitmapImage GetWavelet(double width, double height, string fileName)
+        {
+            double tStart = Source.Data.TimeSeries.Min.X;
+            double tEnd = Source.Data.TimeSeries.Max.X;
+
+            try
+            {
+                Wavelet.BuildWavelet(Source.Data.TimeSeries.YValues,
+                    fileName,
+                    wav_typeCbox.Text,
+                    tStart,
+                    tEnd,
+                    wav_omLeft.ReadDouble(),
+                    wav_omRight.ReadDouble(),
+                    wav_dt.ReadDouble(),
+                    wav_paletteCbox.Text,
+                    width,
+                    height);
+
+                string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                
+                return new BitmapImage(
+                    new Uri(Path.Combine(dir, fileName)));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unable to build {Properties.Resources.Wavelet}:\n" + ex.Message);
+                return null;
+            }
         }
 
         private void le_k_epsCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
             _lyapunov.AdjustSlope(this);
+
+        public void DeleteTempFiles()
+        {
+            DeleteWaveletTempChart();
+            DeleteWaveletPreviewTempChart();
+        }
+
+        private void DeleteWaveletTempChart()
+        {
+            File.Delete(Properties.Resources.WaveletFile);
+        }
+
+        private void DeleteWaveletPreviewTempChart()
+        {
+            File.Delete(Properties.Resources.WaveletPreviewFile);
+        }
     }
 }

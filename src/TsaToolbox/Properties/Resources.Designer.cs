@@ -167,5 +167,23 @@ namespace TsaToolbox.Properties {
                 return ResourceManager.GetString("Wavelet", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to wavelet.tmp.
+        /// </summary>
+        public static string WaveletFile {
+            get {
+                return ResourceManager.GetString("WaveletFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to waveletPreview.tmp.
+        /// </summary>
+        public static string WaveletPreviewFile {
+            get {
+                return ResourceManager.GetString("WaveletPreviewFile", resourceCulture);
+            }
+        }
     }
 }

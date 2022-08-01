@@ -153,4 +153,10 @@
   <data name="Wavelet" xml:space="preserve">
     <value>Wavelet</value>
   </data>
+  <data name="WaveletFile" xml:space="preserve">
+    <value>wavelet.tmp</value>
+  </data>
+  <data name="WaveletPreviewFile" xml:space="preserve">
+    <value>waveletPreview.tmp</value>
+  </data>
 </root>

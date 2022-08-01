@@ -5,6 +5,7 @@
     <TargetFramework>net4.8</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FftSharp" Version="1.0.8" />
     <PackageReference Include="InteractiveDataDisplay.WPF" Version="1.0.0" />
   </ItemGroup>
 
