@@ -56,7 +56,7 @@ namespace TsaToolbox
 
             _lyapunov.CleanUp(this);
             ch_FftGraph.Plot(_zero, _zero);
-            wav_pic.Source = null;
+            ch_wavPlot.Background = null;
             DeleteTempFiles();
         }
 
@@ -121,10 +121,15 @@ namespace TsaToolbox
 
             if (ch_WaveletCbox.IsChecked.Value)
             {
-                wav_pic.Source = null;
                 DeleteWaveletTempChart();
-                var image = GetWavelet(wav_pic.Width * 1.6, wav_pic.Height * 1.6, Properties.Resources.WaveletFile);
-                wav_pic.Source = image;
+                var brush = GetWavelet(
+                    ch_wavChart, 
+                    ch_wavChart.Width * 2, 
+                    ch_wavChart.Height * 2, 
+                    Properties.Resources.WaveletFile);
+
+                ch_wavPlot.Background = brush;
+                SetWavPlotRect(ch_wavPlot);
             }
         }
 
@@ -389,16 +394,20 @@ namespace TsaToolbox
                 {
                     DeleteWaveletPreviewTempChart();
 
-                    var previewForm = new PreviewForm(Properties.Resources.Wavelet, "", "")
+                    var previewForm = new PreviewForm(Properties.Resources.Wavelet, "t", "ω")
                         .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
 
-
                     previewForm.Show();
+                    previewForm.Topmost = true;
 
-                    previewForm.previewChart.Visibility = Visibility.Hidden;
-                    previewForm.imagePreview.Visibility = Visibility.Visible;
-                    var data = GetWavelet(previewForm.grid.ActualWidth, previewForm.grid.ActualHeight, Properties.Resources.WaveletPreviewFile);
-                    previewForm.imagePreview.Source = data;
+                    var brush = GetWavelet(
+                        previewForm.previewChart, 
+                        previewForm.grid.ActualWidth, 
+                        previewForm.grid.ActualHeight, 
+                        Properties.Resources.WaveletPreviewFile);
+
+                    previewForm.previewPlot.Background = brush;
+                    SetWavPlotRect(previewForm.previewPlot);
                 }
                 catch (Exception ex)
                 {
@@ -418,7 +427,7 @@ namespace TsaToolbox
             return Fourier.GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
         }
 
-        private BitmapImage GetWavelet(double width, double height, string fileName)
+        private ImageBrush GetWavelet(Visual visual, double width, double height, string fileName)
         {
             double tStart = Source.Data.TimeSeries.Min.X;
             double tEnd = Source.Data.TimeSeries.Max.X;
@@ -439,8 +448,26 @@ namespace TsaToolbox
 
                 string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 
-                return new BitmapImage(
+                var data = new BitmapImage(
                     new Uri(Path.Combine(dir, fileName)));
+
+                DpiScale dpi = VisualTreeHelper.GetDpi(visual);
+
+                double dWidth = data.Width * data.DpiX / dpi.PixelsPerInchX;
+                double dHeight = data.Height * data.DpiY / dpi.PixelsPerInchY;
+
+                var xOffset = dWidth / 12.5;
+                var yOffset = dHeight / 12.5;
+                var rect = new Int32Rect((int)xOffset, (int)yOffset, (int)(dWidth - 2 * xOffset), (int)(dHeight - 2 * yOffset));
+
+                var croppedBitmap = new CroppedBitmap(data, rect);
+
+                var brush = new ImageBrush(croppedBitmap)
+                {
+                    Stretch = Stretch.Fill
+                };
+
+                return brush;
             }
             catch (Exception ex)
             {
@@ -466,6 +493,17 @@ namespace TsaToolbox
         private void DeleteWaveletPreviewTempChart()
         {
             File.Delete(Properties.Resources.WaveletPreviewFile);
+        }
+
+        private void SetWavPlotRect(InteractiveDataDisplay.WPF.Plot plot)
+        {
+            var rect = new InteractiveDataDisplay.WPF.DataRect(
+                Source.Data.TimeSeries.Min.X,
+                wav_omLeft.ReadDouble(),
+                Source.Data.TimeSeries.Max.X,
+                wav_omRight.ReadDouble());
+
+            plot.SetPlotRect(rect);
         }
     }
 }
