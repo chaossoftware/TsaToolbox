@@ -1,7 +1,7 @@
 ﻿using ChaosSoft.Core.Data;
 using MathWorks.MATLAB.NET.Arrays;
 
-namespace ChaosSoft.Core.Transform
+namespace ChaosSoft.MatlabIntegration
 {
     public class Fourier
     {

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChaosSoft.Core\ChaosSoft.Core.csproj" />
+    <ProjectReference Include="..\ChaosSoft.MatlabIntegration\ChaosSoft.MatlabIntegration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

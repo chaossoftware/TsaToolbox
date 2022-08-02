@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net4.8</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChaosSoft.Core\ChaosSoft.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MatlabEngine">
+      <HintPath>lib\MatlabEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="MWArray">
+      <HintPath>lib\MWArray.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

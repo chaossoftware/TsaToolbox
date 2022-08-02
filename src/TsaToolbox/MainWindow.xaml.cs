@@ -4,6 +4,7 @@ using ChaosSoft.Core.NumericalMethods;
 using ChaosSoft.Core.NumericalMethods.EmbeddingDimension;
 using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using ChaosSoft.Core.Transform;
+using ChaosSoft.MatlabIntegration;
 using System;
 using System.Globalization;
 using System.IO;
