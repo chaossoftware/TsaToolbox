@@ -124,6 +124,15 @@ namespace TsaToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mutual information.
+        /// </summary>
+        public static string Mi {
+            get {
+                return ResourceManager.GetString("Mi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select file first.
         /// </summary>
         public static string MsgEmptyFile {

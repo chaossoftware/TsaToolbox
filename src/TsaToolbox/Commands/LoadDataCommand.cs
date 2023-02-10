@@ -1,5 +1,5 @@
-﻿using ChaosSoft.Core;
-using ChaosSoft.Core.Data;
+﻿using ChaosSoft.Core.Data;
+using ChaosSoft.Core.Extensions;
 using Microsoft.Win32;
 using System;
 using System.Windows;
@@ -45,11 +45,18 @@ namespace TsaToolbox.Commands
         {
             MainWindow.Instance.CleanUp();
 
-            _source.Data = parameterized ?
-                new SourceData(fileName, _source.LinesToSkip, _source.LinesToRead) :
-                new SourceData(fileName);
+            if (_source.ReadFromBytes)
+            {
+                _source.Data = SourceData.FromBytesFile(fileName);
+            }
+            else
+            {
+                _source.Data = parameterized ?
+                    new SourceData(fileName, _source.LinesToSkip, _source.LinesToRead) :
+                    new SourceData(fileName);
+            }
 
-            int[] columnsCount = ArrayUtil.GenerateArray(_source.Data.ColumnsCount, 1, 1);
+            int[] columnsCount = Arrays.GenerateUniformArray(_source.Data.ColumnsCount, 1, 1);
 
             _viewModel.DataColumnsCount = columnsCount;
             _viewModel.MultilineData = columnsCount.Length > 1;

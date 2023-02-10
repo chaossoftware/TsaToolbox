@@ -5,7 +5,7 @@ namespace ChaosSoft.MatlabIntegration
 {
     public class Fourier
     {
-        public static Timeseries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, int logScale)
+        public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, int logScale)
         {
             MatlabEngine.MatlabEngine signalAnalysis = new MatlabEngine.MatlabEngine();
 
@@ -13,7 +13,7 @@ namespace ChaosSoft.MatlabIntegration
             var result = signalAnalysis.GetFourierData(mw_signalArray, dt, logScale);
             var mw_na_result = (MWNumericArray)result;
             var fourierData = (double[,])mw_na_result.ToArray(MWArrayComponent.Real);
-            var fourier = new Timeseries();
+            var fourier = new DataSeries();
 
             for (int i = 0; i < fourierData.GetLength(0); i++)
             {

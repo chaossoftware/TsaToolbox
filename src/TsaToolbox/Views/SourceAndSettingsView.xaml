@@ -82,11 +82,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Label Content="Lines to skip:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <TextBox x:Name="set_linesToSkip" Grid.Row="0" Grid.Column="1" Text="{Binding LinesToSkip}" Style="{StaticResource TextBoxStyle}"/>
-                    <Label Content="Lines to read:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <TextBox x:Name="set_linesToRead" Grid.Row="1" Grid.Column="1" Text="{Binding LinesToRead}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Lines to skip:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="set_linesToSkip" Grid.Row="1" Grid.Column="1" Text="{Binding LinesToSkip}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Lines to read:" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="set_linesToRead" Grid.Row="2" Grid.Column="1" Text="{Binding LinesToRead}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Read from bytes:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <CheckBox x:Name="set_bytesCbox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding ReadFromBytes}"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="Save charts settings" Style="{StaticResource GroupBoxStyle}" Padding="5" Margin="10">

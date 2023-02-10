@@ -138,6 +138,9 @@
   <data name="LePlotError" xml:space="preserve">
     <value>Error plotting Lyapunov slope:</value>
   </data>
+  <data name="Mi" xml:space="preserve">
+    <value>Mutual information</value>
+  </data>
   <data name="MsgEmptyFile" xml:space="preserve">
     <value>Select file first</value>
   </data>

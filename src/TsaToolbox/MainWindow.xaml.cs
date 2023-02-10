@@ -1,7 +1,8 @@
-﻿using ChaosSoft.Core.Data;
+﻿using ChaosSoft.Core;
+using ChaosSoft.Core.Data;
 using ChaosSoft.Core.IO;
 using ChaosSoft.Core.NumericalMethods;
-using ChaosSoft.Core.NumericalMethods.EmbeddingDimension;
+using ChaosSoft.Core.NumericalMethods.PhaseSpace;
 using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using ChaosSoft.Core.Transform;
 using ChaosSoft.MatlabIntegration;
@@ -54,6 +55,11 @@ namespace TsaToolbox
             ch_PseudoPoincareGraph.Plot(_zero, _zero);
             ch_acfGraph.Plot(_zero, _zero);
             an_FnnGraph.Plot(_zero, _zero);
+            an_miGraph.Plot(_zero, _zero);
+
+            ch_acfCbox.Content = Properties.Resources.Acf;
+            ch_fnnCbox.Content = Properties.Resources.Fnn;
+            ch_miCbox.Content = Properties.Resources.Mi;
 
             _lyapunov.CleanUp(this);
             ch_FftGraph.Plot(_zero, _zero);
@@ -100,15 +106,40 @@ namespace TsaToolbox
 
             if (ch_acfCbox.IsChecked.Value)
             {
-                var autoCor = new AutoCorrelationFunction().GetFromSeries(Source.Data.TimeSeries.YValues);
+                var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
                 ch_acfGraph.PlotY(autoCor);
+
+                int i;
+
+                for (i = 1; i < autoCor.Length; i++)
+                {
+                    if (Math.Sign(autoCor[i]) != Math.Sign(autoCor[i - 1]))
+                    {
+                        break;
+                    }
+                }
+
+                ch_acfCbox.Content = $"{Properties.Resources.Acf} (={i})";
             }
 
             if (ch_fnnCbox.IsChecked.Value)
             {
-                var fnn = new FalseNearestNeighbors(Source.Data.TimeSeries.YValues, fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
-                fnn.Calculate();
+                var fnn = new FalseNearestNeighbors(fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
+                fnn.Calculate(Source.Data.TimeSeries.YValues);
                 an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
+
+                int key = fnn.FalseNeighbors.Keys.First(k => fnn.FalseNeighbors[k] == 0);
+                ch_fnnCbox.Content = $"{Properties.Resources.Fnn} (={key})";
+            }
+
+            if (ch_miCbox.IsChecked.Value)
+            {
+                var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
+                mi.Calculate(Source.Data.TimeSeries.YValues);
+                an_miGraph.Plot(mi.Slope.XValues, mi.Slope.YValues);
+
+                double index = mi.Slope.XValues[Array.IndexOf(mi.Slope.YValues, mi.Slope.YValues.Min())];
+                ch_miCbox.Content = $"{Properties.Resources.Mi} (={(int)index})";
             }
         }
 
@@ -163,8 +194,7 @@ namespace TsaToolbox
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
-                var autoCor = new AutoCorrelationFunction()
-                .GetFromSeries(Source.Data.TimeSeries.YValues);
+                var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
 
                 new PreviewForm(Properties.Resources.Acf, "t", "ACF")
                     .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
@@ -176,13 +206,13 @@ namespace TsaToolbox
         private void le_calculateBtn_Click(object sender, RoutedEventArgs e)
         {
             _lyapunov.CleanUp(this);
-            SetLyapunovMethod(Source.Data.TimeSeries.YValues);
+            SetLyapunovMethod(Source.Data.TimeSeries.YValues.Length);
 
-            new Thread(() => _lyapunov.ExecuteLyapunovMethod(this))
+            new Thread(() => _lyapunov.ExecuteLyapunovMethod(this, Source.Data.TimeSeries.YValues))
                     .Start();
         }
 
-        private void SetLyapunovMethod(double[] series)
+        private void SetLyapunovMethod(int lenght)
         {
             var dim = le_eDimTbox.ReadInt();
             var tau = le_tauTbox.ReadInt();
@@ -194,14 +224,14 @@ namespace TsaToolbox
                 var scaleMax = le_w_epsMaxTbox.ReadDouble();
                 var evolSteps = le_w_evolStepsTbox.ReadInt();
 
-                _lyapunov.Method = new LleWolf(series, dim, tau, dt, scaleMin, scaleMax, evolSteps);
+                _lyapunov.Method = new LleWolf(dim, tau, dt, scaleMin, scaleMax, evolSteps);
             }
             else if (le_rosRad.IsChecked.Value)
             {
                 var iter = le_r_iterTbox.ReadInt();
                 var window = le_r_windowTbox.ReadInt();
 
-                _lyapunov.Method = new LleRosenstein(series, dim, tau, iter, window, scaleMin);
+                _lyapunov.Method = new LleRosenstein(dim, tau, iter, window, scaleMin);
             }
             else if (le_kantzRad.IsChecked.Value)
             {
@@ -210,7 +240,7 @@ namespace TsaToolbox
                 var scaleMax = le_k_epsMaxTbox.ReadDouble();
                 var scales = le_k_scalesTbox.ReadInt();
 
-                _lyapunov.Method = new LleKantz(series, dim, tau, iter, window, scaleMin, scaleMax, scales);
+                _lyapunov.Method = new LleKantz(dim, tau, iter, window, scaleMin, scaleMax, scales);
             }
             else if (le_ssRad.IsChecked.Value)
             {
@@ -218,7 +248,7 @@ namespace TsaToolbox
                 var scaleFactor = le_ss_scaleFactorTbox.ReadDouble();
                 var minNeigh = le_ss_minNeighbTbox.ReadInt();
 
-                _lyapunov.Method = new LeSpecSanoSawada(series, dim, tau, series.Length, scaleMin, scaleFactor, minNeigh, inverse);
+                _lyapunov.Method = new LeSpecSanoSawada(dim, tau, lenght, scaleMin, scaleFactor, minNeigh, inverse);
             }
         }
 
@@ -418,7 +448,7 @@ namespace TsaToolbox
             }
         }
 
-        private Timeseries GetFft()
+        private DataSeries GetFft()
         {
             int logScale = ch_logScaleCbox.IsChecked.Value ? 1 : 0;
             double dt = fft_dt.ReadDouble();

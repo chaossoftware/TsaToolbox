@@ -59,6 +59,17 @@ namespace TsaToolbox.ViewModels
             }
         }
 
+        public bool ReadFromBytes
+        {
+            get => _source.ReadFromBytes;
+
+            set
+            {
+                _source.ReadFromBytes = value;
+                OnPropertyChanged(nameof(ReadFromBytes));
+            }
+        }
+
         public bool TimeInFirstColumn
         {
             get => _source.TimeInFirstColumn;

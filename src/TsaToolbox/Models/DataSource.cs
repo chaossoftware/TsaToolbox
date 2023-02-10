@@ -12,6 +12,8 @@ namespace TsaToolbox.Models
 
         public int LinesToRead { get; set; }
 
+        public bool ReadFromBytes { get; set; }
+
         // Timeseries settings.
 
         public bool TimeInFirstColumn { get; set; }

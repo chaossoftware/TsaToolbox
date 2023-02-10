@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using TsaToolbox.Commands;
 using TsaToolbox.ViewModels;
+using ChaosSoft.Core;
 
 namespace TsaToolbox
 {
@@ -145,7 +146,7 @@ namespace TsaToolbox
                     AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
                     break;
                 case "acf":
-                    var autoCor = new AutoCorrelationFunction().GetFromSeries(window.Source.Data.TimeSeries.YValues);
+                    var autoCor = Statistics.Acf(window.Source.Data.TimeSeries.YValues);
                     AddLineChart().PlotY(autoCor);
                     break;
                 default:
@@ -235,10 +236,10 @@ namespace TsaToolbox
         private void CalculateLeSpec()
         {
             window.tboxConsoleSecondary.Clear();
-            var leSpec = new LeSpecSanoSawada(window.Source.Data.TimeSeries.YValues);
+            var leSpec = new LeSpecSanoSawada(2);
             window.tboxConsoleSecondary.AppendText(leSpec.ToString());
-            leSpec.Calculate();
-            PrintResult(leSpec.GetResult());
+            leSpec.Calculate(window.Source.Data.TimeSeries.YValues);
+            PrintResult(leSpec.GetResultAsString());
             window.tboxConsoleSecondary.AppendText("\nLog:\n");
             window.tboxConsoleSecondary.AppendText(leSpec.Log.ToString());
         }
@@ -246,10 +247,10 @@ namespace TsaToolbox
         private void CalculateLleWolf()
         {
             window.tboxConsoleSecondary.Clear();
-            var leSpec = new LleWolf(window.Source.Data.TimeSeries.YValues);
+            var leSpec = new LleWolf(2);
             window.tboxConsoleSecondary.AppendText(leSpec.ToString());
-            leSpec.Calculate();
-            PrintResult(leSpec.GetResult());
+            leSpec.Calculate(window.Source.Data.TimeSeries.YValues);
+            PrintResult(leSpec.GetResultAsString());
             window.tboxConsoleSecondary.AppendText("\nLog:\n");
             window.tboxConsoleSecondary.AppendText(leSpec.Log.ToString());
         }

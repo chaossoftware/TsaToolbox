@@ -1,6 +1,7 @@
-﻿using ChaosSoft.Core;
-using ChaosSoft.Core.Data;
+﻿using ChaosSoft.Core.Data;
+using ChaosSoft.Core.Extensions;
 using ChaosSoft.Core.IO;
+using ChaosSoft.Core.NumericalMethods;
 using ChaosSoft.Core.NumericalMethods.Lyapunov;
 using System;
 using System.Linq;
@@ -20,9 +21,9 @@ namespace TsaToolbox
         {
         }
 
-        public LyapunovMethod Method { get; set; }
+        public ITimeSeriesLyapunov Method { get; set; }
 
-        public void ExecuteLyapunovMethod(MainWindow wnd)
+        public void ExecuteLyapunovMethod(MainWindow wnd, double[] series)
         {
             try
             {
@@ -32,7 +33,7 @@ namespace TsaToolbox
                     wnd.le_resultTbox.Text = Resources.Calculating;
                 });
 
-                Method.Calculate();
+                Method.Calculate(series);
                 wnd.Dispatcher.Invoke(() => SetLyapunovResult(wnd));
             }
             catch (Exception ex)
@@ -50,14 +51,14 @@ namespace TsaToolbox
         {
             try
             {
-                if (Method is LleKantz)
+                if (Method is LleKantz k)
                 {
                     if (string.IsNullOrEmpty(wnd.le_k_epsCombo.Text))
                     {
                         return;
                     }
 
-                    ((LleKantz)Method).SetSlope(wnd.le_k_epsCombo.Text);
+                    k.SetSlope(wnd.le_k_epsCombo.Text);
                 }
 
                 var res = FillLyapunovChart(wnd);
@@ -90,16 +91,16 @@ namespace TsaToolbox
             wnd.le_resultTbox.Background = Brushes.LightGreen;
             string result;
 
-            if (Method is LeSpecSanoSawada)
+            if (Method is LeSpecSanoSawada ss)
             {
-                wnd.le_resultTbox.Text = string.Join(" ", (Method as LeSpecSanoSawada).Result.Spectrum.Select(l => NumFormat.ToShort(l)));
+                wnd.le_resultTbox.Text = string.Join(" ", ss.Result.Select(l => NumFormatter.ToShort(l)));
             }
             else
             {
-                wnd.le_resultTbox.Text = Method.GetResult();
+                wnd.le_resultTbox.Text = (Method as IDescribable).GetResultAsString();
             }
            
-            wnd.le_logTbox.Text = Method.ToString() + "\n\nResult:\n" + Method.GetResult() + "\n\nLog:\n" + Method.Log.ToString();
+            wnd.le_logTbox.Text = Method.ToString() + "\n\nResult:\n" + (Method as IDescribable).GetResultAsString() + "\n\nLog:\n" + Method.Log.ToString();
 
             if (Method is LleKantz || Method is LleRosenstein)
             {
@@ -110,11 +111,11 @@ namespace TsaToolbox
                 wnd.le_kantzResultGbox.Visibility = Visibility.Hidden;
             }
 
-            if (Method is LleKantz)
+            if (Method is LleKantz k)
             {
-                wnd.le_k_epsCombo.ItemsSource = ((LleKantz)Method).SlopesList.Keys;
+                k.SetSlope(k.SlopesList.Keys.First());
+                wnd.le_k_epsCombo.ItemsSource = k.SlopesList.Keys;
                 wnd.le_k_epsCombo.SelectedIndex = 0;
-                ((LleKantz)Method).SetSlope(wnd.le_k_epsCombo.Text);
             }
 
             if (Method.Slope.Length > 1)
@@ -123,7 +124,7 @@ namespace TsaToolbox
                 {
                     if (Method is LleKantz || Method is LleRosenstein)
                     {
-                        var leSectorEnd = Ext.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
+                        var leSectorEnd = DataSeriesExt.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
 
                         if (leSectorEnd <= 0)
                         {
@@ -173,7 +174,7 @@ namespace TsaToolbox
                 var startPoint = wnd.le_k_startTbox.ReadInt() - 1;
                 var endPoint = wnd.le_k_endTbox.ReadInt() - 1;
 
-                var tsSector = new Timeseries();
+                var tsSector = new DataSeries();
 
                 tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint].X, Method.Slope.DataPoints[startPoint].Y);
                 tsSector.AddDataPoint(Method.Slope.DataPoints[endPoint].X, Method.Slope.DataPoints[endPoint].Y);
@@ -183,7 +184,7 @@ namespace TsaToolbox
                 wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
 
                 var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
-                result = string.Format("{0:G5}", slope);
+                result = NumFormatter.ToShort(slope);
             }
 
             return result;

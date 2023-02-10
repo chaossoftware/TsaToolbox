@@ -67,6 +67,23 @@
                         </Grid>
                     </GroupBox>
 
+                    <GroupBox Margin="450,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                        <GroupBox.Header>
+                            <CheckBox x:Name="ch_miCbox" Content="{x:Static resx:Resources.Mi}" IsChecked="False" />
+                        </GroupBox.Header>
+                        <Grid>
+                            <d3:Chart x:Name="an_miChart" BottomTitle="d" LeftTitle="mi" LegendVisibility="Hidden" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="10,10,0,0">
+                                <d3:LineGraph x:Name="an_miGraph" IsAutoFitEnabled="True" Description="Signal" Stroke="Blue" StrokeThickness="0.5"/>
+                            </d3:Chart>
+                            <StackPanel Margin="300,0,10,0">
+                                <TextBlock Text="Partitions:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBox x:Name="mi_partitions" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top"/>
+                                <TextBlock Text="Max. delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="mi_maxDelay" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Width="75" Click="ch_buildBtn_Click"/>
                 </Grid>
             </TabItem>
@@ -196,7 +213,7 @@
                             <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom" FontFamily="Consolas"/>
+                    <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom" VerticalContentAlignment="Center" FontFamily="Consolas"/>
                     <d3:Chart x:Name="le_slopeChart" BottomTitle="t" LeftTitle="Slope" LegendVisibility="Hidden" Margin="10,0,0,10" Width="600" HorizontalAlignment="Left" Height="330" VerticalAlignment="Bottom">
                         <d3:Chart.Title>
                             <TextBlock x:Name="le_slopeChartTitle" HorizontalAlignment="Center" FontSize="14" Margin="0,5,0,5">Lyapunov slope</TextBlock>
