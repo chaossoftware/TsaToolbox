@@ -19,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TsaToolbox.Models;
+using System.Drawing;
 
 namespace TsaToolbox
 {
@@ -341,7 +342,7 @@ namespace TsaToolbox
             {
                 VisualBrush vb = new VisualBrush(plot);
                 ctx.DrawRectangle(vb, null,
-                    new Rect(new Point(bounds.X, bounds.Y), new Point(width, height)));
+                    new Rect(new System.Windows.Point(bounds.X, bounds.Y), new System.Windows.Point(width, height)));
             }
 
             rtb.Render(dv);
@@ -479,8 +480,16 @@ namespace TsaToolbox
 
                 string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 
-                var data = new BitmapImage(
-                    new Uri(Path.Combine(dir, fileName)));
+                var data = new BitmapImage();
+                var stream = File.OpenRead(Path.Combine(dir, fileName));
+
+                data.BeginInit();
+                data.CacheOption = BitmapCacheOption.OnLoad;
+                data.StreamSource = stream;
+                data.EndInit();
+                stream.Close();
+                stream.Dispose();
+                data.Freeze();
 
                 DpiScale dpi = VisualTreeHelper.GetDpi(visual);
 
