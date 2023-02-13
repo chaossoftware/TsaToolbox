@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChaosSoft.NumericalMethods" Version="1.0.0-beta" />
     <PackageReference Include="InteractiveDataDisplay.WPF" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChaosSoft.Core\ChaosSoft.Core.csproj" />
     <ProjectReference Include="..\ChaosSoft.MatlabIntegration\ChaosSoft.MatlabIntegration.csproj" />
   </ItemGroup>
 

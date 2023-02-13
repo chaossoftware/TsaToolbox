@@ -56,7 +56,7 @@ namespace TsaToolbox.Commands
                     new SourceData(fileName);
             }
 
-            int[] columnsCount = Arrays.GenerateUniformArray(_source.Data.ColumnsCount, 1, 1);
+            int[] columnsCount = ChaosSoft.Core.Extensions.Vector.CreateUniform(_source.Data.ColumnsCount, 1, 1);
 
             _viewModel.DataColumnsCount = columnsCount;
             _viewModel.MultilineData = columnsCount.Length > 1;

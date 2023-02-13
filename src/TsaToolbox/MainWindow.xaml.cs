@@ -1,10 +1,10 @@
 ﻿using ChaosSoft.Core;
 using ChaosSoft.Core.Data;
 using ChaosSoft.Core.IO;
-using ChaosSoft.Core.NumericalMethods;
-using ChaosSoft.Core.NumericalMethods.PhaseSpace;
-using ChaosSoft.Core.NumericalMethods.Lyapunov;
-using ChaosSoft.Core.Transform;
+using ChaosSoft.NumericalMethods;
+using ChaosSoft.NumericalMethods.PhaseSpace;
+using ChaosSoft.NumericalMethods.Lyapunov;
+using ChaosSoft.NumericalMethods.Transform;
 using ChaosSoft.MatlabIntegration;
 using System;
 using System.Globalization;
@@ -273,7 +273,7 @@ namespace TsaToolbox
 
             if (ch_signalCbox.IsChecked.Value)
             {
-                DataWriter.CreateDataFile(fName + "_signal.dat", Source.Data.GetTimeSeriesString());
+                DataWriter.CreateDataFile(fName + "_signal.dat", Source.Data.GetTimeSeriesAsString());
                 SaveChartToFile(ch_SignalChart, fName + "_signal.png");
             }
 

@@ -1,8 +1,9 @@
 ﻿using ChaosSoft.Core.Data;
 using ChaosSoft.Core.Extensions;
 using ChaosSoft.Core.IO;
-using ChaosSoft.Core.NumericalMethods;
-using ChaosSoft.Core.NumericalMethods.Lyapunov;
+using ChaosSoft.NumericalMethods;
+using ChaosSoft.NumericalMethods.Extensions;
+using ChaosSoft.NumericalMethods.Lyapunov;
 using System;
 using System.Linq;
 using System.Windows;

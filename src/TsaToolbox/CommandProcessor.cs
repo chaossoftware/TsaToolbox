@@ -1,7 +1,7 @@
 ﻿using InteractiveDataDisplay.WPF;
-using ChaosSoft.Core.NumericalMethods;
-using ChaosSoft.Core.NumericalMethods.Lyapunov;
-using ChaosSoft.Core.Transform;
+using ChaosSoft.NumericalMethods;
+using ChaosSoft.NumericalMethods.Lyapunov;
+using ChaosSoft.NumericalMethods.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;

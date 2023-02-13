@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChaosSoft.Core\ChaosSoft.Core.csproj" />
+    <PackageReference Include="ChaosSoft.Core" Version="1.0.0-beta" />
   </ItemGroup>
 
   <ItemGroup>
