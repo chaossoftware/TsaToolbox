@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:TsaToolbox"
         xmlns:views="clr-namespace:TsaToolbox.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="680" Width="1200">
+        Title="Toolbox" Height="680" Width="1200">
     <Grid>
         <TabControl x:Name="toolboxTabs" TabStripPlacement="Left" Margin="0,0,0,23">
             <TabItem x:Name="tabSettings" Header="Source &amp; Settings" Height="40">

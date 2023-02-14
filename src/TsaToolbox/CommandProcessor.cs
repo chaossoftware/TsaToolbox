@@ -142,7 +142,7 @@ namespace TsaToolbox
                     AddLineChart().Plot(window.Source.Data.TimeSeries.XValues, window.Source.Data.TimeSeries.YValues);
                     break;
                 case "attractor":
-                    var pPoincare = PseudoPoincareMap.GetMapDataFrom(window.Source.Data.TimeSeries.YValues, 1);
+                    var pPoincare = DelayedCoordinates.GetData(window.Source.Data.TimeSeries.YValues, 1);
                     AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
                     break;
                 case "acf":

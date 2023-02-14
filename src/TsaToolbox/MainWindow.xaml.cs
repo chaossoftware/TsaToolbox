@@ -1,5 +1,4 @@
-﻿using ChaosSoft.Core;
-using ChaosSoft.Core.Data;
+﻿using ChaosSoft.Core.Data;
 using ChaosSoft.Core.IO;
 using ChaosSoft.NumericalMethods;
 using ChaosSoft.NumericalMethods.PhaseSpace;
@@ -19,7 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TsaToolbox.Models;
-using System.Drawing;
+using System.Diagnostics;
 
 namespace TsaToolbox
 {
@@ -34,9 +33,13 @@ namespace TsaToolbox
 
         public MainWindow()
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
             InitializeComponent();
+
+            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+            Title += $" v{versionInfo.ProductVersion}";
             _lyapunov = new LyapunovExponents();
             _commandProcessor = new CommandProcessor(tboxConsole, this);
 
@@ -101,7 +104,7 @@ namespace TsaToolbox
 
             if (ch_poincareCbox.IsChecked.Value)
             {
-                var pPoincare = PseudoPoincareMap.GetMapDataFrom(Source.Data.TimeSeries.YValues, 1);
+                var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
                 ch_PseudoPoincareGraph.Plot(pPoincare.XValues, pPoincare.YValues);
             }
 
@@ -137,9 +140,9 @@ namespace TsaToolbox
             {
                 var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
                 mi.Calculate(Source.Data.TimeSeries.YValues);
-                an_miGraph.Plot(mi.Slope.XValues, mi.Slope.YValues);
+                an_miGraph.Plot(mi.EntropySlope.XValues, mi.EntropySlope.YValues);
 
-                double index = mi.Slope.XValues[Array.IndexOf(mi.Slope.YValues, mi.Slope.YValues.Min())];
+                double index = mi.EntropySlope.XValues[Array.IndexOf(mi.EntropySlope.YValues, mi.EntropySlope.YValues.Min())];
                 ch_miCbox.Content = $"{Properties.Resources.Mi} (={(int)index})";
             }
         }
@@ -182,7 +185,7 @@ namespace TsaToolbox
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
-                var pPoincare = PseudoPoincareMap.GetMapDataFrom(Source.Data.TimeSeries.YValues, 1);
+                var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
 
                 new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
                     .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
@@ -274,7 +277,7 @@ namespace TsaToolbox
 
             if (ch_signalCbox.IsChecked.Value)
             {
-                DataWriter.CreateDataFile(fName + "_signal.dat", Source.Data.GetTimeSeriesAsString());
+                DataWriter.CreateDataFile(fName + "_signal.dat", Format.General(Source.Data.TimeSeries.YValues, "\n", 6));
                 SaveChartToFile(ch_SignalChart, fName + "_signal.png");
             }
 

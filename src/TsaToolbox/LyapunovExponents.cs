@@ -1,5 +1,4 @@
 ﻿using ChaosSoft.Core.Data;
-using ChaosSoft.Core.Extensions;
 using ChaosSoft.Core.IO;
 using ChaosSoft.NumericalMethods;
 using ChaosSoft.NumericalMethods.Extensions;
@@ -94,7 +93,7 @@ namespace TsaToolbox
 
             if (Method is LeSpecSanoSawada ss)
             {
-                wnd.le_resultTbox.Text = string.Join(" ", ss.Result.Select(l => NumFormatter.ToShort(l)));
+                wnd.le_resultTbox.Text = Format.General(ss.Result, " ", 6);
             }
             else
             {
@@ -125,7 +124,7 @@ namespace TsaToolbox
                 {
                     if (Method is LleKantz || Method is LleRosenstein)
                     {
-                        var leSectorEnd = DataSeriesExt.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
+                        var leSectorEnd = DataSeriesUtils.SlopeChangePointIndex(Method.Slope, 3, Method.Slope.Amplitude.Y / 30);
 
                         if (leSectorEnd <= 0)
                         {
@@ -185,7 +184,7 @@ namespace TsaToolbox
                 wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
 
                 var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
-                result = NumFormatter.ToShort(slope);
+                result = Format.General(slope);
             }
 
             return result;

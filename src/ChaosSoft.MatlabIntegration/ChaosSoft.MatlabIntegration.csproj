@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ChaosSoft.Core" Version="1.0.0-beta" />
+    <PackageReference Include="ChaosSoft.Core" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
