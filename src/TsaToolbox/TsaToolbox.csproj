@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net4.8</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChaosSoft.NumericalMethods" Version="1.0.0" />
     <PackageReference Include="InteractiveDataDisplay.WPF" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChaosSoft.Core\ChaosSoft.Core.csproj" />
     <ProjectReference Include="..\ChaosSoft.MatlabIntegration\ChaosSoft.MatlabIntegration.csproj" />
   </ItemGroup>
 

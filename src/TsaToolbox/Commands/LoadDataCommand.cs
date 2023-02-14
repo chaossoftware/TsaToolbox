@@ -1,8 +1,7 @@
 ﻿using ChaosSoft.Core.Data;
-using ChaosSoft.Core.Extensions;
+using ChaosSoft.Core.DataUtils;
 using Microsoft.Win32;
 using System;
-using System.Windows;
 using TsaToolbox.Models;
 using TsaToolbox.ViewModels;
 
@@ -36,7 +35,7 @@ namespace TsaToolbox.Commands
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBox.Show("Unable to read file: " + ex.Message);
+                    System.Windows.MessageBox.Show("Unable to read file: " + ex.Message);
                 }
             }
         }
@@ -56,7 +55,7 @@ namespace TsaToolbox.Commands
                     new SourceData(fileName);
             }
 
-            int[] columnsCount = Arrays.GenerateUniformArray(_source.Data.ColumnsCount, 1, 1);
+            int[] columnsCount = Vector.CreateUniform(_source.Data.ColumnsCount, 1, 1);
 
             _viewModel.DataColumnsCount = columnsCount;
             _viewModel.MultilineData = columnsCount.Length > 1;
