@@ -28,6 +28,8 @@ namespace TsaToolbox.ViewModels
             PreviewWindowHeight = "600";
             SaveChartWidth = "215";
             SaveChartHeight = "160";
+            SeparateOutputDir = true;
+            OutputDir = "Results";
             EachNPoints = "1";
 
             TimeSeriesStale = false;
@@ -192,6 +194,28 @@ namespace TsaToolbox.ViewModels
             {
                 _settings.SaveChartHeight = int.Parse(value);
                 OnPropertyChanged(nameof(SaveChartHeight));
+            }
+        }
+
+        public string OutputDir
+        {
+            get => _settings.OutputDir;
+
+            set
+            {
+                _settings.OutputDir = value;
+                OnPropertyChanged(nameof(OutputDir));
+            }
+        }
+
+        public bool SeparateOutputDir
+        {
+            get => _settings.SeparateOutputDir;
+
+            set
+            {
+                _settings.SeparateOutputDir = value;
+                OnPropertyChanged(nameof(SeparateOutputDir));
             }
         }
 
