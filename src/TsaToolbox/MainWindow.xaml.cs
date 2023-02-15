@@ -39,7 +39,7 @@ namespace TsaToolbox
             InitializeComponent();
 
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
-            Title += $" v{versionInfo.ProductVersion}";
+            statusVersionText.Text = $" v{versionInfo.ProductVersion}";
             _lyapunov = new LyapunovExponents();
             _commandProcessor = new CommandProcessor(tboxConsole, this);
 
@@ -267,7 +267,11 @@ namespace TsaToolbox
                 return;
             }
 
-            var outDir = Path.Combine(Source.Data.Folder, Source.Data.FileName + "_out");
+            string outDir =
+                Settings.SeparateOutputDir ?
+                Path.Combine(Settings.OutputDir, Source.Data.FileName) :
+                Settings.OutputDir;
+
             string fName = Path.Combine(outDir, Source.Data.FileName);
 
             if (!Directory.Exists(outDir))
