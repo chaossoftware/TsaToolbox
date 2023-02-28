@@ -1,11 +1,13 @@
 ﻿using ChaosSoft.Core.Data;
 using ChaosSoft.Core.IO;
-using ChaosSoft.NumericalMethods;
-using ChaosSoft.NumericalMethods.PhaseSpace;
-using ChaosSoft.NumericalMethods.Lyapunov;
-using ChaosSoft.NumericalMethods.Transform;
 using ChaosSoft.MatlabIntegration;
+using ChaosSoft.NumericalMethods;
+using ChaosSoft.NumericalMethods.Lyapunov;
+using ChaosSoft.NumericalMethods.PhaseSpace;
+using ChaosSoft.NumericalMethods.Transform;
 using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,7 +20,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TsaToolbox.Models;
-using System.Diagnostics;
 
 namespace TsaToolbox
 {
@@ -29,7 +30,6 @@ namespace TsaToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private readonly CommandProcessor _commandProcessor;
-        private readonly double[] _zero = new double[] { 0 };
 
         public MainWindow()
         {
@@ -55,20 +55,20 @@ namespace TsaToolbox
         public void CleanUp()
         {
             Source.Data = null;
-            ch_SignalGraph.Plot(_zero, _zero);
-            ch_PseudoPoincareGraph.Plot(_zero, _zero);
-            ch_acfGraph.Plot(_zero, _zero);
-            an_FnnGraph.Plot(_zero, _zero);
-            an_miGraph.Plot(_zero, _zero);
+            ClearPlot(ch_SignalChart);
+            ClearPlot(ch_PseudoPoincareChart);
+            ClearPlot(ch_acfChart);
+            ClearPlot(an_FnnChart);
+            ClearPlot(an_miChart);
+            ClearPlot(ch_FftChart);
+            DeleteWaveletTempFile();
+            ch_wavChart.Background = null;
 
             ch_acfCbox.Content = Properties.Resources.Acf;
             ch_fnnCbox.Content = Properties.Resources.Fnn;
             ch_miCbox.Content = Properties.Resources.Mi;
 
             _lyapunov.CleanUp(this);
-            ch_FftGraph.Plot(_zero, _zero);
-            ch_wavPlot.Background = null;
-            DeleteTempFiles();
         }
 
         private void le_rosRad_Checked(object sender, RoutedEventArgs e) =>
@@ -95,23 +95,71 @@ namespace TsaToolbox
         private void le_ssRad_Unchecked(object sender, RoutedEventArgs e) =>
             le_ssGbox.Visibility = Visibility.Hidden;
 
+        internal void ClearPlot(ScottPlot.WpfPlot plot)
+        {
+            plot.Plot.Clear();
+            plot.Render();
+        }
+
+        private void SavePlot(ScottPlot.WpfPlot plot, string fileName) =>
+            plot.Plot.SaveFig(fileName, Settings.SaveChartWidth, Settings.SaveChartHeight);
+
+        internal void PlotScatter(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
+        {
+            ClearPlot(plot);
+            plot.Plot.AddScatter(series.XValues, series.YValues, System.Drawing.Color.Blue, 0.5f, 0f);
+            RenderPlot(plot, xLabel, yLabel);
+        }
+
+        private void PlotScatter(ScottPlot.WpfPlot plot, double[] xs, double[] ys, string xLabel, string yLabel)
+        {
+            ClearPlot(plot);
+            plot.Plot.AddScatter(xs, ys, System.Drawing.Color.Blue, 0.5f, 0f);
+            RenderPlot(plot, xLabel, yLabel);
+        }
+
+        private void PlotSignal(ScottPlot.WpfPlot plot, double[] series, string xLabel, string yLabel)
+        {
+            ClearPlot(plot);
+            plot.Plot.AddSignal(series, 1, System.Drawing.Color.Blue);
+            RenderPlot(plot, xLabel, yLabel);
+        }
+
+        private void PlotScatterPoints(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
+        {
+            ClearPlot(plot);
+            plot.Plot.AddScatterPoints(series.XValues, series.YValues, System.Drawing.Color.Blue, 1);
+            RenderPlot(plot, xLabel, yLabel);
+        }
+
+        private void RenderPlot(ScottPlot.WpfPlot plot, string xLabel, string yLabel)
+        {
+            plot.Plot.XAxis.LabelStyle(fontSize: 12);
+            plot.Plot.YAxis.LabelStyle(fontSize: 12);
+            plot.Plot.XAxis.Label(xLabel);
+            plot.Plot.YAxis.Label(yLabel);
+            plot.Render();
+        }
+
         private void ch_buildBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ch_signalCbox.IsChecked.Value)
             {
-                ch_SignalGraph.Plot(Source.Data.TimeSeries.XValues, Source.Data.TimeSeries.YValues);
+                PlotScatter(ch_SignalChart, Source.Data.TimeSeries, "t", "f(t)");
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
                 var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
-                ch_PseudoPoincareGraph.Plot(pPoincare.XValues, pPoincare.YValues);
+
+                PlotScatterPoints(ch_PseudoPoincareChart, pPoincare, "Xn", "Xn+1");
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
                 var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
-                ch_acfGraph.PlotY(autoCor);
+
+                PlotSignal(ch_acfChart, autoCor, "t", "acf");
 
                 int i;
 
@@ -130,7 +178,12 @@ namespace TsaToolbox
             {
                 var fnn = new FalseNearestNeighbors(fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
                 fnn.Calculate(Source.Data.TimeSeries.YValues);
-                an_FnnGraph.Plot(fnn.FalseNeighbors.Keys, fnn.FalseNeighbors.Values);
+
+                PlotScatter(an_FnnChart, 
+                    fnn.FalseNeighbors.Keys.Select(x => (double)x).ToArray(), 
+                    fnn.FalseNeighbors.Values.Select(y => (double)y).ToArray(), 
+                    "d", 
+                    "fnn");
 
                 int key = fnn.FalseNeighbors.Keys.First(k => fnn.FalseNeighbors[k] == 0);
                 ch_fnnCbox.Content = $"{Properties.Resources.Fnn} (={key})";
@@ -140,7 +193,8 @@ namespace TsaToolbox
             {
                 var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
                 mi.Calculate(Source.Data.TimeSeries.YValues);
-                an_miGraph.Plot(mi.EntropySlope.XValues, mi.EntropySlope.YValues);
+
+                PlotScatter(an_miChart, mi.EntropySlope, "d", "mi");
 
                 double index = mi.EntropySlope.XValues[Array.IndexOf(mi.EntropySlope.YValues, mi.EntropySlope.YValues.Min())];
                 ch_miCbox.Content = $"{Properties.Resources.Mi} (={(int)index})";
@@ -152,58 +206,30 @@ namespace TsaToolbox
             if (ch_fftCbox.IsChecked.Value)
             {
                 var fftTs = GetFft();
-                ch_FftGraph.Plot(fftTs.XValues, fftTs.YValues);
+
+                PlotScatter(ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", "F(ω)");
             }
 
             if (ch_WaveletCbox.IsChecked.Value)
             {
-                DeleteWaveletTempChart();
+                DeleteWaveletTempFile();
+
                 var brush = GetWavelet(
                     ch_wavChart, 
                     ch_wavChart.Width * 2, 
                     ch_wavChart.Height * 2, 
                     Properties.Resources.WaveletFile);
 
-                ch_wavPlot.Background = brush;
-                SetWavPlotRect(ch_wavPlot);
-            }
-        }
+                ch_wavChart.Plot.Style(dataBackgroundImage: brush);
+                ch_wavChart.Plot.Grid(enable: false);
 
+                ch_wavChart.Plot.SetAxisLimits(
+                    Source.Data.TimeSeries.Min.X,
+                    Source.Data.TimeSeries.Max.X,
+                    wav_omLeft.ReadDouble(),
+                    wav_omRight.ReadDouble());
 
-        private void ch_SignalChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                new PreviewForm(Properties.Resources.Signal, "t", "f(t)")
-                .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
-                .PlotLine(Source.Data.TimeSeries.XValues, Source.Data.TimeSeries.YValues)
-                .ShowDialog();
-            }
-        }
-
-        private void ch_PseudoPoincareChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
-
-                new PreviewForm(Properties.Resources.PseudoPoincare, "f(t)", "f(t+1)")
-                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
-                    .PlotMap(pPoincare.XValues, pPoincare.YValues)
-                    .ShowDialog();
-            }
-        }
-
-        private void tsp_autocorChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
-
-                new PreviewForm(Properties.Resources.Acf, "t", "ACF")
-                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight)
-                    .PlotLine(autoCor)
-                    .ShowDialog();
+                RenderPlot(ch_wavChart, "t", "ω");
             }
         }
 
@@ -282,33 +308,33 @@ namespace TsaToolbox
             if (ch_signalCbox.IsChecked.Value)
             {
                 DataWriter.CreateDataFile(fName + "_signal.dat", Format.General(Source.Data.TimeSeries.YValues, "\n", 6));
-                SaveChartToFile(ch_SignalChart, fName + "_signal.png");
+                SavePlot(ch_SignalChart, fName + "_signal.png");
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
-                SaveChartToFile(ch_PseudoPoincareChart, fName + "_poincare.png");
+                SavePlot(ch_PseudoPoincareChart, fName + "_poincare.png");
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
-                SaveChartToFile(ch_acfChart, fName + "_acf.png");
+                SavePlot(ch_acfChart, fName + "_acf.png");
             }
 
-            //if (chartFft.HasData)
-            //{
-            //    chartFft.SaveImage(fName + "_fourier", ImageFormat.Png);
-            //}
+            if (ch_fftCbox.IsChecked.Value)
+            {
+                SavePlot(ch_FftChart, fName + "_fft.png");
+            }
 
-            //if (wav_plotPBox.Image != null)
-            //{
-            //    wav_plotPBox.Image.Save(fName + "_wavelet.png", ImageFormat.Png);
-            //}
+            if (ch_WaveletCbox.IsChecked.Value)
+            {
+                SavePlot(ch_wavChart, fName + "_wavelet.png");
+            }
 
             if (_lyapunov.Method != null)
             {
                 GenerateLeFile(fName);
-                SaveChartToFile(le_slopeChart, fName + "_lyapunovSlope.png");
+                SavePlot(le_slopeChart, fName + "_lyapunovSlope.png");
             }
         }
 
@@ -323,44 +349,8 @@ namespace TsaToolbox
                 .AppendLine("Execution log:")
                 .AppendLine()
                 .AppendLine(_lyapunov.Method.Log.ToString());
+
             DataWriter.CreateDataFile(baseFileName + "_lyapunov.txt", sb.ToString());
-        }
-
-        private void SaveChartToFile(InteractiveDataDisplay.WPF.Chart plot, string path)
-        {
-            plot.Arrange(new Rect(plot.RenderSize));
-            plot.Measure(plot.RenderSize);
-            Rect bounds = VisualTreeHelper.GetDescendantBounds(plot);
-
-            var scaleX = Settings.SaveChartWidth / plot.Width;
-            var scaleY = Settings.SaveChartHeight / plot.Height;
-
-            var width = (bounds.Width + bounds.X) * scaleX;
-            var height = (bounds.Height + bounds.Y) * scaleY;
-
-            RenderTargetBitmap rtb =
-                new RenderTargetBitmap((int)Math.Round(width, MidpointRounding.AwayFromZero),
-                (int)Math.Round(height, MidpointRounding.AwayFromZero),
-                96, 96, PixelFormats.Pbgra32);
-
-            DrawingVisual dv = new DrawingVisual();
-            
-            using (DrawingContext ctx = dv.RenderOpen())
-            {
-                VisualBrush vb = new VisualBrush(plot);
-                ctx.DrawRectangle(vb, null,
-                    new Rect(new System.Windows.Point(bounds.X, bounds.Y), new System.Windows.Point(width, height)));
-            }
-
-            rtb.Render(dv);
-            var iSource = (BitmapSource)rtb.GetAsFrozen();
-
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(iSource));
-                encoder.Save(fileStream);
-            }
         }
 
         private void tboxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -410,52 +400,6 @@ namespace TsaToolbox
             Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
         }
 
-        private void ch_FftChart_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                var previewForm = new PreviewForm(Properties.Resources.Fft, "ω", "F(ω)")
-                    .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
-
-                var data = GetFft();
-
-                previewForm.PlotLine(data.XValues, data.YValues);
-
-                previewForm.ShowDialog();
-            }
-        }
-
-        private void ch_WavChart_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                try
-                {
-                    DeleteWaveletPreviewTempChart();
-
-                    var previewForm = new PreviewForm(Properties.Resources.Wavelet, "t", "ω")
-                        .SetSize(Settings.PreviewWindowWidth, Settings.PreviewWindowHeight);
-
-                    previewForm.Show();
-                    previewForm.Topmost = true;
-
-                    var brush = GetWavelet(
-                        previewForm.previewChart, 
-                        previewForm.grid.ActualWidth, 
-                        previewForm.grid.ActualHeight, 
-                        Properties.Resources.WaveletPreviewFile);
-
-                    previewForm.previewPlot.Background = brush;
-                    SetWavPlotRect(previewForm.previewPlot);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error previewing wavelet:\n" + ex);
-                }
-
-            }
-        }
-
         private DataSeries GetFft()
         {
             int logScale = ch_logScaleCbox.IsChecked.Value ? 1 : 0;
@@ -466,7 +410,7 @@ namespace TsaToolbox
             return Fourier.GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
         }
 
-        private ImageBrush GetWavelet(Visual visual, double width, double height, string fileName)
+        private Bitmap GetWavelet(Visual visual, double width, double height, string fileName)
         {
             double tStart = Source.Data.TimeSeries.Min.X;
             double tEnd = Source.Data.TimeSeries.Max.X;
@@ -509,12 +453,15 @@ namespace TsaToolbox
 
                 var croppedBitmap = new CroppedBitmap(data, rect);
 
-                var brush = new ImageBrush(croppedBitmap)
+                using (MemoryStream outStream = new MemoryStream())
                 {
-                    Stretch = Stretch.Fill
-                };
+                    BitmapEncoder enc = new BmpBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(croppedBitmap));
+                    enc.Save(outStream);
+                    Bitmap bitmap = new Bitmap(outStream);
 
-                return brush;
+                    return new Bitmap(bitmap);
+                }
             }
             catch (Exception ex)
             {
@@ -526,31 +473,7 @@ namespace TsaToolbox
         private void le_k_epsCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
             _lyapunov.AdjustSlope(this);
 
-        public void DeleteTempFiles()
-        {
-            DeleteWaveletTempChart();
-            DeleteWaveletPreviewTempChart();
-        }
-
-        private void DeleteWaveletTempChart()
-        {
+        private void DeleteWaveletTempFile() =>
             File.Delete(Properties.Resources.WaveletFile);
-        }
-
-        private void DeleteWaveletPreviewTempChart()
-        {
-            File.Delete(Properties.Resources.WaveletPreviewFile);
-        }
-
-        private void SetWavPlotRect(InteractiveDataDisplay.WPF.Plot plot)
-        {
-            var rect = new InteractiveDataDisplay.WPF.DataRect(
-                Source.Data.TimeSeries.Min.X,
-                wav_omLeft.ReadDouble(),
-                Source.Data.TimeSeries.Max.X,
-                wav_omRight.ReadDouble());
-
-            plot.SetPlotRect(rect);
-        }
     }
 }

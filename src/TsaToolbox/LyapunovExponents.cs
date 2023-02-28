@@ -15,8 +15,6 @@ namespace TsaToolbox
     {
         private const string DefaultStartPoint = "1";
 
-        private readonly double[] _zero = new double[] { 0 };
-        
         public LyapunovExponents()
         {
         }
@@ -78,8 +76,7 @@ namespace TsaToolbox
         {
             Method = null;
 
-            wnd.le_mainSlopeChart.Plot(_zero, _zero);
-            wnd.le_secondarySlopeChart.Plot(_zero, _zero);
+            wnd.ClearPlot(wnd.le_slopeChart);
 
             wnd.le_logTbox.Text = string.Empty;
             wnd.le_resultTbox.Text = string.Empty;
@@ -156,18 +153,14 @@ namespace TsaToolbox
 
         private string FillLyapunovChart(MainWindow wnd)
         {
-            wnd.le_mainSlopeChart.Plot(_zero, _zero);
-            wnd.le_secondarySlopeChart.Plot(_zero, _zero);
-
             var result = string.Empty;
 
-            wnd.le_slopeChart.BottomTitle = "t";
-            wnd.le_mainSlopeChart.Plot(Method.Slope.XValues, Method.Slope.YValues);
+            wnd.PlotScatter(wnd.le_slopeChart, Method.Slope, "t", "");
 
             if (Method is LleWolf)
             {
-                wnd.le_slopeChart.LeftTitle = "LE";
-                wnd.le_slopeChartTitle.Text = "Lyapunov Exponent in Time";
+                wnd.le_slopeChart.Plot.YLabel("LE");
+                wnd.le_slopeChart.Plot.Title("Lyapunov Exponent in time");
             }
             else
             {
@@ -179,9 +172,10 @@ namespace TsaToolbox
                 tsSector.AddDataPoint(Method.Slope.DataPoints[startPoint].X, Method.Slope.DataPoints[startPoint].Y);
                 tsSector.AddDataPoint(Method.Slope.DataPoints[endPoint].X, Method.Slope.DataPoints[endPoint].Y);
 
-                wnd.le_slopeChart.LeftTitle = "Slope";
-                wnd.le_slopeChartTitle.Text = "Lyapunov Function";
-                wnd.le_secondarySlopeChart.Plot(tsSector.XValues, tsSector.YValues);
+                wnd.le_slopeChart.Plot.YLabel("Slope");
+                wnd.le_slopeChart.Plot.Title("Lyapunov Slope");
+                wnd.le_slopeChart.Plot.AddScatter(tsSector.XValues, tsSector.YValues, System.Drawing.Color.Red, 2);
+                wnd.le_slopeChart.Render();
 
                 var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
                 result = Format.General(slope);
