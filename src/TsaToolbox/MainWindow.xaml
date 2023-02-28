@@ -199,7 +199,7 @@
                     </GroupBox>
                     <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom" VerticalContentAlignment="Center" FontFamily="Consolas"/>
 
-                    <WpfPlot x:Name="le_slopeChart" Margin="10,0,300,10" Height="330" VerticalAlignment="Bottom"/>
+                    <WpfPlot x:Name="le_slopeChart" Margin="10,0,450,10" Height="330" VerticalAlignment="Bottom"/>
 
                 </Grid>
             </TabItem>
