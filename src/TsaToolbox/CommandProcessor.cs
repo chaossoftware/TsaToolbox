@@ -1,18 +1,17 @@
-﻿using InteractiveDataDisplay.WPF;
+﻿using ChaosSoft.Core.Data;
 using ChaosSoft.NumericalMethods;
 using ChaosSoft.NumericalMethods.Lyapunov;
 using ChaosSoft.NumericalMethods.Transform;
+using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using TsaToolbox.Commands;
 using TsaToolbox.ViewModels;
-using ChaosSoft.Core;
 
 namespace TsaToolbox
 {
@@ -27,7 +26,7 @@ namespace TsaToolbox
         private const string LleW = "lle_w";
         private const string LeSpec = "le_spec";
 
-        private readonly List<Chart> _chartsList;
+        private readonly List<WpfPlot> _chartsList;
 
         public Dictionary<string, string> Commands { get; } = new Dictionary<string, string>()
         {
@@ -42,13 +41,15 @@ namespace TsaToolbox
         private MainWindow window;
         private RichTextBox _console;
         private readonly SolidColorBrush consoleBrush;
+        private readonly System.Drawing.Color chartBrush;
 
         public CommandProcessor(RichTextBox console, MainWindow window)
         {
             this.window = window;
             _console = console;
-            _chartsList = new List<Chart>();
+            _chartsList = new List<WpfPlot>();
             consoleBrush = new BrushConverter().ConvertFromString("#FFC7C7C7") as SolidColorBrush;
+            chartBrush = System.Drawing.ColorTranslator.FromHtml("#FFC7C7C7");
             AddParagraph();
         }
 
@@ -110,11 +111,9 @@ namespace TsaToolbox
 
         private void Clear()
         {
-            var markerCharts = _chartsList.Where(c => c.Content is CircleMarkerGraph);
-
-            foreach (var chart in markerCharts)
+            foreach (var chart in _chartsList)
             {
-               chart.Content = null;
+                chart.Plot.Clear();
             }
 
             _chartsList.Clear();
@@ -139,15 +138,15 @@ namespace TsaToolbox
             switch (chart)
             {
                 case "signal":
-                    AddLineChart().Plot(window.Source.Data.TimeSeries.XValues, window.Source.Data.TimeSeries.YValues);
+                    AddLineChart(window.Source.Data.TimeSeries);
                     break;
                 case "attractor":
                     var pPoincare = DelayedCoordinates.GetData(window.Source.Data.TimeSeries.YValues, 1);
-                    AddMarkerChart().Plot(pPoincare.XValues, pPoincare.YValues);
+                    AddPointsChart(pPoincare);
                     break;
                 case "acf":
                     var autoCor = Statistics.Acf(window.Source.Data.TimeSeries.YValues);
-                    AddLineChart().PlotY(autoCor);
+                    AddLineChart(autoCor);
                     break;
                 default:
                     PrintError($"unknown chart type '{chart}'");
@@ -183,48 +182,46 @@ namespace TsaToolbox
 
         private void PrintError(string result) => PrintResult(result, Brushes.Red);
 
-        private LineGraph AddLineChart()
+        private WpfPlot AddLineChart(DataSeries series)
         {
             var chart = AddChart();
-
-            var linePlot = new LineGraph
-            {
-                IsAutoFitEnabled = true,
-                Stroke = consoleBrush,
-                StrokeThickness = 0.5,
-            };
-
-            chart.Content = linePlot;
-            return linePlot;
+            chart.Plot.AddScatter(series.XValues, series.YValues, chartBrush);
+            return chart;
         }
 
-        private CircleMarkerGraph AddMarkerChart()
+        private WpfPlot AddLineChart(double[] series)
         {
             var chart = AddChart();
-
-            var markerPlot = new CircleMarkerGraph
-            {
-                IsAutoFitEnabled = true,
-                Stroke = consoleBrush,
-                Min = 1,
-                Max = 4
-            };
-
-            chart.Content = markerPlot;
-            return markerPlot;
+            chart.Plot.AddSignal(series, 1, chartBrush);
+            return chart;
         }
 
-        private Chart AddChart()
+        private WpfPlot AddPointsChart(DataSeries series)
         {
-            var chart = new Chart
+            var chart = AddChart();
+            chart.Plot.AddScatterPoints(series.XValues, series.YValues, chartBrush);
+            return chart;
+        }
+
+        private WpfPlot AddChart()
+        {
+            var chart = new WpfPlot
             {
-                LegendVisibility = Visibility.Hidden,
                 Width = 270,
                 Height = 200,
-                Background = null,
-                Foreground = null,
                 FontFamily = new FontFamily("Courier New")
             };
+
+            chart.Plot.Style(dataBackground: System.Drawing.Color.Transparent);
+            chart.Plot.Style(figureBackground: System.Drawing.Color.Transparent);
+
+            chart.Plot.XAxis.TickLabelStyle(color: chartBrush);
+            chart.Plot.XAxis.Color(chartBrush);
+            chart.Plot.XAxis2.Color(chartBrush);
+            chart.Plot.YAxis.TickLabelStyle(color: chartBrush);
+            chart.Plot.YAxis.Color(chartBrush);
+            chart.Plot.YAxis2.Color(chartBrush);
+            chart.Plot.Grid(enable: false);
 
             var paragraph = new Paragraph();
             paragraph.Inlines.Add(new InlineUIContainer(chart));

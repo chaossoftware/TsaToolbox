@@ -96,7 +96,7 @@
                     <CheckBox x:Name="set_bytesCbox" Grid.Row="0" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding ReadFromBytes}"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Preview form settings" Style="{StaticResource GroupBoxStyle}" Padding="5">
+            <GroupBox Header="Preview form settings" Style="{StaticResource GroupBoxStyle}" Padding="5" IsEnabled="False">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

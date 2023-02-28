@@ -88,6 +88,15 @@ namespace TsaToolbox.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delayed coordinates.
+        /// </summary>
+        public static string DelayedCoordinates {
+            get {
+                return ResourceManager.GetString("DelayedCoordinates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -151,15 +160,6 @@ namespace TsaToolbox.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Poincare pseudo section.
-        /// </summary>
-        public static string PseudoPoincare {
-            get {
-                return ResourceManager.GetString("PseudoPoincare", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Signal.
         /// </summary>
         public static string Signal {
@@ -183,15 +183,6 @@ namespace TsaToolbox.Properties {
         public static string WaveletFile {
             get {
                 return ResourceManager.GetString("WaveletFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to waveletPreview.tmp.
-        /// </summary>
-        public static string WaveletPreviewFile {
-            get {
-                return ResourceManager.GetString("WaveletPreviewFile", resourceCulture);
             }
         }
     }
