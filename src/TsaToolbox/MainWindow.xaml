@@ -218,7 +218,7 @@
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <Separator/>
-                    <TextBlock x:Name="statusTsInfoText" Width="260" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
+                    <TextBlock x:Name="statusTsInfoText" Width="300" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
                     <Separator/>
                     <TextBlock x:Name="statusDtText" Text="Δt:"/>
                     <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>

@@ -71,7 +71,8 @@ namespace TsaToolbox.ViewModels
 
                 if (_source.TimeInFirstColumn)
                 {
-                    info += "  ‧  timed";
+                    double[] xs = _source.Data.GetColumn(0);
+                    info += $"  ‧  t = [{xs[_source.StartPoint - 1]}; {xs[_source.EndPoint - 1]}]";
                 }
 
                 TimeSeriesInfo = info;
