@@ -26,7 +26,7 @@ namespace TsaToolbox.Commands
             _source.Data.SetTimeSeries(
                 _source.SignalColumn - 1,
                 _source.StartPoint - 1,
-                _source.EndPoint - 1,
+                _source.EndPoint,
                 _source.EachNPoints,
                 _source.TimeInFirstColumn
             );
