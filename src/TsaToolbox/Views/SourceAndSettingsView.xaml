@@ -117,7 +117,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
@@ -136,8 +135,11 @@
                         <Label Content="Separate directory:" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding SeparateOutputDir}"/>
                     </Grid>
-                    <Label Grid.Row="1" Content="Output directory" HorizontalAlignment="Right" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Grid.Row="2" Text="{Binding OutputDir}"/>
+                    <DockPanel Grid.Row="1">
+                        <Label Content="Save to:" HorizontalAlignment="Right" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding OutputDir}" Height="18" HorizontalAlignment="Stretch"/>
+                    </DockPanel>
+                    
                 </Grid>
             </GroupBox>
         </StackPanel>

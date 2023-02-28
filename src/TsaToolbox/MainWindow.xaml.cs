@@ -138,6 +138,7 @@ namespace TsaToolbox
             plot.Plot.YAxis.LabelStyle(fontSize: 12);
             plot.Plot.XAxis.Label(xLabel);
             plot.Plot.YAxis.Label(yLabel);
+            plot.Plot.Layout(padding: 0);
             plot.Render();
         }
 
