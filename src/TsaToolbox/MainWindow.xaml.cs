@@ -221,6 +221,8 @@ namespace TsaToolbox
                     ch_wavChart.Height * 2, 
                     Properties.Resources.WaveletFile);
 
+                ch_wavChart.Reset();
+
                 ch_wavChart.Plot.Style(dataBackgroundImage: brush);
                 ch_wavChart.Plot.Grid(enable: false);
 
