@@ -462,6 +462,7 @@ namespace TsaToolbox
                     enc.Frames.Add(BitmapFrame.Create(croppedBitmap));
                     enc.Save(outStream);
                     Bitmap bitmap = new Bitmap(outStream);
+                    bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
                     return new Bitmap(bitmap);
                 }
