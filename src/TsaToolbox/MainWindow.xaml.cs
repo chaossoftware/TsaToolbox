@@ -61,14 +61,11 @@ namespace TsaToolbox
             ClearPlot(an_FnnChart);
             ClearPlot(an_miChart);
             ClearPlot(ch_FftChart);
-            DeleteWaveletTempFile();
-            ch_wavChart.Background = null;
 
-            ch_acfCbox.Content = Properties.Resources.Acf;
-            ch_fnnCbox.Content = Properties.Resources.Fnn;
-            ch_miCbox.Content = Properties.Resources.Mi;
-
+            ch_wavChart.Reset();
             _lyapunov.CleanUp(this);
+
+            DeleteWaveletTempFile();
         }
 
         private void le_rosRad_Checked(object sender, RoutedEventArgs e) =>
@@ -142,6 +139,13 @@ namespace TsaToolbox
             plot.Render();
         }
 
+        private void AddVerticalLine(ScottPlot.WpfPlot plot, double x)
+        {
+            plot.Plot.AddVerticalLine(x, System.Drawing.Color.Red, 1, ScottPlot.LineStyle.DashDot);
+            plot.Plot.AddAnnotation(x.ToString(), 0, 0);
+            plot.Render();
+        }
+
         private void ch_buildBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ch_signalCbox.IsChecked.Value)
@@ -152,54 +156,84 @@ namespace TsaToolbox
             if (ch_poincareCbox.IsChecked.Value)
             {
                 var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
-
                 PlotScatterPoints(ch_PseudoPoincareChart, pPoincare, "Xn", "Xn+1");
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
-                var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
-
-                PlotSignal(ch_acfChart, autoCor, "t", "acf");
-
-                int i;
-
-                for (i = 1; i < autoCor.Length; i++)
-                {
-                    if (Math.Sign(autoCor[i]) != Math.Sign(autoCor[i - 1]))
-                    {
-                        break;
-                    }
-                }
-
-                ch_acfCbox.Content = $"{Properties.Resources.Acf} (={i})";
+                BuildAcfChart();
             }
 
             if (ch_fnnCbox.IsChecked.Value)
             {
-                var fnn = new FalseNearestNeighbors(fnn_minDim.ReadInt(), fnn_maxDim.ReadInt(), fnn_tau.ReadInt(), fnn_rt.ReadDouble(), fnn_theiler.ReadInt());
-                fnn.Calculate(Source.Data.TimeSeries.YValues);
-
-                PlotScatter(an_FnnChart, 
-                    fnn.FalseNeighbors.Keys.Select(x => (double)x).ToArray(), 
-                    fnn.FalseNeighbors.Values.Select(y => (double)y).ToArray(), 
-                    "d", 
-                    "fnn");
-
-                int key = fnn.FalseNeighbors.Keys.First(k => fnn.FalseNeighbors[k] == 0);
-                ch_fnnCbox.Content = $"{Properties.Resources.Fnn} (={key})";
+                BuildFnnChart();
             }
 
             if (ch_miCbox.IsChecked.Value)
             {
-                var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
-                mi.Calculate(Source.Data.TimeSeries.YValues);
-
-                PlotScatter(an_miChart, mi.EntropySlope, "d", "mi");
-
-                double index = mi.EntropySlope.XValues[Array.IndexOf(mi.EntropySlope.YValues, mi.EntropySlope.YValues.Min())];
-                ch_miCbox.Content = $"{Properties.Resources.Mi} (={(int)index})";
+                BuildMiChart();
             }
+        }
+
+        private void BuildAcfChart()
+        {
+            var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
+
+            PlotSignal(ch_acfChart, autoCor, "t", "acf");
+
+            int i;
+
+            for (i = 1; i < autoCor.Length; i++)
+            {
+                if (Math.Sign(autoCor[i]) != Math.Sign(autoCor[i - 1]))
+                {
+                    break;
+                }
+            }
+
+            AddVerticalLine(ch_acfChart, i);
+        }
+
+        private void BuildFnnChart()
+        {
+            var fnn = new FalseNearestNeighbors(
+                fnn_minDim.ReadInt(), 
+                fnn_maxDim.ReadInt(), 
+                fnn_tau.ReadInt(), 
+                fnn_rt.ReadDouble(), 
+                fnn_theiler.ReadInt());
+
+            fnn.Calculate(Source.Data.TimeSeries.YValues);
+
+            PlotScatter(an_FnnChart,
+                fnn.FalseNeighbors.Keys.Select(x => (double)x).ToArray(),
+                fnn.FalseNeighbors.Values.Select(y => (double)y).ToArray(),
+                "d",
+                "fnn");
+
+            int key = fnn.FalseNeighbors.Keys.First(k => fnn.FalseNeighbors[k] == 0);
+            AddVerticalLine(an_FnnChart, key);
+        }
+
+        private void BuildMiChart()
+        {
+            var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
+            mi.Calculate(Source.Data.TimeSeries.YValues);
+
+            PlotScatter(an_miChart, mi.EntropySlope, "d", "mi");
+
+            int index = 1;
+            bool firstMinimumReached = false;
+
+            while (index < mi.EntropySlope.Length && !firstMinimumReached)
+            {
+                firstMinimumReached = mi.EntropySlope.YValues[index] > mi.EntropySlope.YValues[index - 1];
+                index++;
+            }
+
+            double tau = mi.EntropySlope.XValues[index - 2];
+
+            AddVerticalLine(an_miChart, tau);
         }
 
         private void ch_buildMlBtn_Click(object sender, RoutedEventArgs e)
