@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -456,7 +457,7 @@ namespace TsaToolbox
             {
                 Wavelet.BuildWavelet(Source.Data.TimeSeries.YValues,
                     fileName,
-                    wav_typeCbox.Text,
+                    (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString(),
                     tStart,
                     tEnd,
                     wav_omLeft.ReadDouble(),
