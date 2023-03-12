@@ -103,11 +103,11 @@ namespace TsaToolbox
 
             if (Method is LleKantz || Method is LleRosenstein)
             {
-                wnd.le_kantzResultGbox.Visibility = Visibility.Visible;
+                wnd.le_slopeAdjGbox.Visibility = Visibility.Visible;
             }
             else
             {
-                wnd.le_kantzResultGbox.Visibility = Visibility.Hidden;
+                wnd.le_slopeAdjGbox.Visibility = Visibility.Hidden;
             }
 
             if (Method is LleKantz k)
@@ -130,8 +130,8 @@ namespace TsaToolbox
                             leSectorEnd = Method.Slope.Length;
                         }
 
-                        wnd.le_k_endTbox.Text = leSectorEnd.ToString();
-                        wnd.le_k_startTbox.Text = DefaultStartPoint;
+                        wnd.le_slopeEndTbox.Text = leSectorEnd.ToString();
+                        wnd.le_slopeStartTbox.Text = DefaultStartPoint;
                     }
 
                     result = FillLyapunovChart(wnd);
@@ -159,15 +159,16 @@ namespace TsaToolbox
 
             wnd.PlotScatter(wnd.le_slopeChart, Method.Slope, "t", "");
 
-            if (Method is LleWolf)
+            if (Method is LleWolf wolf)
             {
                 wnd.le_slopeChart.Plot.YLabel("LE");
                 wnd.le_slopeChart.Plot.Title("Lyapunov Exponent in time");
+                wnd.le_slopeChart.Plot.AddAnnotation(wolf.GetResultAsString(), 0, 0);
             }
             else
             {
-                var startPoint = wnd.le_k_startTbox.ReadInt() - 1;
-                var endPoint = wnd.le_k_endTbox.ReadInt() - 1;
+                var startPoint = wnd.le_slopeStartTbox.ReadInt() - 1;
+                var endPoint = wnd.le_slopeEndTbox.ReadInt() - 1;
 
                 var tsSector = new DataSeries();
 
@@ -177,11 +178,13 @@ namespace TsaToolbox
                 wnd.le_slopeChart.Plot.YLabel("Slope");
                 wnd.le_slopeChart.Plot.Title("Lyapunov Slope");
                 wnd.le_slopeChart.Plot.AddScatter(tsSector.XValues, tsSector.YValues, System.Drawing.Color.Red, 2);
-                wnd.le_slopeChart.Render();
 
                 var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
                 result = Format.General(slope / wnd.le_dtTbox.ReadDouble());
+                wnd.le_slopeChart.Plot.AddAnnotation(result, 0, 0);
             }
+
+            wnd.le_slopeChart.Render();
 
             return result;
         }

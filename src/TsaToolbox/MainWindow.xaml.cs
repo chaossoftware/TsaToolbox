@@ -75,11 +75,19 @@ namespace TsaToolbox
         private void le_rosRad_Unchecked(object sender, RoutedEventArgs e) =>
             le_rosGbox.Visibility = Visibility.Hidden;
 
-        private void le_kantzRad_Checked(object sender, RoutedEventArgs e) =>
+        private void le_kantzRad_Checked(object sender, RoutedEventArgs e)
+        {
             le_kantzGbox.Visibility = Visibility.Visible;
+            le_k_epsLbl.Visibility = Visibility.Visible;
+            le_k_epsCombo.Visibility = Visibility.Visible;
+        }
 
-        private void le_kantzRad_Unchecked(object sender, RoutedEventArgs e) =>
+        private void le_kantzRad_Unchecked(object sender, RoutedEventArgs e)
+        {
             le_kantzGbox.Visibility = Visibility.Hidden;
+            le_k_epsLbl.Visibility = Visibility.Hidden;
+            le_k_epsCombo.Visibility = Visibility.Hidden;
+        }
 
         private void le_wolfRad_Checked(object sender, RoutedEventArgs e) =>
             le_wolfGbox.Visibility = Visibility.Visible;
