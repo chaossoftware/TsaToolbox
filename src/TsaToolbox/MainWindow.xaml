@@ -135,17 +135,19 @@
                 <Grid>
                     <Button x:Name="le_calculateBtn"  Content="Calculate" Margin="0,10,10,0" VerticalAlignment="Top" Click="le_calculateBtn_Click" HorizontalAlignment="Right" Width="75"/>
                     <TextBox x:Name="le_logTbox" Margin="0,35,10,40" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545" FontFamily="Consolas"/>
-                    <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="140" Padding="10">
+                    <GroupBox Header="General parameters" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                             <TextBox x:Name="le_eDimTbox" Style="{StaticResource ParameterValueWide}" Text="2" HorizontalAlignment="Center"/>
                             <TextBlock Text="Reconstr. delay:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_tauTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBox x:Name="le_dtTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
                             <TextBlock Text="Min. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_epsMinTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="le_rosGbox" Visibility="Hidden" HorizontalAlignment="Left" Margin="185,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
+                    <GroupBox x:Name="le_rosGbox" Header=" " Visibility="Hidden" HorizontalAlignment="Left" Margin="185,10,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                             <TextBox x:Name="le_r_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
@@ -153,9 +155,8 @@
                             <TextBox x:Name="le_r_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <RadioButton x:Name="le_rosRad" IsChecked="True" Content="Rosenstein" HorizontalAlignment="Left" Margin="185,10,0,0" VerticalAlignment="Top" Checked="le_rosRad_Checked" Unchecked="le_rosRad_Unchecked"/>
-                    <RadioButton x:Name="le_kantzRad" Content="Kantz" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Checked="le_kantzRad_Checked" Unchecked="le_kantzRad_Unchecked"/>
-                    <GroupBox x:Name="le_kantzGbox" Visibility="Hidden" HorizontalAlignment="Left" Margin="330,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
+                    <RadioButton x:Name="le_rosRad" IsChecked="True" Content="Rosenstein" HorizontalAlignment="Left" Margin="190,12,0,0" VerticalAlignment="Top" Checked="le_rosRad_Checked" Unchecked="le_rosRad_Unchecked"/>
+                    <GroupBox x:Name="le_kantzGbox" Header=" " Visibility="Hidden" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
                             <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                             <TextBox x:Name="le_k_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
@@ -166,9 +167,10 @@
                             <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_k_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                             <TextBlock Text="Found scales:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                            <ComboBox x:Name="le_k_epsCombo" Margin="5,5" SelectionChanged="le_k_epsCombo_SelectionChanged"/>
+                            <ComboBox x:Name="le_k_epsCombo" Width="100" SelectionChanged="le_k_epsCombo_SelectionChanged"/>
                         </StackPanel>
                     </GroupBox>
+                    <RadioButton x:Name="le_kantzRad" Content="Kantz" HorizontalAlignment="Left" Margin="335,12,0,0" VerticalAlignment="Top" Checked="le_kantzRad_Checked" Unchecked="le_kantzRad_Unchecked"/>
                     <GroupBox x:Name="le_kantzResultGbox" Visibility="Hidden" Margin="0,360,300,0" VerticalAlignment="Top" Padding="10" HorizontalAlignment="Right" Width="140">
                         <StackPanel>
                             <TextBlock Text="Start point:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
@@ -178,19 +180,17 @@
                             <Button x:Name="le_k_adjustBtn" Content="Adjust" Margin="0,20,0,0" HorizontalAlignment="Center" Width="100" Height="20" Click="le_k_adjustBtn_Click"/>
                         </StackPanel>
                     </GroupBox>
-                    <RadioButton x:Name="le_wolfRad" Content="Wolf" HorizontalAlignment="Left" Margin="475,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="6.651,0.733" Checked="le_wolfRad_Checked" Unchecked="le_wolfRad_Unchecked"/>
-                    <GroupBox x:Name="le_wolfGbox" Visibility="Hidden" HorizontalAlignment="Left" Margin="475,30,0,0" VerticalAlignment="Top" Width="140" Padding="10">
+                    <GroupBox x:Name="le_wolfGbox" Header=" " Visibility="Hidden" HorizontalAlignment="Left" Margin="475,10,0,0" VerticalAlignment="Top" Width="140" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                            <TextBox x:Name="le_w_dtTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
                             <TextBlock Text="Evolution steps:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_w_evolStepsTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
                             <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_w_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
-                    <RadioButton x:Name="le_ssRad" Content="Sano-Sawada" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" Checked="le_ssRad_Checked" Unchecked="le_ssRad_Unchecked"/>
-                    <GroupBox x:Name="le_ssGbox" Visibility="Hidden" Margin="620,30,0,0" VerticalAlignment="Top" Padding="10" HorizontalAlignment="Left" Width="140">
+                    <RadioButton x:Name="le_wolfRad" Content="Wolf" HorizontalAlignment="Left" Margin="480,12,0,0" VerticalAlignment="Top" RenderTransformOrigin="6.651,0.733" Checked="le_wolfRad_Checked" Unchecked="le_wolfRad_Unchecked"/>
+
+                    <GroupBox x:Name="le_ssGbox" Header=" " Visibility="Hidden" Margin="620,10,0,0" VerticalAlignment="Top" Padding="10" HorizontalAlignment="Left" Width="140">
                         <StackPanel>
                             <TextBlock Text="Scale inc. factor:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             <TextBox x:Name="le_ss_scaleFactorTbox" Style="{StaticResource ParameterValueWide}" Text="1.20" HorizontalAlignment="Center"/>
@@ -199,6 +199,8 @@
                             <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
+                    <RadioButton x:Name="le_ssRad" Content="Sano-Sawada" HorizontalAlignment="Left" Margin="625,12,0,0" VerticalAlignment="Top" Checked="le_ssRad_Checked" Unchecked="le_ssRad_Unchecked"/>
+
                     <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,0,10,10" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Bottom" VerticalContentAlignment="Center" FontFamily="Consolas"/>
 
                     <WpfPlot x:Name="le_slopeChart" Margin="10,0,450,10" Height="330" VerticalAlignment="Bottom"/>

@@ -90,7 +90,9 @@ namespace TsaToolbox
 
             if (Method is LeSpecSanoSawada ss)
             {
-                wnd.le_resultTbox.Text = Format.General(ss.Result, " ", 6);
+                double dt = wnd.le_dtTbox.ReadDouble();
+                double[] leSpec = ss.Result.Select(e => e / dt).ToArray();
+                wnd.le_resultTbox.Text = Format.General(leSpec, " ", 6);
             }
             else
             {
@@ -178,7 +180,7 @@ namespace TsaToolbox
                 wnd.le_slopeChart.Render();
 
                 var slope = Math.Atan2(Method.Slope.DataPoints[endPoint].Y - Method.Slope.DataPoints[startPoint].Y, Method.Slope.DataPoints[endPoint].X - Method.Slope.DataPoints[startPoint].X);
-                result = Format.General(slope);
+                result = Format.General(slope / wnd.le_dtTbox.ReadDouble());
             }
 
             return result;

@@ -288,7 +288,7 @@ namespace TsaToolbox
 
             if (le_wolfRad.IsChecked.Value)
             {
-                var dt = le_w_dtTbox.ReadDouble();
+                var dt = le_dtTbox.ReadDouble();
                 var scaleMax = le_w_epsMaxTbox.ReadDouble();
                 var evolSteps = le_w_evolStepsTbox.ReadInt();
 
