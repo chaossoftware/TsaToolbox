@@ -19,5 +19,7 @@
 -- sano-sawada
 
 * and some other cool features  
-![image](https://user-images.githubusercontent.com/3007588/215598157-78cfb33e-c3f1-4d32-b14e-35abfc993e92.png)
-![image](https://user-images.githubusercontent.com/3007588/215598217-7b96639b-c24d-4948-a929-e9237992463f.png)
+
+![tsa-toolbox-charts](https://user-images.githubusercontent.com/3007588/224573320-3cd361b9-49ef-4036-965e-143e449a9e06.png)
+
+![tsa-lyapunov](https://user-images.githubusercontent.com/3007588/224573327-da56a023-d8a7-4e61-a7e5-0b0555037e4c.png)
