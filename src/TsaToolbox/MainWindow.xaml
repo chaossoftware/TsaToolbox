@@ -15,25 +15,25 @@
             </TabItem>
             <TabItem x:Name="tabCharts" Header="Charts" Height="40">
                 <Grid>
-                    <GroupBox Margin="10,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <GroupBox Margin="10,40,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_signalCbox" Content="{x:Static resx:Resources.Signal}" IsChecked="True" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_SignalChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_SignalChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                     </GroupBox>
 
-                    <GroupBox Margin="304,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <GroupBox Margin="0,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Center">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_poincareCbox" Content="{x:Static resx:Resources.DelayedCoordinates}" IsChecked="True" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_PseudoPoincareChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_PseudoPoincareChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                     </GroupBox>
 
-                    <GroupBox Margin="597,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <GroupBox Margin="690,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_acfCbox" Content="{x:Static resx:Resources.Acf}" IsChecked="False" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_acfChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_acfChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                     </GroupBox>
 
                     <GroupBox Margin="10,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left">
@@ -41,9 +41,9 @@
                             <CheckBox x:Name="ch_fnnCbox" Content="{x:Static resx:Resources.Fnn}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <WpfPlot x:Name="an_FnnChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="an_FnnChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
 
-                            <StackPanel Margin="300,0,10,0">
+                            <StackPanel Margin="330,0,10,0">
                                 <TextBlock Text="Min. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="fnn_minDim" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
                                 <TextBlock Text="Max. dimension:" HorizontalAlignment="Center" Margin="0,10,0,0" />
@@ -58,14 +58,14 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Margin="450,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                    <GroupBox Margin="460,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_miCbox" Content="{x:Static resx:Resources.Mi}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <WpfPlot x:Name="an_miChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="an_miChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
 
-                            <StackPanel Margin="300,0,10,0">
+                            <StackPanel Margin="330,0,10,0">
                                 <TextBlock Text="Partitions:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="mi_partitions" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top"/>
                                 <TextBlock Text="Max. delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
@@ -79,12 +79,12 @@
             </TabItem>
             <TabItem x:Name="tabChartsMl" Header="Charts (Matlab)" Height="40">
                 <Grid>
-                    <GroupBox Margin="10,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <GroupBox Margin="10,40,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_fftCbox" Content="{x:Static resx:Resources.Fft}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <StackPanel Margin="300,0,10,0">
+                            <StackPanel Margin="330,0,10,0">
                                 <CheckBox x:Name="ch_logScaleCbox" Content="Log scale" Margin="0,10,0,10" FlowDirection="RightToLeft" HorizontalAlignment="Center"/>
                                 <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="fft_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
@@ -93,24 +93,26 @@
                                 <TextBlock Text="End ω:" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="fft_omRight" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
                             </StackPanel>
-                            <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Margin="437,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <GroupBox Margin="437,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_WaveletCbox" Content="{x:Static resx:Resources.Wavelet}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <StackPanel Margin="300,0,10,0">
+                            <StackPanel Margin="330,0,10,0">
                                 <TextBlock Text="Type:" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <ComboBox x:Name="wav_typeCbox" SelectedIndex="0" HorizontalContentAlignment="Center">
+                                    <ComboBoxItem Content="Morlet" ToolTip="morl"></ComboBoxItem>
+                                    <ComboBoxItem Content="Gaussian (8)" ToolTip="gaus8"></ComboBoxItem>
+                                    <ComboBoxItem Content="Daubechies (10)" ToolTip="db10"></ComboBoxItem>
                                     <ComboBoxItem Content="Haar" ToolTip="haar"></ComboBoxItem>
                                     <ComboBoxItem Content="Symlets (8)" ToolTip="sym8"></ComboBoxItem>
-                                    <ComboBoxItem Content="Gaussian (8)" ToolTip="gaus8"></ComboBoxItem>
                                     <ComboBoxItem Content="Complex Gaussian (8)" ToolTip="cgau8"></ComboBoxItem>
-                                    <ComboBoxItem Content="Daubechies (10)" ToolTip="db10"></ComboBoxItem>
-                                    <ComboBoxItem Content="Morlet" ToolTip="morl"></ComboBoxItem>
+                                    <ComboBoxItem Content="Mexican hat" ToolTip="mexh"></ComboBoxItem>
+                                    <ComboBoxItem Content="Meyer" ToolTip="meyr"></ComboBoxItem>
                                 </ComboBox>
                                 <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="wav_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
@@ -124,7 +126,7 @@
                                     <ComboBoxItem Content="parula"></ComboBoxItem>
                                 </ComboBox>
                             </StackPanel>
-                            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="280" Height="210" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                         </Grid>
                     </GroupBox>
 

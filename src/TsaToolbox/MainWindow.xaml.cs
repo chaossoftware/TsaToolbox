@@ -31,6 +31,7 @@ namespace TsaToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private readonly CommandProcessor _commandProcessor;
+        private TsaToolbox.Charts charts;
 
         public MainWindow()
         {
@@ -51,17 +52,19 @@ namespace TsaToolbox
 
         public Settings Settings { get; set; }
 
+        internal TsaToolbox.Charts Charts => charts ?? (charts = new TsaToolbox.Charts(Settings));
+
         public DataSource Source { get; set; }
 
         public void CleanUp()
         {
             Source.Data = null;
-            ClearPlot(ch_SignalChart);
-            ClearPlot(ch_PseudoPoincareChart);
-            ClearPlot(ch_acfChart);
-            ClearPlot(an_FnnChart);
-            ClearPlot(an_miChart);
-            ClearPlot(ch_FftChart);
+            Charts.ClearPlot(ch_SignalChart);
+            Charts.ClearPlot(ch_PseudoPoincareChart);
+            Charts.ClearPlot(ch_acfChart);
+            Charts.ClearPlot(an_FnnChart);
+            Charts.ClearPlot(an_miChart);
+            Charts.ClearPlot(ch_FftChart);
 
             ch_wavChart.Reset();
             _lyapunov.CleanUp(this);
@@ -101,71 +104,17 @@ namespace TsaToolbox
         private void le_ssRad_Unchecked(object sender, RoutedEventArgs e) =>
             le_ssGbox.Visibility = Visibility.Hidden;
 
-        internal void ClearPlot(ScottPlot.WpfPlot plot)
-        {
-            plot.Plot.Clear();
-            plot.Render();
-        }
-
-        private void SavePlot(ScottPlot.WpfPlot plot, string fileName) =>
-            plot.Plot.SaveFig(fileName, Settings.SaveChartWidth, Settings.SaveChartHeight);
-
-        internal void PlotScatter(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
-        {
-            ClearPlot(plot);
-            plot.Plot.AddScatter(series.XValues, series.YValues, System.Drawing.Color.Blue, 0.5f, 0f);
-            RenderPlot(plot, xLabel, yLabel);
-        }
-
-        private void PlotScatter(ScottPlot.WpfPlot plot, double[] xs, double[] ys, string xLabel, string yLabel)
-        {
-            ClearPlot(plot);
-            plot.Plot.AddScatter(xs, ys, System.Drawing.Color.Blue, 0.5f, 0f);
-            RenderPlot(plot, xLabel, yLabel);
-        }
-
-        private void PlotSignal(ScottPlot.WpfPlot plot, double[] series, string xLabel, string yLabel)
-        {
-            ClearPlot(plot);
-            plot.Plot.AddSignal(series, 1, System.Drawing.Color.Blue);
-            RenderPlot(plot, xLabel, yLabel);
-        }
-
-        private void PlotScatterPoints(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
-        {
-            ClearPlot(plot);
-            plot.Plot.AddScatterPoints(series.XValues, series.YValues, System.Drawing.Color.Blue, 1);
-            RenderPlot(plot, xLabel, yLabel);
-        }
-
-        private void RenderPlot(ScottPlot.WpfPlot plot, string xLabel, string yLabel)
-        {
-            plot.Plot.XAxis.LabelStyle(fontSize: 12);
-            plot.Plot.YAxis.LabelStyle(fontSize: 12);
-            plot.Plot.XAxis.Label(xLabel);
-            plot.Plot.YAxis.Label(yLabel);
-            plot.Plot.Layout(padding: 0);
-            plot.Render();
-        }
-
-        private void AddVerticalLine(ScottPlot.WpfPlot plot, double x)
-        {
-            plot.Plot.AddVerticalLine(x, System.Drawing.Color.Red, 1, ScottPlot.LineStyle.DashDot);
-            plot.Plot.AddAnnotation(x.ToString(), 0, 0);
-            plot.Render();
-        }
-
         private void ch_buildBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ch_signalCbox.IsChecked.Value)
             {
-                PlotScatter(ch_SignalChart, Source.Data.TimeSeries, "t", "f(t)");
+                Charts.PlotScatter(ch_SignalChart, Source.Data.TimeSeries, "t", "f(t)");
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
                 var pPoincare = DelayedCoordinates.GetData(Source.Data.TimeSeries.YValues, 1);
-                PlotScatterPoints(ch_PseudoPoincareChart, pPoincare, "Xn", "Xn+1");
+                Charts.PlotScatterPoints(ch_PseudoPoincareChart, pPoincare, "Xn", "Xn+1");
             }
 
             if (ch_acfCbox.IsChecked.Value)
@@ -188,7 +137,7 @@ namespace TsaToolbox
         {
             var autoCor = Statistics.Acf(Source.Data.TimeSeries.YValues);
 
-            PlotSignal(ch_acfChart, autoCor, "t", "acf");
+            Charts.PlotSignal(ch_acfChart, autoCor, "t", "acf");
 
             int i;
 
@@ -200,7 +149,7 @@ namespace TsaToolbox
                 }
             }
 
-            AddVerticalLine(ch_acfChart, i);
+            Charts.AddVerticalLine(ch_acfChart, i);
         }
 
         private void BuildFnnChart()
@@ -214,14 +163,14 @@ namespace TsaToolbox
 
             fnn.Calculate(Source.Data.TimeSeries.YValues);
 
-            PlotScatter(an_FnnChart,
+            Charts.PlotScatter(an_FnnChart,
                 fnn.FalseNeighbors.Keys.Select(x => (double)x).ToArray(),
                 fnn.FalseNeighbors.Values.Select(y => (double)y).ToArray(),
                 "d",
                 "fnn");
 
             int key = fnn.FalseNeighbors.Keys.First(k => fnn.FalseNeighbors[k] == 0);
-            AddVerticalLine(an_FnnChart, key);
+            Charts.AddVerticalLine(an_FnnChart, key);
         }
 
         private void BuildMiChart()
@@ -229,7 +178,7 @@ namespace TsaToolbox
             var mi = new MutualInformation(mi_partitions.ReadInt(), mi_maxDelay.ReadInt());
             mi.Calculate(Source.Data.TimeSeries.YValues);
 
-            PlotScatter(an_miChart, mi.EntropySlope, "d", "mi");
+            Charts.PlotScatter(an_miChart, mi.EntropySlope, "d", "mi");
 
             int index = 1;
             bool firstMinimumReached = false;
@@ -242,7 +191,7 @@ namespace TsaToolbox
 
             double tau = mi.EntropySlope.XValues[index - 2];
 
-            AddVerticalLine(an_miChart, tau);
+            Charts.AddVerticalLine(an_miChart, tau);
         }
 
         private void ch_buildMlBtn_Click(object sender, RoutedEventArgs e)
@@ -250,8 +199,8 @@ namespace TsaToolbox
             if (ch_fftCbox.IsChecked.Value)
             {
                 var fftTs = GetFft();
-
-                PlotScatter(ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", "F(ω)");
+                string yLabel = ch_logScaleCbox.IsChecked.Value ? "log(FFT)" : "FFT";
+                Charts.PlotScatter(ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", yLabel);
             }
 
             if (ch_WaveletCbox.IsChecked.Value)
@@ -275,7 +224,7 @@ namespace TsaToolbox
                     wav_omLeft.ReadDouble(),
                     wav_omRight.ReadDouble());
 
-                RenderPlot(ch_wavChart, "t", "ω");
+                Charts.RenderPlot(ch_wavChart, "t", "ω");
             }
         }
 
@@ -346,6 +295,12 @@ namespace TsaToolbox
 
             string fName = Path.Combine(outDir, Source.Data.FileName);
 
+            if (File.Exists(outDir))
+            {
+                throw new IOException(
+                    "Unable to create folder as file with this name already exists. Folder name: " + outDir);
+            }
+
             if (!Directory.Exists(outDir))
             {
                 Directory.CreateDirectory(outDir);
@@ -354,33 +309,33 @@ namespace TsaToolbox
             if (ch_signalCbox.IsChecked.Value)
             {
                 DataWriter.CreateDataFile(fName + "_signal.dat", Format.General(Source.Data.TimeSeries.YValues, "\n", 6));
-                SavePlot(ch_SignalChart, fName + "_signal.png");
+                Charts.SavePlot(ch_SignalChart, fName + "_signal.png");
             }
 
             if (ch_poincareCbox.IsChecked.Value)
             {
-                SavePlot(ch_PseudoPoincareChart, fName + "_poincare.png");
+                Charts.SavePlot(ch_PseudoPoincareChart, fName + "_poincare.png");
             }
 
             if (ch_acfCbox.IsChecked.Value)
             {
-                SavePlot(ch_acfChart, fName + "_acf.png");
+                Charts.SavePlot(ch_acfChart, fName + "_acf.png");
             }
 
             if (ch_fftCbox.IsChecked.Value)
             {
-                SavePlot(ch_FftChart, fName + "_fft.png");
+                Charts.SavePlot(ch_FftChart, fName + "_fft.png");
             }
 
             if (ch_WaveletCbox.IsChecked.Value)
             {
-                SavePlot(ch_wavChart, fName + "_wavelet.png");
+                Charts.SavePlot(ch_wavChart, fName + "_wavelet.png");
             }
 
             if (_lyapunov.Method != null)
             {
                 GenerateLeFile(fName);
-                SavePlot(le_slopeChart, fName + "_lyapunovSlope.png");
+                Charts.SavePlot(le_slopeChart, fName + "_lyapunovSlope.png");
             }
         }
 

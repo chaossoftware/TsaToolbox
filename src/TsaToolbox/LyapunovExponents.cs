@@ -76,7 +76,7 @@ namespace TsaToolbox
         {
             Method = null;
 
-            wnd.ClearPlot(wnd.le_slopeChart);
+            wnd.Charts.ClearPlot(wnd.le_slopeChart);
 
             wnd.le_logTbox.Text = string.Empty;
             wnd.le_resultTbox.Text = string.Empty;
@@ -157,7 +157,7 @@ namespace TsaToolbox
         {
             var result = string.Empty;
 
-            wnd.PlotScatter(wnd.le_slopeChart, Method.Slope, "t", "");
+            wnd.Charts.PlotScatter(wnd.le_slopeChart, Method.Slope, "t", "");
 
             if (Method is LleWolf wolf)
             {

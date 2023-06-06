@@ -26,8 +26,8 @@ namespace TsaToolbox.ViewModels
             // Default values.
             PreviewWindowWidth = "1024";
             PreviewWindowHeight = "600";
-            SaveChartWidth = "215";
-            SaveChartHeight = "160";
+            SaveChartWidth = "320";
+            SaveChartHeight = "240";
             SeparateOutputDir = true;
             OutputDir = "Results";
             EachNPoints = "1";
