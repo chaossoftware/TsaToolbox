@@ -408,7 +408,7 @@ namespace TsaToolbox
             double omStart = fft_omLeft.ReadDouble();
             double omEnd = fft_omRight.ReadDouble();
             
-            return Fourier.GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
+            return GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
         }
 
         private Bitmap GetWavelet(Visual visual, double width, double height, string fileName)
@@ -477,5 +477,41 @@ namespace TsaToolbox
 
         private void DeleteWaveletTempFile() =>
             File.Delete(Properties.Resources.WaveletFile);
+
+        public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, int logScale)
+        {
+            int powOfTwo = (int)Math.Log(timeSeries.Length, 2);
+            int newLength = (int)Math.Pow(2, powOfTwo);
+            int skip = (timeSeries.Length - newLength) / 2;
+
+            double[] signal = timeSeries.Skip(skip).Take(newLength).ToArray();
+
+            //double[] signal = new double[newLength];
+            //timeSeries.CopyTo(signal, 0);
+
+            // Shape the signal using a Hanning window
+            var window = new FftSharp.Windows.Hanning();
+            window.ApplyInPlace(signal);
+
+            // Calculate the FFT as an array of complex numbers
+            System.Numerics.Complex[] spectrum = FftSharp.FFT.Forward(signal);
+
+            double[] power = FftSharp.FFT.Power(spectrum);
+            double[] freq = FftSharp.FFT.FrequencyScale(power.Length, 1 / dt);
+
+            var fourier = new DataSeries();
+
+            for (int i = 0; i < power.Length; i++)
+            {
+                double x = freq[i];// i * dt;
+
+                if (x >= startFreq && x <= endFreq)
+                {
+                    fourier.AddDataPoint(x, power[i]);
+                }
+            }
+
+            return fourier;
+        }
     }
 }
