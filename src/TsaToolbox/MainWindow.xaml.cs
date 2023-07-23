@@ -329,7 +329,8 @@ namespace TsaToolbox
 
             if (ch_WaveletCbox.IsChecked.Value)
             {
-                Charts.SavePlot(ch_wavChart, fName + "_wavelet.png");
+                string waveletName = (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString();
+                Charts.SavePlot(ch_wavChart, $"{fName}_{waveletName}_wavelet.png");
             }
 
             if (_lyapunov.Method != null)
@@ -448,9 +449,9 @@ namespace TsaToolbox
                 double dWidth = data.Width * data.DpiX / dpi.PixelsPerInchX;
                 double dHeight = data.Height * data.DpiY / dpi.PixelsPerInchY;
 
-                var xOffset = dWidth / 12.5;
-                var yOffset = dHeight / 12.5;
-                var rect = new Int32Rect((int)xOffset, (int)yOffset, (int)(dWidth - 2 * xOffset), (int)(dHeight - 2 * yOffset));
+                var xOffset = dWidth / 12.7;
+                var yOffset = dHeight / 14.6;
+                var rect = new Int32Rect((int)xOffset, (int)yOffset, (int)(dWidth - 1.85 * xOffset), (int)(dHeight - 2.1 * yOffset));
 
                 var croppedBitmap = new CroppedBitmap(data, rect);
 
