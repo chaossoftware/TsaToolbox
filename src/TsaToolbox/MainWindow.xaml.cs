@@ -498,7 +498,15 @@ namespace TsaToolbox
             System.Numerics.Complex[] spectrum = FftSharp.FFT.Forward(signal);
 
             double[] power = FftSharp.FFT.Power(spectrum);
-            double[] freq = FftSharp.FFT.FrequencyScale(power.Length, 1 / dt);
+
+            double fs = 1 / dt;
+            double freqCoeff = Math.PI * fs / power.Length;
+            double[] freq = new double[power.Length];
+
+            for (int i = 0; i < power.Length; i++)
+            {
+                freq[i] = freqCoeff * i;
+            }
 
             var fourier = new DataSeries();
 
