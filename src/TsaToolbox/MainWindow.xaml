@@ -44,15 +44,15 @@
                             <WpfPlot x:Name="an_FnnChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
 
                             <StackPanel Margin="330,0,10,0">
-                                <TextBlock Text="Min. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="min dimension" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="fnn_minDim" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
-                                <TextBlock Text="Max. dimension:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="max dimension" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="fnn_maxDim" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top"/>
-                                <TextBlock Text="Delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="delay" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="fnn_tau" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
-                                <TextBlock Text="Escape factor:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="escape factor" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="fnn_rt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
-                                <TextBlock Text="Theiler window:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="Theiler window" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="fnn_theiler" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" />
                             </StackPanel>
                         </Grid>
@@ -66,9 +66,9 @@
                             <WpfPlot x:Name="an_miChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
 
                             <StackPanel Margin="330,0,10,0">
-                                <TextBlock Text="Partitions:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="partitions" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="mi_partitions" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top"/>
-                                <TextBlock Text="Max. delay:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="max delay" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="mi_maxDelay" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top"/>
                             </StackPanel>
                         </Grid>
@@ -77,7 +77,7 @@
                     <Button x:Name="ch_buildBtn" Content="Build" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Width="75" Click="ch_buildBtn_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabChartsMl" Header="Charts (Matlab)" Height="40">
+            <TabItem x:Name="tabChartsMl" Header="Frequency analysis" Height="40">
                 <Grid>
                     <GroupBox Margin="10,40,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <GroupBox.Header>
@@ -85,13 +85,16 @@
                         </GroupBox.Header>
                         <Grid>
                             <StackPanel Margin="330,0,10,0">
-                                <CheckBox x:Name="ch_logScaleCbox" Content="Log scale" Margin="0,10,0,10" FlowDirection="RightToLeft" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="Δt" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="fft_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding TimeStep, Mode=OneWay}" VerticalAlignment="Top"/>
-                                <TextBlock Text="Start ω:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fft_omLeft" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-                                <TextBlock Text="End ω:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="fft_omRight" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
+                                <TextBlock Text="ω range" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                
+                                <DockPanel>
+                                    <TextBox x:Name="fft_omLeft" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="fft_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
+                                </DockPanel>
+
+                                <CheckBox x:Name="fft_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             </StackPanel>
                             <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
                         </Grid>
@@ -103,8 +106,8 @@
                         </GroupBox.Header>
                         <Grid>
                             <StackPanel Margin="330,0,10,0">
-                                <TextBlock Text="Type:" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                                <ComboBox x:Name="wav_typeCbox" SelectedIndex="0" HorizontalContentAlignment="Center">
+                                <TextBlock Text="type" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <ComboBox x:Name="wav_typeCbox" SelectedIndex="0" HorizontalContentAlignment="Center" Width="100">
                                     <ComboBoxItem Content="Gaussian (8)" ToolTip="gaus8"></ComboBoxItem>
                                     <ComboBoxItem Content="Morlet" ToolTip="morl"></ComboBoxItem>
                                     <ComboBoxItem Content="Daubechies (10)" ToolTip="db10"></ComboBoxItem>
@@ -114,13 +117,17 @@
                                     <ComboBoxItem Content="Meyer" ToolTip="meyr"></ComboBoxItem>
                                     <ComboBoxItem Content="Compl. Gaussian (8)" ToolTip="cgau8"></ComboBoxItem>
                                 </ComboBox>
-                                <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="wav_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding TimeStep, Mode=OneWay}" VerticalAlignment="Top"/>
-                                <TextBlock Text="Start ω:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="wav_omLeft" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-                                <TextBlock Text="End ω:" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="wav_omRight" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
-                                <TextBlock Text="Type:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="ω range" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <DockPanel>
+                                    <TextBox x:Name="wav_omLeft" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="wav_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
+                                </DockPanel>
+
+                                <CheckBox x:Name="wvl_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="thinning" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBox x:Name="wav_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
+                                <TextBlock Text="color map" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <ComboBox x:Name="wav_paletteCbox" SelectedIndex="0" HorizontalContentAlignment="Center">
                                     <ComboBoxItem Content="pink"></ComboBoxItem>
                                     <ComboBoxItem Content="parula"></ComboBoxItem>
@@ -139,52 +146,52 @@
                     <UniformGrid Columns="5" Rows="1" Margin="10,30,300,0" VerticalAlignment="Top">
                         <GroupBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="Embed. dimension:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="embed. dimension" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="le_eDimTbox" Style="{StaticResource ParameterValueWide}" Text="2" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Reconstr. delay:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="reconstr. delay" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_tauTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Δt:" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="Δt" HorizontalAlignment="Center" Margin="0,10,0,0" />
                                 <TextBox x:Name="le_dtTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Min. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="min scale" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_epsMinTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox x:Name="le_rosGbox" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="iterations" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="le_r_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Theiler window:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Theiler window" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_r_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox x:Name="le_kantzGbox" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="Iterations:" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="iterations" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="le_k_iterTbox" Style="{StaticResource ParameterValueWide}" Text="50" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Theiler window:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Theiler window" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_k_windowTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Scales:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="scales" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_k_scalesTbox" Style="{StaticResource ParameterValueWide}" Text="5" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="max scale" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_k_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox x:Name="le_wolfGbox" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="Evolution steps:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="evolution steps" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_w_evolStepsTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Max. scale:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="max scale" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_w_epsMaxTbox" Style="{StaticResource ParameterValueWide}" Text="0" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox x:Name="le_ssGbox" Visibility="Hidden" VerticalAlignment="Top" Padding="10" HorizontalAlignment="Left" Width="140">
                             <StackPanel>
-                                <TextBlock Text="Scale inc. factor:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="scale inc. factor" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_ss_scaleFactorTbox" Style="{StaticResource ParameterValueWide}" Text="1.20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Min. neighbors:" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="min neighbors" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_ss_minNeighbTbox" Style="{StaticResource ParameterValueWide}" Text="30" HorizontalAlignment="Center"/>
-                                <CheckBox x:Name="le_ss_inverseCbox" Content="Inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                                <CheckBox x:Name="le_ss_inverseCbox" Content="inverse series" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </GroupBox>
                     </UniformGrid>
@@ -197,14 +204,17 @@
                         <RadioButton x:Name="le_ssRad" HorizontalAlignment="Center" Content="Sano-Sawada" Checked="le_ssRad_Checked" Unchecked="le_ssRad_Unchecked"/>
                     </UniformGrid>
 
-                    <UniformGrid Columns="7" x:Name="le_slopeAdjGbox" Visibility="Visible" VerticalAlignment="Bottom" Margin="10,10,300,10">
-                        <TextBlock x:Name="le_k_epsLbl" Visibility="Hidden" Text="Found scales: " VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <ComboBox x:Name="le_k_epsCombo" Visibility="Hidden" Width="100" HorizontalAlignment="Left" SelectionChanged="le_k_epsCombo_SelectionChanged"/>
-                        <TextBlock Text="Start point: " VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <TextBox x:Name="le_slopeStartTbox" HorizontalAlignment="Left" Style="{StaticResource ParameterValue}" Text="0"/>
-                        <TextBlock Text="End point: " VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <TextBox x:Name="le_slopeEndTbox" Style="{StaticResource ParameterValue}" Text="5" HorizontalAlignment="Left"/>
-                        <Button x:Name="le_adjustBtn" Content="Adjust" HorizontalAlignment="Center" Width="100" Height="20" Click="le_k_adjustBtn_Click"/>
+                    <UniformGrid Columns="3" x:Name="le_slopeAdjGbox" Visibility="Visible" VerticalAlignment="Bottom" Margin="10,10,300,10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock x:Name="le_k_epsLbl" Visibility="Hidden" Text="Found scales: " VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <ComboBox x:Name="le_k_epsCombo" Visibility="Hidden" Width="100" HorizontalAlignment="Left" SelectionChanged="le_k_epsCombo_SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Plot range: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <TextBox x:Name="le_slopeStartTbox" HorizontalAlignment="Center" Style="{StaticResource ParameterValue}" Text="0"/>
+                                <TextBox x:Name="le_slopeEndTbox" Style="{StaticResource ParameterValue}" Text="5" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                        <Button x:Name="le_adjustBtn" Grid.Column="7" Content="Adjust" HorizontalAlignment="Center" Width="100" Height="20" Click="le_k_adjustBtn_Click"/>
                     </UniformGrid>
 
                     <Button x:Name="le_calculateBtn" Content="Calculate" Click="le_calculateBtn_Click" Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0"/>

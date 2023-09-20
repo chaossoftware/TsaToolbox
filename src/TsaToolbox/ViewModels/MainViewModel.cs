@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using ChaosSoft.Core.Data;
+using System.ComponentModel;
+using System.Data;
 using System.Globalization;
+using System.Reflection;
 using TsaToolbox.Models;
 
 namespace TsaToolbox.ViewModels
@@ -77,10 +80,20 @@ namespace TsaToolbox.ViewModels
 
                 TimeSeriesInfo = info;
 
-                TimeStep = _source.TimeInFirstColumn ?
-                    string.Format(CultureInfo.InvariantCulture, "{0:G8}", _source.Data.Step) :
-                    "NaN";
-            }
+                // dirty hack in case when time in file has G format
+                // at big offsets accuracy could be lost due to big integer part
+                if (_source.TimeInFirstColumn)
+                {
+                    FieldInfo field = typeof(SourceData).GetField("_dataColumns", BindingFlags.NonPublic | BindingFlags.Instance);
+                    double[][] data = field.GetValue(_source.Data) as double[][];
+                    double step = data[0][_source.EachNPoints] - data[0][0];
+                    TimeStep = string.Format(CultureInfo.InvariantCulture, "{0:G8}", step);
+                }
+                else
+                {
+                    TimeStep = double.NaN.ToString();
+                }
+              }
         }
     }
 }
