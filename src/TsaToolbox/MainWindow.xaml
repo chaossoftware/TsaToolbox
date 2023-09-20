@@ -19,21 +19,21 @@
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_signalCbox" Content="{x:Static resx:Resources.Signal}" IsChecked="True" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_SignalChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_SignalChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
                     </GroupBox>
 
                     <GroupBox Margin="0,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Center">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_poincareCbox" Content="{x:Static resx:Resources.DelayedCoordinates}" IsChecked="True" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_PseudoPoincareChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_PseudoPoincareChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
                     </GroupBox>
 
                     <GroupBox Margin="690,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <GroupBox.Header>
                             <CheckBox x:Name="ch_acfCbox" Content="{x:Static resx:Resources.Acf}" IsChecked="False" />
                         </GroupBox.Header>
-                        <WpfPlot x:Name="ch_acfChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                        <WpfPlot x:Name="ch_acfChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
                     </GroupBox>
 
                     <GroupBox Margin="10,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left">
@@ -41,7 +41,7 @@
                             <CheckBox x:Name="ch_fnnCbox" Content="{x:Static resx:Resources.Fnn}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <WpfPlot x:Name="an_FnnChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="an_FnnChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
 
                             <StackPanel Margin="330,0,10,0">
                                 <TextBlock Text="min dimension" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -63,7 +63,7 @@
                             <CheckBox x:Name="ch_miCbox" Content="{x:Static resx:Resources.Mi}" IsChecked="False" />
                         </GroupBox.Header>
                         <Grid>
-                            <WpfPlot x:Name="an_miChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="an_miChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
 
                             <StackPanel Margin="330,0,10,0">
                                 <TextBlock Text="partitions" HorizontalAlignment="Center" Margin="0,0,0,0" />
@@ -96,7 +96,7 @@
 
                                 <CheckBox x:Name="fft_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
                         </Grid>
                     </GroupBox>
 
@@ -133,7 +133,7 @@
                                     <ComboBoxItem Content="parula"></ComboBoxItem>
                                 </ComboBox>
                             </StackPanel>
-                            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0"></WpfPlot>
+                            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
                         </Grid>
                     </GroupBox>
 
@@ -221,7 +221,7 @@
                     <TextBox x:Name="le_logTbox" Margin="0,70,10,10" TextWrapping="Wrap" HorizontalAlignment="Right" Width="280" Foreground="White" Background="#FF464545" FontFamily="Consolas"/>
 
                     <TextBox x:Name="le_resultTbox" TextWrapping="Wrap" Margin="0,40,10,0" HorizontalAlignment="Right" Width="280" Height="25" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Consolas"/>
-                    <WpfPlot x:Name="le_slopeChart" Margin="10,0,300,40" Height="310" VerticalAlignment="Bottom"/>
+                    <WpfPlot x:Name="le_slopeChart" Margin="10,0,300,40" Height="310" VerticalAlignment="Bottom" Cursor="Cross"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabConsole" Header="Console" Height="40">
