@@ -73,6 +73,7 @@ namespace TsaToolbox.Commands
             }
 
             _viewModel.DataLoaded = true;
+            _viewModel.TimeSeriesStale = true;
             _viewModel.SetTimeseriesCommand.Execute(null);
         }
     }
