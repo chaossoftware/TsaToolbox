@@ -96,7 +96,7 @@
                     <CheckBox x:Name="set_bytesCbox" Grid.Row="0" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding ReadFromBytes}"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Preview form settings" Style="{StaticResource GroupBoxStyle}" Padding="5" IsEnabled="False">
+            <GroupBox Header="Charts settings" Style="{StaticResource GroupBoxStyle}" Padding="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -105,11 +105,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Label Content="Window width:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <TextBox x:Name="set_previewWidth" Grid.Row="0" Grid.Column="1" Text="{Binding PreviewWindowWidth}" Style="{StaticResource TextBoxStyle}"/>
-                    <Label Content="Window height:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
-                    <TextBox x:Name="set_previewHeight" Grid.Row="1" Grid.Column="1" Text="{Binding PreviewWindowHeight}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Axis tick label size:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="set_tickLabelSize" Grid.Row="0" Grid.Column="1" Text="{Binding AxisTickLabelSize}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Axis label size:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="set_labelSize" Grid.Row="1" Grid.Column="1" Text="{Binding AxisLabelSize}" Style="{StaticResource TextBoxStyle}"/>
+                    <Label Content="Show grid lines:" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding ShowGridLines}"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="Output settings" Style="{StaticResource GroupBoxStyle}" Padding="5" Margin="10">

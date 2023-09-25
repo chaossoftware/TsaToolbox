@@ -10,9 +10,11 @@
 
         public bool SeparateOutputDir { get; set; }
 
-        public int PreviewWindowWidth { get; set; }
+        public int AxisTickLabelSize { get; set; }
 
-        public int PreviewWindowHeight { get; set; }
+        public int AxisLabelSize { get; set; }
+
+        public bool ShowGridLines { get; set; }
 
     }
 }
