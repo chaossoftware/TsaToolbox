@@ -422,6 +422,7 @@ namespace TsaToolbox
                     wav_omLeft.ReadDouble(),
                     wav_omRight.ReadDouble(),
                     wav_paletteCbox.Text,
+                    wvl_radCbox.IsChecked.Value,
                     width,
                     height);
 

@@ -5,7 +5,7 @@ namespace ChaosSoft.MatlabIntegration
     public class Wavelet
     {
         public static void BuildWavelet(double[] yValues, double[] xValues, string tmpFileName, string wName, 
-            double fStart, double fEnd, string colMap, double width, double height)
+            double fStart, double fEnd, string colMap, bool inRadians, double width, double height)
         {
             var matlabBridge = new MatlabEngine.MatlabBridge();
 
@@ -15,9 +15,12 @@ namespace ChaosSoft.MatlabIntegration
             var mwFolder = (MWCharArray)string.Empty;
             var mwfileName = (MWCharArray)tmpFileName;
             var mwColMap = (MWCharArray)colMap;
+            var omegaRange = (MWNumericArray)new double[] { fStart, fEnd };
+            var picSize = (MWNumericArray)new double[] { width, height };
+            int rad = inRadians ? 1 : 0;
 
             matlabBridge.Build2DWavelet(
-                mwSignalArray, mwTimeArray, mwWname, fStart, fEnd, 10, mwFolder, mwfileName, mwColMap, width, height, 1);
+                mwSignalArray, mwTimeArray, mwWname, omegaRange, 10, rad, mwColMap, 1, mwFolder, mwfileName, picSize);
         }
     }
 }
