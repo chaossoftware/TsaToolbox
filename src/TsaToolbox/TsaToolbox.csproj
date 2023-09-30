@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChaosSoft.MatlabIntegration\ChaosSoft.MatlabIntegration.csproj" />
+    <Folder Include="lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MatlabEngine">
+      <HintPath>lib\MatlabEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="MWArray">
+      <HintPath>lib\MWArray.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

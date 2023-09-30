@@ -1,6 +1,5 @@
 ﻿using ChaosSoft.Core.Data;
 using System.ComponentModel;
-using System.Data;
 using System.Globalization;
 using System.Reflection;
 using TsaToolbox.Models;

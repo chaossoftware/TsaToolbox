@@ -1,6 +1,5 @@
 ﻿using ChaosSoft.Core.Data;
 using ChaosSoft.Core.IO;
-using ChaosSoft.MatlabIntegration;
 using ChaosSoft.NumericalMethods;
 using ChaosSoft.NumericalMethods.Lyapunov;
 using ChaosSoft.NumericalMethods.PhaseSpace;
@@ -18,8 +17,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using TsaToolbox.Helpers;
 using TsaToolbox.Models;
 
 namespace TsaToolbox
@@ -401,21 +399,16 @@ namespace TsaToolbox
             Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
         }
 
-        private DataSeries GetFft()
-        {
-            double dt = fft_dt.ReadDouble();
-            double omStart = fft_omLeft.ReadDouble();
-            double omEnd = fft_omRight.ReadDouble();
-            bool inRadians = fft_radCbox.IsChecked.Value;
+        private DataSeries GetFft() =>
+            FreqAnalysis.GetFourier(
+                Source.Data.TimeSeries.YValues,
+                fft_omLeft.ReadDouble(),
+                fft_omRight.ReadDouble(), 
+                fft_dt.ReadDouble(),
+                fft_radCbox.IsChecked.Value);
 
-            return GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, inRadians);
-        }
-
-        private Bitmap GetWavelet(double width, double height, string fileName)
-        {
-            try
-            {
-                Wavelet.BuildWavelet(Source.Data.TimeSeries.YValues,
+        private Bitmap GetWavelet(double width, double height, string fileName) =>
+            FreqAnalysis.GetWavelet(Source.Data.TimeSeries.YValues,
                     Source.Data.TimeSeries.XValues,
                     fileName,
                     (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString(),
@@ -426,81 +419,10 @@ namespace TsaToolbox
                     width,
                     height);
 
-                string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                
-                var data = new BitmapImage();
-                var stream = File.OpenRead(Path.Combine(dir, fileName));
-
-                data.BeginInit();
-                data.CacheOption = BitmapCacheOption.OnLoad;
-                data.StreamSource = stream;
-                data.EndInit();
-                stream.Close();
-                stream.Dispose();
-                data.Freeze();
-
-                using (MemoryStream outStream = new MemoryStream())
-                {
-                    BitmapEncoder enc = new BmpBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(data));
-                    enc.Save(outStream);
-                    return new Bitmap(outStream);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Unable to build {Properties.Resources.Wavelet}:\n" + ex.Message);
-                return null;
-            }
-        }
-
-        private void le_k_epsCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
+        private void le_k_epsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
             _lyapunov.AdjustSlope(this);
 
         private void DeleteWaveletTempFile() =>
             File.Delete(Properties.Resources.WaveletFile);
-
-        public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, bool inRadians)
-        {
-            int powOfTwo = (int)Math.Log(timeSeries.Length, 2);
-            int newLength = (int)Math.Pow(2, powOfTwo);
-            int skip = (timeSeries.Length - newLength) / 2;
-
-            double[] signal = timeSeries.Skip(skip).Take(newLength).ToArray();
-
-            // Shape the signal using a Hanning window
-            var window = new FftSharp.Windows.Hanning();
-            window.ApplyInPlace(signal);
-
-            // Calculate the FFT as an array of complex numbers
-            System.Numerics.Complex[] spectrum = FftSharp.FFT.Forward(signal);
-
-            double[] power = FftSharp.FFT.Power(spectrum);
-
-            double multiplier = inRadians ? 2d * Math.PI : 1d;
-
-            double fs = 1 / (2 * dt);
-            double freqCoeff = multiplier * fs / power.Length;
-            double[] freq = new double[power.Length];
-
-            for (int i = 0; i < power.Length; i++)
-            {
-                freq[i] = freqCoeff * i;
-            }
-
-            var fourier = new DataSeries();
-
-            for (int i = 0; i < power.Length; i++)
-            {
-                double x = freq[i];
-
-                if (x >= startFreq && x <= endFreq)
-                {
-                    fourier.AddDataPoint(x, power[i]);
-                }
-            }
-
-            return fourier;
-        }
     }
 }
