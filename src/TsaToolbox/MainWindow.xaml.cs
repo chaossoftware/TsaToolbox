@@ -199,7 +199,7 @@ namespace TsaToolbox
             if (ch_fftCbox.IsChecked.Value)
             {
                 var fftTs = GetFft();
-                string yLabel = ch_logScaleCbox.IsChecked.Value ? "log(FFT)" : "FFT";
+                string yLabel = "power (dB)";
                 Charts.PlotScatter(ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", yLabel);
             }
 
@@ -208,7 +208,6 @@ namespace TsaToolbox
                 DeleteWaveletTempFile();
 
                 var brush = GetWavelet(
-                    ch_wavChart, 
                     ch_wavChart.Width * 2, 
                     ch_wavChart.Height * 2, 
                     Properties.Resources.WaveletFile);
@@ -404,30 +403,26 @@ namespace TsaToolbox
 
         private DataSeries GetFft()
         {
-            int logScale = ch_logScaleCbox.IsChecked.Value ? 1 : 0;
             double dt = fft_dt.ReadDouble();
             double omStart = fft_omLeft.ReadDouble();
             double omEnd = fft_omRight.ReadDouble();
-            
-            return GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, logScale);
+            bool inRadians = fft_radCbox.IsChecked.Value;
+
+            return GetFourier(Source.Data.TimeSeries.YValues, omStart, omEnd, dt, inRadians);
         }
 
-        private Bitmap GetWavelet(Visual visual, double width, double height, string fileName)
+        private Bitmap GetWavelet(double width, double height, string fileName)
         {
-            double tStart = Source.Data.TimeSeries.Min.X;
-            double tEnd = Source.Data.TimeSeries.Max.X;
-
             try
             {
                 Wavelet.BuildWavelet(Source.Data.TimeSeries.YValues,
+                    Source.Data.TimeSeries.XValues,
                     fileName,
                     (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString(),
-                    tStart,
-                    tEnd,
                     wav_omLeft.ReadDouble(),
                     wav_omRight.ReadDouble(),
-                    wav_dt.ReadDouble(),
                     wav_paletteCbox.Text,
+                    wvl_radCbox.IsChecked.Value,
                     width,
                     height);
 
@@ -444,26 +439,12 @@ namespace TsaToolbox
                 stream.Dispose();
                 data.Freeze();
 
-                DpiScale dpi = VisualTreeHelper.GetDpi(visual);
-
-                double dWidth = data.Width * data.DpiX / dpi.PixelsPerInchX;
-                double dHeight = data.Height * data.DpiY / dpi.PixelsPerInchY;
-
-                var xOffset = dWidth / 12.7;
-                var yOffset = dHeight / 14.6;
-                var rect = new Int32Rect((int)xOffset, (int)yOffset, (int)(dWidth - 1.85 * xOffset), (int)(dHeight - 2.1 * yOffset));
-
-                var croppedBitmap = new CroppedBitmap(data, rect);
-
                 using (MemoryStream outStream = new MemoryStream())
                 {
                     BitmapEncoder enc = new BmpBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(croppedBitmap));
+                    enc.Frames.Add(BitmapFrame.Create(data));
                     enc.Save(outStream);
-                    Bitmap bitmap = new Bitmap(outStream);
-                    bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-                    return new Bitmap(bitmap);
+                    return new Bitmap(outStream);
                 }
             }
             catch (Exception ex)
@@ -479,16 +460,13 @@ namespace TsaToolbox
         private void DeleteWaveletTempFile() =>
             File.Delete(Properties.Resources.WaveletFile);
 
-        public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, int logScale)
+        public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, bool inRadians)
         {
             int powOfTwo = (int)Math.Log(timeSeries.Length, 2);
             int newLength = (int)Math.Pow(2, powOfTwo);
             int skip = (timeSeries.Length - newLength) / 2;
 
             double[] signal = timeSeries.Skip(skip).Take(newLength).ToArray();
-
-            //double[] signal = new double[newLength];
-            //timeSeries.CopyTo(signal, 0);
 
             // Shape the signal using a Hanning window
             var window = new FftSharp.Windows.Hanning();
@@ -499,8 +477,10 @@ namespace TsaToolbox
 
             double[] power = FftSharp.FFT.Power(spectrum);
 
-            double fs = 1 / dt;
-            double freqCoeff = Math.PI * fs / power.Length;
+            double multiplier = inRadians ? 2d * Math.PI : 1d;
+
+            double fs = 1 / (2 * dt);
+            double freqCoeff = multiplier * fs / power.Length;
             double[] freq = new double[power.Length];
 
             for (int i = 0; i < power.Length; i++)
@@ -512,7 +492,7 @@ namespace TsaToolbox
 
             for (int i = 0; i < power.Length; i++)
             {
-                double x = freq[i];// i * dt;
+                double x = freq[i];
 
                 if (x >= startFreq && x <= endFreq)
                 {
