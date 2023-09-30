@@ -68,8 +68,8 @@ namespace TsaToolbox.Commands
 
             if (_source.EndPoint > _source.Data.LinesCount || _source.EndPoint == 0)
             {
-                _viewModel.StartPoint = "1";
-                _viewModel.EndPoint = _source.Data.LinesCount.ToString();
+                _viewModel.StartPoint = 1;
+                _viewModel.EndPoint = _source.Data.LinesCount;
             }
 
             _viewModel.DataLoaded = true;

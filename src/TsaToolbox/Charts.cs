@@ -67,10 +67,13 @@ namespace TsaToolbox
 
         internal void RenderPlot(ScottPlot.WpfPlot plot, string xLabel, string yLabel)
         {
-            plot.Plot.XAxis.LabelStyle(fontSize: 13);
-            plot.Plot.YAxis.LabelStyle(fontSize: 13);
+            plot.Plot.XAxis.LabelStyle(fontSize: _settings.AxisLabelSize);
+            plot.Plot.YAxis.LabelStyle(fontSize: _settings.AxisLabelSize); 
+            plot.Plot.XAxis.TickLabelStyle(fontSize: _settings.AxisTickLabelSize);
+            plot.Plot.YAxis.TickLabelStyle(fontSize: _settings.AxisTickLabelSize);
             plot.Plot.XAxis.Label(xLabel);
             plot.Plot.YAxis.Label(yLabel);
+            plot.Plot.Grid(enable: _settings.ShowGridLines);
             plot.Render();
         }
 

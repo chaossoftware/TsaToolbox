@@ -24,13 +24,13 @@ namespace TsaToolbox.ViewModels
             SetTimeseriesCommand = new SetTimeseriesCommand(source, this);
 
             // Default values.
-            PreviewWindowWidth = "1024";
-            PreviewWindowHeight = "600";
-            SaveChartWidth = "320";
-            SaveChartHeight = "240";
+            AxisTickLabelSize = 13;
+            AxisLabelSize = 14;
+            SaveChartWidth = 320;
+            SaveChartHeight = 240;
             SeparateOutputDir = true;
             OutputDir = "Results";
-            EachNPoints = "1";
+            EachNPoints = 1;
 
             TimeSeriesStale = false;
         }
@@ -39,24 +39,24 @@ namespace TsaToolbox.ViewModels
 
         public ICommand SetTimeseriesCommand { get; }
 
-        public string LinesToSkip 
+        public int LinesToSkip 
         {
-            get => _source.LinesToSkip.ToString();
+            get => _source.LinesToSkip;
 
             set
             {
-                _source.LinesToSkip = int.Parse(value);
+                _source.LinesToSkip = value;
                 OnPropertyChanged(nameof(LinesToSkip));
             }
         }
 
-        public string LinesToRead
+        public int LinesToRead
         {
-            get => _source.LinesToRead.ToString();
+            get => _source.LinesToRead;
 
             set
             {
-                _source.LinesToRead = int.Parse(value);
+                _source.LinesToRead = value;
                 OnPropertyChanged(nameof(LinesToRead));
             }
         }
@@ -111,88 +111,90 @@ namespace TsaToolbox.ViewModels
             }
         }
 
-        public string StartPoint
+        public int StartPoint
         {
-            get => _source.StartPoint.ToString();
+            get => _source.StartPoint;
 
             set
             {
-                if (int.TryParse(value, out int sp))
-                {
-                    _source.StartPoint = sp > 0 && sp < _source.Data.LinesCount ? sp : 0;
-                    OnTsPropertyChanged(nameof(StartPoint));
-                }
+                _source.StartPoint = value > 0 && value < _source.Data.LinesCount ? value : 0;
+                OnTsPropertyChanged(nameof(StartPoint));
             }
         }
 
-        public string EndPoint
+        public int EndPoint
         {
-            get => _source.EndPoint.ToString();
+            get => _source.EndPoint;
 
             set
             {
-                if (int.TryParse(value, out int ep))
-                {
-                    _source.EndPoint = ep > 0 && ep < _source.Data?.LinesCount ? ep : _source.Data.LinesCount;
-                    OnTsPropertyChanged(nameof(EndPoint));
-                }
+                _source.EndPoint = value > 0 && value < _source.Data?.LinesCount ? value : _source.Data.LinesCount;
+                OnTsPropertyChanged(nameof(EndPoint));
             }
         }
 
-        public string EachNPoints
+        public int EachNPoints
         {
-            get => _source.EachNPoints.ToString();
+            get => _source.EachNPoints;
 
             set
             {
-                if (int.TryParse(value, out int np))
-                {
-                    _source.EachNPoints = np > 0 && np < _source.Data?.LinesCount ? np : 1;
-                    OnTsPropertyChanged(nameof(EachNPoints));
-                }
+                _source.EachNPoints = value > 0 && value < _source.Data?.LinesCount ? value : 1;
+                OnTsPropertyChanged(nameof(EachNPoints));
             }
         }
 
-        public string PreviewWindowWidth
+        public int AxisTickLabelSize
         {
-            get => _settings.PreviewWindowWidth.ToString();
+            get => _settings.AxisTickLabelSize;
 
             set
             {
-                _settings.PreviewWindowWidth = int.Parse(value);
-                OnPropertyChanged(nameof(PreviewWindowWidth));
+                _settings.AxisTickLabelSize = value;
+                OnPropertyChanged(nameof(AxisTickLabelSize));
             }
         }
 
-        public string PreviewWindowHeight
+        public int AxisLabelSize
         {
-            get => _settings.PreviewWindowHeight.ToString();
+            get => _settings.AxisLabelSize;
 
             set
             {
-                _settings.PreviewWindowHeight = int.Parse(value);
-                OnPropertyChanged(nameof(PreviewWindowHeight));
+                _settings.AxisLabelSize = value;
+                OnPropertyChanged(nameof(AxisLabelSize));
             }
         }
 
-        public string SaveChartWidth
+        public bool ShowGridLines
         {
-            get => _settings.SaveChartWidth.ToString();
+            get => _settings.ShowGridLines;
 
             set
             {
-                _settings.SaveChartWidth = int.Parse(value);
+                _settings.ShowGridLines = value;
+                OnPropertyChanged(nameof(ShowGridLines));
+            }
+        }
+
+        public int SaveChartWidth
+        {
+            get => _settings.SaveChartWidth;
+
+            set
+            {
+                _settings.SaveChartWidth = value;
                 OnPropertyChanged(nameof(SaveChartWidth));
             }
         }
 
-        public string SaveChartHeight
+        public int SaveChartHeight
         {
-            get => _settings.SaveChartHeight.ToString();
+            get => _settings.SaveChartHeight;
 
             set
             {
-                _settings.SaveChartHeight = int.Parse(value);
+                _settings.SaveChartHeight = value;
                 OnPropertyChanged(nameof(SaveChartHeight));
             }
         }
