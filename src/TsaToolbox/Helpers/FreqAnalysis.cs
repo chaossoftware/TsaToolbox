@@ -7,18 +7,18 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using TsaToolbox.Models.Setups;
 
 namespace TsaToolbox.Helpers;
 
 internal class FreqAnalysis
 {
-    public static Bitmap GetWavelet(double[] yValues, double[] xValues, string tmpFileName, string wName,
-        double fStart, double fEnd, string colMap, bool inRadians, double width, double height)
+    public static Bitmap GetWavelet(double[] yValues, double[] xValues, string tmpFileName, 
+        WaveletSetup setup, double width, double height)
     {
         try
         {
-            BuildWavelet(yValues, xValues, tmpFileName, wName, fStart, fEnd,
-                colMap, inRadians, width, height);
+            BuildWavelet(yValues, xValues, tmpFileName, setup, width, height);
 
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -46,7 +46,7 @@ internal class FreqAnalysis
         }
     }
 
-    public static DataSeries GetFourier(double[] timeSeries, double startFreq, double endFreq, double dt, bool inRadians)
+    public static DataSeries GetFourier(double[] timeSeries, FftSetup setup)
     {
         int powOfTwo = (int)Math.Log(timeSeries.Length, 2);
         int newLength = (int)Math.Pow(2, powOfTwo);
@@ -63,9 +63,9 @@ internal class FreqAnalysis
 
         double[] power = FftSharp.FFT.Power(spectrum);
 
-        double multiplier = inRadians ? 2d * Math.PI : 1d;
+        double multiplier = setup.UseRadians ? 2d * Math.PI : 1d;
 
-        double fs = 1 / (2 * dt);
+        double fs = 1 / (2 * setup.Dt);
         double freqCoeff = multiplier * fs / power.Length;
         double[] freq = new double[power.Length];
 
@@ -80,7 +80,7 @@ internal class FreqAnalysis
         {
             double x = freq[i];
 
-            if (x >= startFreq && x <= endFreq)
+            if (x >= setup.OmegaFrom && x <= setup.OmegaTo)
             {
                 fourier.AddDataPoint(x, power[i]);
             }
@@ -89,20 +89,20 @@ internal class FreqAnalysis
         return fourier;
     }
 
-    private static void BuildWavelet(double[] yValues, double[] xValues, string tmpFileName, string wName,
-        double fStart, double fEnd, string colMap, bool inRadians, double width, double height)
+    private static void BuildWavelet(double[] yValues, double[] xValues, string tmpFileName, 
+        WaveletSetup setup, double width, double height)
     {
         MatlabEngine.MatlabBridge matlabBridge = new();
 
         MWNumericArray mwSignalArray = yValues;
         MWNumericArray mwTimeArray = xValues;
-        MWCharArray mwWname = wName;
+        MWCharArray mwWname = setup.Family.ToString().ToLowerInvariant();
         MWCharArray mwFolder = string.Empty;
         MWCharArray mwfileName = tmpFileName;
-        MWCharArray mwColMap = colMap;
-        MWNumericArray omegaRange = new double[] { fStart, fEnd };
+        MWCharArray mwColMap = setup.ColorMap.ToString().ToLowerInvariant();
+        MWNumericArray omegaRange = new double[] { setup.OmegaFrom, setup.OmegaTo };
         MWNumericArray picSize = new double[] { width, height };
-        int rad = inRadians ? 1 : 0;
+        int rad = setup.UseRadians ? 1 : 0;
 
         matlabBridge.Build2DWavelet(
             mwSignalArray, mwTimeArray, mwWname, omegaRange, 10, rad, mwColMap, 1, mwFolder, mwfileName, picSize);

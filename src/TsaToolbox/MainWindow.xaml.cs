@@ -19,6 +19,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using TsaToolbox.Helpers;
 using TsaToolbox.Models;
+using TsaToolbox.Models.Setups;
 
 namespace TsaToolbox
 {
@@ -29,7 +30,7 @@ namespace TsaToolbox
     {
         private readonly LyapunovExponents _lyapunov;
         private readonly CommandProcessor _commandProcessor;
-        private TsaToolbox.Charts charts;
+        private Charts charts;
 
         public MainWindow()
         {
@@ -50,7 +51,9 @@ namespace TsaToolbox
 
         public Settings Settings { get; set; }
 
-        internal TsaToolbox.Charts Charts => charts ?? (charts = new TsaToolbox.Charts(Settings));
+        public Setup Setup { get; set; }
+
+        internal Charts Charts => charts ?? (charts = new Charts(Settings));
 
         public DataSource Source { get; set; }
 
@@ -62,9 +65,9 @@ namespace TsaToolbox
             Charts.ClearPlot(ch_acfChart);
             Charts.ClearPlot(an_FnnChart);
             Charts.ClearPlot(an_miChart);
-            Charts.ClearPlot(ch_FftChart);
+            Charts.ClearPlot(FftView.ch_FftChart);
 
-            ch_wavChart.Reset();
+            WaveletView.ch_wavChart.Reset();
             _lyapunov.CleanUp(this);
 
             DeleteWaveletTempFile();
@@ -194,34 +197,37 @@ namespace TsaToolbox
 
         private void ch_buildMlBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (ch_fftCbox.IsChecked.Value)
+            if (Setup.Fft.Enabled)
             {
                 var fftTs = GetFft();
                 string yLabel = "power (dB)";
-                Charts.PlotScatter(ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", yLabel);
+                Charts.PlotScatter(FftView.ch_FftChart, fftTs.XValues, fftTs.YValues, "ω", yLabel);
             }
 
-            if (ch_WaveletCbox.IsChecked.Value)
+            if (Setup.Wavelet.Enabled)
             {
                 DeleteWaveletTempFile();
 
+                ScottPlot.WpfPlot wvlChart = WaveletView.ch_wavChart;
+
                 var brush = GetWavelet(
-                    ch_wavChart.Width * 2, 
-                    ch_wavChart.Height * 2, 
+                    wvlChart.Width * 2,
+                    wvlChart.Height * 2, 
                     Properties.Resources.WaveletFile);
 
-                ch_wavChart.Reset();
 
-                ch_wavChart.Plot.Style(dataBackgroundImage: brush);
-                ch_wavChart.Plot.Grid(enable: false);
+                WaveletView.ch_wavChart.Reset();
 
-                ch_wavChart.Plot.SetAxisLimits(
+                wvlChart.Plot.Style(dataBackgroundImage: brush);
+                wvlChart.Plot.Grid(enable: false);
+
+                wvlChart.Plot.SetAxisLimits(
                     Source.Data.TimeSeries.Min.X,
                     Source.Data.TimeSeries.Max.X,
-                    wav_omLeft.ReadDouble(),
-                    wav_omRight.ReadDouble());
+                    Setup.Wavelet.OmegaFrom,
+                    Setup.Wavelet.OmegaTo);
 
-                Charts.RenderPlot(ch_wavChart, "t", "ω");
+                Charts.RenderPlot(wvlChart, "t", "ω");
             }
         }
 
@@ -319,15 +325,15 @@ namespace TsaToolbox
                 Charts.SavePlot(ch_acfChart, fName + "_acf.png");
             }
 
-            if (ch_fftCbox.IsChecked.Value)
+            if (Setup.Fft.Enabled)
             {
-                Charts.SavePlot(ch_FftChart, fName + "_fft.png");
+                Charts.SavePlot(FftView.ch_FftChart, fName + "_fft.png");
             }
 
-            if (ch_WaveletCbox.IsChecked.Value)
+            if (Setup.Wavelet.Enabled)
             {
-                string waveletName = (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString();
-                Charts.SavePlot(ch_wavChart, $"{fName}_{waveletName}_wavelet.png");
+                string waveletName = Setup.Wavelet.Family.ToString().ToLowerInvariant();
+                Charts.SavePlot(WaveletView.ch_wavChart, $"{fName}_{waveletName}_wavelet.png");
             }
 
             if (_lyapunov.Method != null)
@@ -400,22 +406,13 @@ namespace TsaToolbox
         }
 
         private DataSeries GetFft() =>
-            FreqAnalysis.GetFourier(
-                Source.Data.TimeSeries.YValues,
-                fft_omLeft.ReadDouble(),
-                fft_omRight.ReadDouble(), 
-                fft_dt.ReadDouble(),
-                fft_radCbox.IsChecked.Value);
+            FreqAnalysis.GetFourier(Source.Data.TimeSeries.YValues, Setup.Fft);
 
         private Bitmap GetWavelet(double width, double height, string fileName) =>
             FreqAnalysis.GetWavelet(Source.Data.TimeSeries.YValues,
                     Source.Data.TimeSeries.XValues,
                     fileName,
-                    (wav_typeCbox.SelectedItem as ComboBoxItem).ToolTip.ToString(),
-                    wav_omLeft.ReadDouble(),
-                    wav_omRight.ReadDouble(),
-                    wav_paletteCbox.Text,
-                    wvl_radCbox.IsChecked.Value,
+                    Setup.Wavelet,
                     width,
                     height);
 

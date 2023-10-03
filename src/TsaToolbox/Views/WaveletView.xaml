@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="TsaToolbox.Views.WaveletView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:resx="clr-namespace:TsaToolbox.Properties"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:TsaToolbox.Views"
+             mc:Ignorable="d">
+    <GroupBox>
+        <GroupBox.Header>
+            <CheckBox x:Name="ch_WaveletCbox" Content="{x:Static resx:Resources.Wavelet}" IsChecked="{Binding Enabled}" />
+        </GroupBox.Header>
+        <Grid>
+            <StackPanel Margin="330,0,10,0">
+
+                <TextBlock Text="ω range" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                <DockPanel>
+                    <TextBox x:Name="wav_omLeft" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding OmegaFrom}" VerticalAlignment="Top"/>
+                    <TextBox x:Name="wav_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding OmegaTo}" VerticalAlignment="Top"/>
+                </DockPanel>
+
+                <CheckBox x:Name="wvl_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center" IsChecked="{Binding UseRadians}"/>
+
+                <TextBlock Text="thinning" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                <TextBox x:Name="wav_thinning" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding Thinning}" VerticalAlignment="Top"/>
+
+                <TextBlock Text="family" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                <ComboBox x:Name="wav_typeCbox" ItemsSource="{Binding Families}" Text="{Binding Family}" HorizontalContentAlignment="Center"/>
+
+                <TextBlock Text="color map" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                <ComboBox x:Name="wav_paletteCbox" ItemsSource="{Binding ColorMaps}" Text="{Binding ColorMap}" HorizontalContentAlignment="Center"/>
+
+            </StackPanel>
+            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
+        </Grid>
+    </GroupBox>
+
+</UserControl>

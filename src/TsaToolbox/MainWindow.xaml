@@ -79,63 +79,13 @@
             </TabItem>
             <TabItem x:Name="tabChartsMl" Header="Frequency analysis" Height="40">
                 <Grid>
-                    <GroupBox Margin="10,40,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
-                        <GroupBox.Header>
-                            <CheckBox x:Name="ch_fftCbox" Content="{x:Static resx:Resources.Fft}" IsChecked="False" />
-                        </GroupBox.Header>
-                        <Grid>
-                            <StackPanel Margin="330,0,10,0">
-                                <TextBlock Text="Δt" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                                <TextBox x:Name="fft_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding TimeStep, Mode=OneWay}" VerticalAlignment="Top"/>
-                                <TextBlock Text="ω range" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                
-                                <DockPanel>
-                                    <TextBox x:Name="fft_omLeft" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="fft_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
-                                </DockPanel>
+                    <Grid Margin="10,40,0,10" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <views:FftView x:Name="FftView" DataContext="{Binding FftVM}"/>
+                    </Grid>
 
-                                <CheckBox x:Name="fft_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
-                        </Grid>
-                    </GroupBox>
-
-                    <GroupBox Margin="437,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
-                        <GroupBox.Header>
-                            <CheckBox x:Name="ch_WaveletCbox" Content="{x:Static resx:Resources.Wavelet}" IsChecked="False" />
-                        </GroupBox.Header>
-                        <Grid>
-                            <StackPanel Margin="330,0,10,0">
-                                <TextBlock Text="type" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                                <ComboBox x:Name="wav_typeCbox" SelectedIndex="0" HorizontalContentAlignment="Center" Width="100">
-                                    <ComboBoxItem Content="Gaussian (8)" ToolTip="gaus8"></ComboBoxItem>
-                                    <ComboBoxItem Content="Morlet" ToolTip="morl"></ComboBoxItem>
-                                    <ComboBoxItem Content="Daubechies (10)" ToolTip="db10"></ComboBoxItem>
-                                    <ComboBoxItem Content="Haar" ToolTip="haar"></ComboBoxItem>
-                                    <ComboBoxItem Content="Symlets (8)" ToolTip="sym8"></ComboBoxItem>
-                                    <ComboBoxItem Content="Mexican hat" ToolTip="mexh"></ComboBoxItem>
-                                    <ComboBoxItem Content="Meyer" ToolTip="meyr"></ComboBoxItem>
-                                    <ComboBoxItem Content="Compl. Gaussian (8)" ToolTip="cgau8"></ComboBoxItem>
-                                </ComboBox>
-                                <TextBlock Text="ω range" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <DockPanel>
-                                    <TextBox x:Name="wav_omLeft" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="wav_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
-                                </DockPanel>
-
-                                <CheckBox x:Name="wvl_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-
-                                <TextBlock Text="thinning" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBox x:Name="wav_dt" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"/>
-                                <TextBlock Text="color map" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <ComboBox x:Name="wav_paletteCbox" SelectedIndex="0" HorizontalContentAlignment="Center">
-                                    <ComboBoxItem Content="pink"></ComboBoxItem>
-                                    <ComboBoxItem Content="parula"></ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-                            <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
-                        </Grid>
-                    </GroupBox>
+                    <Grid Margin="437,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+                        <views:WaveletView x:Name="WaveletView" DataContext="{Binding WaveletVM}"/>
+                    </Grid>
 
                     <Button x:Name="ch_buildMlBtn" Content="Build" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Width="75" Click="ch_buildMlBtn_Click"/>
                 </Grid>
@@ -242,7 +192,7 @@
                     <TextBlock x:Name="statusTsInfoText" Width="300" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
                     <Separator/>
                     <TextBlock x:Name="statusDtText" Text="Δt:"/>
-                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
+                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep, StringFormat=G8}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
                     <Separator/>
                     <TextBlock HorizontalAlignment="Right" Width="80">
                         <Hyperlink NavigateUri="https://www.mathworks.com/products/compiler/matlab-runtime.html">
