@@ -1,99 +1,104 @@
 ﻿using ChaosSoft.Core.Data;
 using System.ComponentModel;
-using System.Data;
-using System.Globalization;
 using System.Reflection;
 using TsaToolbox.Models;
+using TsaToolbox.Models.Setups;
 
-namespace TsaToolbox.ViewModels
+namespace TsaToolbox.ViewModels;
+
+public class MainViewModel : ViewModelBase
 {
-    public class MainViewModel : ViewModelBase
+
+    private readonly DataSource _source;
+
+    private string fileInfo;
+    private string timeSeriesInfo;
+    private double timeStep;
+
+    public MainViewModel(Settings settings, DataSource source, Setup setup)
     {
+        _source = source;
 
-        private readonly DataSource _source;
+        SourceAndSettingsVM = new SourceAndSettingsViewModel(settings, source);
+        SourceAndSettingsVM.PropertyChanged += OnSourcePropertyChanged;
+        FftVM = new FftViewModel(setup.Fft);
+        WaveletVM = new WaveletViewModel(setup.Wavelet);
+    }
 
-        private string fileInfo;
-        private string timeSeriesInfo;
-        private string timeStep;
+    public ViewModelBase SourceAndSettingsVM { get; }
 
-        public MainViewModel(Settings settings, DataSource source)
+    public FftViewModel FftVM { get; }
+
+    public WaveletViewModel WaveletVM { get; }
+
+
+    public string FileInfo
+    {
+        get => fileInfo;
+
+        set
         {
-            _source = source;
-
-            SourceAndSettingsVM = new SourceAndSettingsViewModel(settings, source);
-            SourceAndSettingsVM.PropertyChanged += OnSourcePropertyChanged;
+            fileInfo = value;
+            OnPropertyChanged(nameof(FileInfo));
         }
+    }
 
-        public ViewModelBase SourceAndSettingsVM { get; }
+    public string TimeSeriesInfo
+    { 
+        get => timeSeriesInfo;
 
-
-        public string FileInfo
+        set
         {
-            get => fileInfo;
-
-            set
-            {
-                fileInfo = value;
-                OnPropertyChanged(nameof(FileInfo));
-            }
+            timeSeriesInfo = value;
+            OnPropertyChanged(nameof(TimeSeriesInfo));
         }
+    }
 
-        public string TimeSeriesInfo
-        { 
-            get => timeSeriesInfo;
+    public double TimeStep
+    {
+        get => timeStep;
 
-            set
-            {
-                timeSeriesInfo = value;
-                OnPropertyChanged(nameof(TimeSeriesInfo));
-            }
-        }
-
-        public string TimeStep
+        set
         {
-            get => timeStep;
-
-            set
-            {
-                timeStep = value;
-                OnPropertyChanged(nameof(TimeStep));
-            }
+            timeStep = value;
+            FftVM.Dt = value;
+            OnPropertyChanged(nameof(TimeStep));
         }
+    }
 
 
-        private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SourceAndSettingsViewModel.DataLoaded))
         {
-            if (e.PropertyName == nameof(SourceAndSettingsViewModel.DataLoaded))
+            FileInfo = _source.Data.ToString().Replace("\n", "  ‧  ");
+        }
+
+        if (e.PropertyName == nameof(SourceAndSettingsViewModel.TimeSeriesStale))
+        {
+            string info = $"Col: {_source.SignalColumn}  ‧  Range: [{_source.StartPoint}; {_source.EndPoint}]";
+
+            if (_source.TimeInFirstColumn)
             {
-                FileInfo = _source.Data.ToString().Replace("\n", "  ‧  ");
+                double[] xs = _source.Data.GetColumn(0);
+                info += $"  ‧  t = [{xs[_source.StartPoint - 1]}; {xs[_source.EndPoint - 1]}]";
             }
 
-            if (e.PropertyName == nameof(SourceAndSettingsViewModel.TimeSeriesStale))
+            TimeSeriesInfo = info;
+
+            // dirty hack in case when time in file has G format
+            // at big offsets accuracy could be lost due to big integer part
+            if (_source.TimeInFirstColumn)
             {
-                string info = $"Col: {_source.SignalColumn}  ‧  Range: [{_source.StartPoint}; {_source.EndPoint}]";
-
-                if (_source.TimeInFirstColumn)
-                {
-                    double[] xs = _source.Data.GetColumn(0);
-                    info += $"  ‧  t = [{xs[_source.StartPoint - 1]}; {xs[_source.EndPoint - 1]}]";
-                }
-
-                TimeSeriesInfo = info;
-
-                // dirty hack in case when time in file has G format
-                // at big offsets accuracy could be lost due to big integer part
-                if (_source.TimeInFirstColumn)
-                {
-                    FieldInfo field = typeof(SourceData).GetField("_dataColumns", BindingFlags.NonPublic | BindingFlags.Instance);
-                    double[][] data = field.GetValue(_source.Data) as double[][];
-                    double step = data[0][_source.EachNPoints] - data[0][0];
-                    TimeStep = string.Format(CultureInfo.InvariantCulture, "{0:G8}", step);
-                }
-                else
-                {
-                    TimeStep = double.NaN.ToString();
-                }
-              }
-        }
+                FieldInfo field = typeof(SourceData).GetField("_dataColumns", BindingFlags.NonPublic | BindingFlags.Instance);
+                double[][] data = field.GetValue(_source.Data) as double[][];
+                double step = data[0][_source.EachNPoints] - data[0][0];
+                TimeStep = step;
+            }
+            else
+            {
+                TimeStep = double.NaN;
+            }
+          }
     }
 }

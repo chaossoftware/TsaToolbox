@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TsaToolbox.Models;
+using TsaToolbox.Models.Setups;
 using TsaToolbox.ViewModels;
 
 namespace TsaToolbox
@@ -13,12 +14,14 @@ namespace TsaToolbox
         {
             Settings settigns = new Settings();
             DataSource source = new DataSource();
+            Setup setup = new Setup();
 
             MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(settigns, source),
+                DataContext = new MainViewModel(settigns, source, setup),
                 Settings = settigns,
-                Source = source
+                Source = source,
+                Setup = setup
             };
 
             MainWindow.Show();
