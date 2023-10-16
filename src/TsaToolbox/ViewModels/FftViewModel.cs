@@ -2,7 +2,7 @@
 
 namespace TsaToolbox.ViewModels;
 
-public class FftViewModel : ViewModelBase
+public class FftViewModel
 {
     private readonly FftSetup parameters;
 
@@ -18,58 +18,38 @@ public class FftViewModel : ViewModelBase
         UseRadians = false;
     }
 
+    [Notify]
     public bool Enabled
     {
         get => parameters.Enabled;
-
-        set
-        {
-            parameters.Enabled = value;
-            OnPropertyChanged(nameof(Enabled));
-        }
+        set => parameters.Enabled = value;
     }
 
+    [Notify]
     public double Dt
     {
         get => parameters.Dt;
-
-        set
-        {
-            parameters.Dt = value;
-            OnPropertyChanged(nameof(Dt));
-        }
+        set => parameters.Dt = value;
     }
 
+    [Notify]
     public double OmegaFrom
     {
         get => parameters.OmegaFrom;
-
-        set
-        {
-            parameters.OmegaFrom = value;
-            OnPropertyChanged(nameof(OmegaFrom));
-        }
+        set => parameters.OmegaFrom = value;
     }
 
+    [Notify]
     public double OmegaTo
     {
         get => parameters.OmegaTo;
-
-        set
-        {
-            parameters.OmegaTo = value;
-            OnPropertyChanged(nameof(OmegaTo));
-        }
+        set => parameters.OmegaTo = value;
     }
 
+    [Notify]
     public bool UseRadians
     {
         get => parameters.UseRadians;
-
-        set
-        {
-            parameters.UseRadians = value;
-            OnPropertyChanged(nameof(UseRadians));
-        }
+        set => parameters.UseRadians = value;
     }
 }

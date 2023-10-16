@@ -1,18 +1,15 @@
 ﻿using ChaosSoft.Core.Data;
-using System.ComponentModel;
+using System;
 using System.Reflection;
 using TsaToolbox.Models;
 using TsaToolbox.Models.Setups;
 
 namespace TsaToolbox.ViewModels;
 
-public class MainViewModel : ViewModelBase
+public class MainViewModel
 {
 
     private readonly DataSource _source;
-
-    private string fileInfo;
-    private string timeSeriesInfo;
     private double timeStep;
 
     public MainViewModel(Settings settings, DataSource source, Setup setup)
@@ -20,40 +17,27 @@ public class MainViewModel : ViewModelBase
         _source = source;
 
         SourceAndSettingsVM = new SourceAndSettingsViewModel(settings, source);
-        SourceAndSettingsVM.PropertyChanged += OnSourcePropertyChanged;
+        SourceAndSettingsVM.DataLoaded += UpdateFileInfo;
+        SourceAndSettingsVM.TimeSeriesSet += UpdateTimeSeriesInfo;
+
+        
         FftVM = new FftViewModel(setup.Fft);
         WaveletVM = new WaveletViewModel(setup.Wavelet);
     }
 
-    public ViewModelBase SourceAndSettingsVM { get; }
+    public SourceAndSettingsViewModel SourceAndSettingsVM { get; }
 
     public FftViewModel FftVM { get; }
 
     public WaveletViewModel WaveletVM { get; }
 
+    [Notify]
+    public string FileInfo { get; set; }
 
-    public string FileInfo
-    {
-        get => fileInfo;
+    [Notify]
+    public string TimeSeriesInfo { get; set; }
 
-        set
-        {
-            fileInfo = value;
-            OnPropertyChanged(nameof(FileInfo));
-        }
-    }
-
-    public string TimeSeriesInfo
-    { 
-        get => timeSeriesInfo;
-
-        set
-        {
-            timeSeriesInfo = value;
-            OnPropertyChanged(nameof(TimeSeriesInfo));
-        }
-    }
-
+    [Notify]
     public double TimeStep
     {
         get => timeStep;
@@ -62,43 +46,37 @@ public class MainViewModel : ViewModelBase
         {
             timeStep = value;
             FftVM.Dt = value;
-            OnPropertyChanged(nameof(TimeStep));
         }
     }
 
 
-    private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void UpdateFileInfo(object sender, EventArgs e) =>
+        FileInfo = _source.Data.ToString().Replace(":", " ‧").Replace("\n", "  ::  ");
+
+    private void UpdateTimeSeriesInfo(object sender, EventArgs e)
     {
-        if (e.PropertyName == nameof(SourceAndSettingsViewModel.DataLoaded))
+        string info = $"Col ‧ {_source.SignalColumn}  ::  Range ‧ [{_source.StartPoint}; {_source.EndPoint}]";
+
+        if (_source.TimeInFirstColumn)
         {
-            FileInfo = _source.Data.ToString().Replace("\n", "  ‧  ");
+            double[] xs = _source.Data.GetColumn(0);
+            info += $"  ::  t = [{xs[_source.StartPoint - 1]}; {xs[_source.EndPoint - 1]}]";
         }
 
-        if (e.PropertyName == nameof(SourceAndSettingsViewModel.TimeSeriesStale))
+        TimeSeriesInfo = info;
+
+        // dirty hack in case when time in file has G format
+        // at big offsets accuracy could be lost due to big integer part
+        if (_source.TimeInFirstColumn)
         {
-            string info = $"Col: {_source.SignalColumn}  ‧  Range: [{_source.StartPoint}; {_source.EndPoint}]";
-
-            if (_source.TimeInFirstColumn)
-            {
-                double[] xs = _source.Data.GetColumn(0);
-                info += $"  ‧  t = [{xs[_source.StartPoint - 1]}; {xs[_source.EndPoint - 1]}]";
-            }
-
-            TimeSeriesInfo = info;
-
-            // dirty hack in case when time in file has G format
-            // at big offsets accuracy could be lost due to big integer part
-            if (_source.TimeInFirstColumn)
-            {
-                FieldInfo field = typeof(SourceData).GetField("_dataColumns", BindingFlags.NonPublic | BindingFlags.Instance);
-                double[][] data = field.GetValue(_source.Data) as double[][];
-                double step = data[0][_source.EachNPoints] - data[0][0];
-                TimeStep = step;
-            }
-            else
-            {
-                TimeStep = double.NaN;
-            }
-          }
+            FieldInfo field = typeof(SourceData).GetField("_dataColumns", BindingFlags.NonPublic | BindingFlags.Instance);
+            double[][] data = field.GetValue(_source.Data) as double[][];
+            double step = data[0][_source.EachNPoints] - data[0][0];
+            TimeStep = step;
+        }
+        else
+        {
+            TimeStep = double.NaN;
+        }
     }
 }

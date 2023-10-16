@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using TsaToolbox.Commands;
 using TsaToolbox.Models;
 
 namespace TsaToolbox.ViewModels
 {
-    public class SourceAndSettingsViewModel : ViewModelBase
+    public class SourceAndSettingsViewModel
     {
         private readonly Settings _settings;
         private readonly DataSource _source;
 
         private IEnumerable<int> dataColumnsCount;
-        private bool dataLoaded;
         private bool timeSeriesStale;
         private bool multilineData;
 
@@ -28,6 +28,7 @@ namespace TsaToolbox.ViewModels
             AxisLabelSize = 14;
             SaveChartWidth = 320;
             SaveChartHeight = 240;
+            SaveChartScaling = 1;
             SeparateOutputDir = true;
             OutputDir = "Results";
             EachNPoints = 1;
@@ -35,43 +36,37 @@ namespace TsaToolbox.ViewModels
             TimeSeriesStale = false;
         }
 
+        public event EventHandler TimeSeriesSet;
+
+        public event EventHandler DataLoaded;
+
+
         public ICommand LoadDataCommand { get; }
 
         public ICommand SetTimeseriesCommand { get; }
 
+        [Notify]
         public int LinesToSkip 
         {
             get => _source.LinesToSkip;
-
-            set
-            {
-                _source.LinesToSkip = value;
-                OnPropertyChanged(nameof(LinesToSkip));
-            }
+            set => _source.LinesToSkip = value;
         }
 
+        [Notify]
         public int LinesToRead
         {
             get => _source.LinesToRead;
-
-            set
-            {
-                _source.LinesToRead = value;
-                OnPropertyChanged(nameof(LinesToRead));
-            }
+            set => _source.LinesToRead = value;
         }
 
+        [Notify]
         public bool ReadFromBytes
         {
             get => _source.ReadFromBytes;
-
-            set
-            {
-                _source.ReadFromBytes = value;
-                OnPropertyChanged(nameof(ReadFromBytes));
-            }
+            set => _source.ReadFromBytes = value;
         }
 
+        [Notify]
         public bool TimeInFirstColumn
         {
             get => _source.TimeInFirstColumn;
@@ -85,21 +80,18 @@ namespace TsaToolbox.ViewModels
                     SignalColumn = 2;
                 }
 
-                OnTsPropertyChanged(nameof(TimeInFirstColumn));
+                StaleTimeSeries();
             }
         }
 
+        [Notify]
         public IEnumerable<int> DataColumnsCount
         {
             get => dataColumnsCount;
-
-            set
-            {
-                dataColumnsCount = value;
-                OnPropertyChanged(nameof(DataColumnsCount));
-            }
+            set => dataColumnsCount = value;
         }
 
+        [Notify]
         public int SignalColumn
         {
             get => _source.SignalColumn;
@@ -107,10 +99,11 @@ namespace TsaToolbox.ViewModels
             set
             {
                 _source.SignalColumn = value;
-                OnTsPropertyChanged(nameof(SignalColumn));
+                StaleTimeSeries();
             }
         }
 
+        [Notify]
         public int StartPoint
         {
             get => _source.StartPoint;
@@ -118,10 +111,11 @@ namespace TsaToolbox.ViewModels
             set
             {
                 _source.StartPoint = value > 0 && value < _source.Data.LinesCount ? value : 0;
-                OnTsPropertyChanged(nameof(StartPoint));
+                StaleTimeSeries();
             }
         }
 
+        [Notify]
         public int EndPoint
         {
             get => _source.EndPoint;
@@ -129,10 +123,11 @@ namespace TsaToolbox.ViewModels
             set
             {
                 _source.EndPoint = value > 0 && value < _source.Data?.LinesCount ? value : _source.Data.LinesCount;
-                OnTsPropertyChanged(nameof(EndPoint));
+                StaleTimeSeries();
             }
         }
 
+        [Notify]
         public int EachNPoints
         {
             get => _source.EachNPoints;
@@ -140,127 +135,96 @@ namespace TsaToolbox.ViewModels
             set
             {
                 _source.EachNPoints = value > 0 && value < _source.Data?.LinesCount ? value : 1;
-                OnTsPropertyChanged(nameof(EachNPoints));
+                StaleTimeSeries();
             }
         }
 
+        [Notify]
         public int AxisTickLabelSize
         {
             get => _settings.AxisTickLabelSize;
-
-            set
-            {
-                _settings.AxisTickLabelSize = value;
-                OnPropertyChanged(nameof(AxisTickLabelSize));
-            }
+            set => _settings.AxisTickLabelSize = value;
         }
 
+        [Notify]
         public int AxisLabelSize
         {
             get => _settings.AxisLabelSize;
-
-            set
-            {
-                _settings.AxisLabelSize = value;
-                OnPropertyChanged(nameof(AxisLabelSize));
-            }
+            set => _settings.AxisLabelSize = value;
         }
 
+        [Notify]
         public bool ShowGridLines
         {
             get => _settings.ShowGridLines;
-
-            set
-            {
-                _settings.ShowGridLines = value;
-                OnPropertyChanged(nameof(ShowGridLines));
-            }
+            set => _settings.ShowGridLines = value;
         }
 
+        [Notify]
         public int SaveChartWidth
         {
             get => _settings.SaveChartWidth;
-
-            set
-            {
-                _settings.SaveChartWidth = value;
-                OnPropertyChanged(nameof(SaveChartWidth));
-            }
+            set => _settings.SaveChartWidth = value;
         }
 
+        [Notify]
         public int SaveChartHeight
         {
             get => _settings.SaveChartHeight;
-
-            set
-            {
-                _settings.SaveChartHeight = value;
-                OnPropertyChanged(nameof(SaveChartHeight));
-            }
+            set => _settings.SaveChartHeight = value;
         }
 
+        [Notify]
+        public double SaveChartScaling
+        {
+            get => _settings.SaveChartScaling;
+            set => _settings.SaveChartScaling = value;
+        }
+
+        [Notify]
         public string OutputDir
         {
             get => _settings.OutputDir;
-
-            set
-            {
-                _settings.OutputDir = value;
-                OnPropertyChanged(nameof(OutputDir));
-            }
+            set => _settings.OutputDir = value;
         }
 
+        [Notify]
         public bool SeparateOutputDir
         {
             get => _settings.SeparateOutputDir;
-
-            set
-            {
-                _settings.SeparateOutputDir = value;
-                OnPropertyChanged(nameof(SeparateOutputDir));
-            }
+            set => _settings.SeparateOutputDir = value;
         }
 
-        public bool DataLoaded
-        {
-            get => dataLoaded;
-
-            set
-            {
-                dataLoaded = value;
-                OnPropertyChanged(nameof(DataLoaded));
-            }
-        }
-
+        [Notify]
         public bool TimeSeriesStale
         {
             get => timeSeriesStale;
-
-            set
-            {
-                if (timeSeriesStale != value)
-                {
-                    timeSeriesStale = value;
-                    OnPropertyChanged(nameof(TimeSeriesStale));
-                }
-            }
+            set => timeSeriesStale = value;
         }
 
+        [Notify]
         public bool MultilineData
         {
             get => multilineData;
+            set => multilineData = value;
+        }
 
-            set
+        public void StaleTimeSeries()
+        {
+            if (!timeSeriesStale)
             {
-                multilineData = value;
-                OnPropertyChanged(nameof(MultilineData));
+                TimeSeriesStale = true;
             }
         }
 
-        protected void OnTsPropertyChanged(string propertyName)
+        public void SetTimeSeries()
         {
-            TimeSeriesStale = true;
-            OnPropertyChanged(propertyName);
+            TimeSeriesStale = false;
+            TimeSeriesSet?.Invoke(this, new EventArgs());
+
         }
+
+        public void FireDataLoadedEvent() =>
+            DataLoaded?.Invoke(this, new EventArgs());
     }
 }

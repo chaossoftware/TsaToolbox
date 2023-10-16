@@ -31,7 +31,7 @@ namespace TsaToolbox.Commands
                 _source.TimeInFirstColumn
             );
 
-            _viewModel.TimeSeriesStale = false;
+            _viewModel.SetTimeSeries();
         }
     }
 }

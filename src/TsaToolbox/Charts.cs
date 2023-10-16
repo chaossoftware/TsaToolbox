@@ -18,8 +18,7 @@ namespace TsaToolbox
 
         internal void SavePlot(ScottPlot.WpfPlot plot, string fileName)
         {
-            double coeff = GetSizeCoefficient(plot);
-            plot.Plot.SaveFig(fileName, null, null, false, coeff);
+            plot.Plot.SaveFig(fileName, _settings.SaveChartWidth, _settings.SaveChartHeight, false, _settings.SaveChartScaling);
         }
 
         internal void PlotScatter(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
@@ -55,7 +54,8 @@ namespace TsaToolbox
         internal void AddVerticalLine(ScottPlot.WpfPlot plot, double x)
         {
             plot.Plot.AddVerticalLine(x, _markerColor, 1, ScottPlot.LineStyle.DashDot);
-            plot.Plot.AddAnnotation(x.ToString(), 0, 0);
+            var annotation = plot.Plot.AddAnnotation(x.ToString(), 0, 0);
+            annotation.Shadow = false;
             plot.Render();
         }
 
@@ -75,13 +75,6 @@ namespace TsaToolbox
             plot.Plot.YAxis.Label(yLabel);
             plot.Plot.Grid(enable: _settings.ShowGridLines);
             plot.Render();
-        }
-
-        private double GetSizeCoefficient(ScottPlot.WpfPlot plot)
-        {
-            double coefficient = Math.Max(_settings.SaveChartWidth / plot.Width, _settings.SaveChartHeight / plot.Height);
-            coefficient = Math.Max(coefficient, 1f);
-            return coefficient;
         }
     }
 }

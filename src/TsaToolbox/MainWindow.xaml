@@ -7,10 +7,10 @@
         xmlns:local="clr-namespace:TsaToolbox"
         xmlns:views="clr-namespace:TsaToolbox.Views"
         mc:Ignorable="d"
-        Title="TSA toolbox" Height="680" Width="1200">
+        Title="TSA toolbox" Height="680" Width="1200" FontFamily="{StaticResource Sansation}" FontSize="13">
     <Grid>
         <TabControl x:Name="toolboxTabs" TabStripPlacement="Left" Margin="0,0,0,23">
-            <TabItem x:Name="tabSettings" Header="Source &amp; Settings" Height="40">
+            <TabItem x:Name="tabSettings" Header="Source and Settings" Height="40">
                 <views:SourceAndSettingsView x:Name="SettingsView" DataContext="{Binding SourceAndSettingsVM}"/>
             </TabItem>
             <TabItem x:Name="tabCharts" Header="Charts" Height="40">
@@ -83,7 +83,7 @@
                         <views:FftView x:Name="FftView" DataContext="{Binding FftVM}"/>
                     </Grid>
 
-                    <Grid Margin="437,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Margin="0,40,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <views:WaveletView x:Name="WaveletView" DataContext="{Binding WaveletVM}"/>
                     </Grid>
 
@@ -184,22 +184,17 @@
             </TabItem>
         </TabControl>
         <Button x:Name="saveBtn" Content="Save results" HorizontalAlignment="Left" Width="105" Margin="10,0,0,27" Height="20" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
-        <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom">
+        <StatusBar x:Name="statusBar" Height="22" VerticalAlignment="Bottom" FontFamily="Consolas" FontSize="13" Foreground="Gray">
             <TextBlock x:Name="statusFileInfoText" Width="Auto" Text="{Binding FileInfo}"/>
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <Separator/>
                     <TextBlock x:Name="statusTsInfoText" Width="300" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
                     <Separator/>
-                    <TextBlock x:Name="statusDtText" Text="Δt:"/>
-                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep, StringFormat=G8}" Margin="0,-1,0,0" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
+                    <TextBlock x:Name="statusDtText" Text="Δt ‧ " VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep, StringFormat=G8}" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
                     <Separator/>
-                    <TextBlock HorizontalAlignment="Right" Width="80">
-                        <Hyperlink NavigateUri="https://www.mathworks.com/products/compiler/matlab-runtime.html">
-                            MCR 2016b
-                        </Hyperlink>
-                    </TextBlock>
-                    <TextBlock x:Name="statusVersionText" HorizontalAlignment="Right" TextAlignment="Right" Width="60"/>
+                    <TextBlock x:Name="statusVersionText" HorizontalAlignment="Right" TextAlignment="Right" Width="80"/>
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>

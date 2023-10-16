@@ -6,6 +6,8 @@
 
         public int SaveChartHeight { get; set; }
 
+        public double SaveChartScaling { get; set; }
+
         public string OutputDir { get; set; }
 
         public bool SeparateOutputDir { get; set; }
