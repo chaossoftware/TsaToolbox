@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:TsaToolbox"
         xmlns:views="clr-namespace:TsaToolbox.Views"
         mc:Ignorable="d"
-        Title="TSA toolbox" Height="680" Width="1200" FontFamily="{StaticResource Sansation}" FontSize="13">
+        Title="{Binding Title}" Height="680" Width="1200" FontFamily="{StaticResource Sansation}" FontSize="14">
     <Grid>
         <TabControl x:Name="toolboxTabs" TabStripPlacement="Left" Margin="0,0,0,23">
             <TabItem x:Name="tabSettings" Header="Source and Settings" Height="40">
@@ -96,7 +96,7 @@
                     <UniformGrid Columns="5" Rows="1" Margin="10,30,300,0" VerticalAlignment="Top">
                         <GroupBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="embed. dimension" HorizontalAlignment="Center" Margin="0,0,0,0" />
+                                <TextBlock Text="embedding dim." HorizontalAlignment="Center" Margin="0,0,0,0" />
                                 <TextBox x:Name="le_eDimTbox" Style="{StaticResource ParameterValueWide}" Text="2" HorizontalAlignment="Center"/>
                                 <TextBlock Text="reconstr. delay" Margin="0,10,0,0" HorizontalAlignment="Center"/>
                                 <TextBox x:Name="le_tauTbox" Style="{StaticResource ParameterValueWide}" Text="1" HorizontalAlignment="Center"/>
@@ -181,12 +181,12 @@
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <Separator/>
-                    <TextBlock x:Name="statusTsInfoText" Width="300" Text="{Binding TimeSeriesInfo}" TextAlignment="Center"/>
+                    <TextBlock x:Name="statusTsInfoText" Text="{Binding TimeSeriesInfo}" TextAlignment="Right"/>
                     <Separator/>
-                    <TextBlock x:Name="statusDtText" Text="Δt ‧ " VerticalAlignment="Center" TextAlignment="Center"/>
-                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep, StringFormat=G8}" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent"/>
+                    <TextBlock x:Name="statusDtText" Text="  ::  Δt ‧ " VerticalAlignment="Center" TextAlignment="Right"/>
+                    <TextBox x:Name="statusDtTbox" Width="80" IsReadOnly="True" Text="{Binding TimeStep, StringFormat=G8}" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Background="Transparent" VerticalAlignment="Top" BorderBrush="Transparent" Padding="-1"/>
                     <Separator/>
-                    <TextBlock x:Name="statusVersionText" HorizontalAlignment="Right" TextAlignment="Right" Width="80"/>
+                    <TextBlock x:Name="statusVersionText" HorizontalAlignment="Right" TextAlignment="Right" Width="60"/>
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>

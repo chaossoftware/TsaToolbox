@@ -8,7 +8,7 @@ namespace TsaToolbox.ViewModels;
 
 public class MainViewModel
 {
-
+    private const string BaseTitle = "TSA toolbox";
     private readonly DataSource _source;
     private double timeStep;
 
@@ -23,6 +23,7 @@ public class MainViewModel
         
         FftVM = new FftViewModel(setup.Fft);
         WaveletVM = new WaveletViewModel(setup.Wavelet);
+        Title = BaseTitle;
     }
 
     public SourceAndSettingsViewModel SourceAndSettingsVM { get; }
@@ -49,13 +50,18 @@ public class MainViewModel
         }
     }
 
+    [Notify]
+    public string Title { get; set; }
 
-    private void UpdateFileInfo(object sender, EventArgs e) =>
-        FileInfo = _source.Data.ToString().Replace(":", " ‧").Replace("\n", "  ::  ");
+    private void UpdateFileInfo(object sender, EventArgs e)
+    {
+        FileInfo = $"Lines ‧ {_source.Data.LinesCount}  ::  Columns ‧ {_source.Data.ColumnsCount}";
+        Title = BaseTitle + ": " + _source.Data.FileName;
+    }
 
     private void UpdateTimeSeriesInfo(object sender, EventArgs e)
     {
-        string info = $"Col ‧ {_source.SignalColumn}  ::  Range ‧ [{_source.StartPoint}; {_source.EndPoint}]";
+        string info = $"Column ‧ {_source.SignalColumn}  ::  Range ‧ [{_source.StartPoint}; {_source.EndPoint}]";
 
         if (_source.TimeInFirstColumn)
         {
