@@ -321,6 +321,16 @@ namespace TsaToolbox
                 Charts.SavePlot(ch_acfChart, fName + "_acf.png");
             }
 
+            if (ch_fnnCbox.IsChecked.Value)
+            {
+                Charts.SavePlot(an_FnnChart, fName + "_fnn.png");
+            }
+
+            if (ch_miCbox.IsChecked.Value)
+            {
+                Charts.SavePlot(an_miChart, fName + "_mi.png");
+            }
+
             if (Setup.Fft.Enabled)
             {
                 Charts.SavePlot(FftView.ch_FftChart, fName + "_fft.png");

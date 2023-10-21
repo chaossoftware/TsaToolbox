@@ -1,5 +1,5 @@
 ﻿using ChaosSoft.Core.Data;
-using System;
+using ChaosSoft.Core.DataUtils;
 using System.Drawing;
 using TsaToolbox.Models;
 
@@ -24,7 +24,6 @@ namespace TsaToolbox
         internal void PlotScatter(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
         {
             ClearPlot(plot);
-            //plot.Plot.AddSignalXY(series.XValues, series.YValues, _mainColor);
             plot.Plot.AddScatter(series.XValues, series.YValues, _mainColor, 0.5f, 0f);
             RenderPlot(plot, xLabel, yLabel);
         }
@@ -32,16 +31,14 @@ namespace TsaToolbox
         internal void PlotScatter(ScottPlot.WpfPlot plot, double[] xs, double[] ys, string xLabel, string yLabel)
         {
             ClearPlot(plot);
-            //plot.Plot.AddSignalXY(xs, ys, _mainColor);
             plot.Plot.AddScatter(xs, ys, _mainColor, 0.5f, 0f);
             RenderPlot(plot, xLabel, yLabel);
         }
 
         internal void PlotSignal(ScottPlot.WpfPlot plot, double[] series, string xLabel, string yLabel)
         {
-            ClearPlot(plot);
-            plot.Plot.AddSignal(series, 1, _mainColor);
-            RenderPlot(plot, xLabel, yLabel);
+            double[] xs = Vector.CreateUniform(series.Length, 0d, 1d);
+            PlotScatter(plot, xs, series, xLabel, yLabel);
         }
 
         internal void PlotScatterPoints(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
