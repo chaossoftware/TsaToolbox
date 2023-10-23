@@ -22,7 +22,7 @@
                     <TextBox x:Name="fft_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding OmegaTo}" VerticalAlignment="Top"/>
                 </DockPanel>
 
-                <CheckBox x:Name="fft_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center" IsChecked="{Binding UseRadians}"/>
+                <CheckBox x:Name="fft_radCbox" Content="use radians" Margin="0,10,0,0" HorizontalAlignment="Center" IsChecked="{Binding UseRadians}"/>
             </StackPanel>
             <WpfPlot x:Name="ch_FftChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>
         </Grid>

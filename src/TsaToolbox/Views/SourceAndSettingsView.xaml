@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
-            <Setter Property="Width" Value="220" />
+            <Setter Property="Width" Value="250" />
         </Style>
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -51,7 +51,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="80" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -75,13 +75,12 @@
                     <Button Content="Set" Grid.Row="5" Grid.Column="1" Command="{Binding SetTimeseriesCommand}" Background="{Binding TimeSeriesStale, Converter={StaticResource BoolToColorConverter}, ConverterParameter='button'}" VerticalAlignment="Center" />
                 </Grid>
             </GroupBox>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Margin="10">
-            <GroupBox Header="Data file settings" Style="{StaticResource GroupBoxStyle}" Padding="5">
+
+            <GroupBox Header="Custom file load settings" Style="{StaticResource GroupBoxStyle}" Padding="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="80" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -96,11 +95,13 @@
                     <CheckBox x:Name="set_bytesCbox" Grid.Row="0" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding ReadFromBytes}"/>
                 </Grid>
             </GroupBox>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Margin="10">
             <GroupBox Header="Charts settings" Style="{StaticResource GroupBoxStyle}" Padding="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="80" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -124,17 +125,20 @@
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="80" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Label Content="Save chart width:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                        <Label Content="Chart width:" Grid.Row="0" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                         <TextBox x:Name="set_chartSaveWidth" Grid.Row="0" Grid.Column="1" Text="{Binding SaveChartWidth}" Style="{StaticResource TextBoxStyle}"/>
-                        <Label Content="Save chart height:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                        <Label Content="Chart height:" Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                         <TextBox x:Name="set_chartSaveHeight" Grid.Row="1" Grid.Column="1" Text="{Binding SaveChartHeight}" Style="{StaticResource TextBoxStyle}"/>
+                        <Label Content="Chart scaling:" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="set_chartScaling" Grid.Row="2" Grid.Column="1" Text="{Binding SaveChartScaling}" Style="{StaticResource TextBoxStyle}"/>
                         <Label Content="Separate directory:" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" Style="{StaticResource CheckboxStyle}" IsChecked="{Binding SeparateOutputDir}"/>
                     </Grid>

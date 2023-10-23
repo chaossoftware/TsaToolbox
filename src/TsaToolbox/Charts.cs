@@ -1,5 +1,5 @@
 ﻿using ChaosSoft.Core.Data;
-using System;
+using ChaosSoft.Core.DataUtils;
 using System.Drawing;
 using TsaToolbox.Models;
 
@@ -18,14 +18,12 @@ namespace TsaToolbox
 
         internal void SavePlot(ScottPlot.WpfPlot plot, string fileName)
         {
-            double coeff = GetSizeCoefficient(plot);
-            plot.Plot.SaveFig(fileName, null, null, false, coeff);
+            plot.Plot.SaveFig(fileName, _settings.SaveChartWidth, _settings.SaveChartHeight, false, _settings.SaveChartScaling);
         }
 
         internal void PlotScatter(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
         {
             ClearPlot(plot);
-            //plot.Plot.AddSignalXY(series.XValues, series.YValues, _mainColor);
             plot.Plot.AddScatter(series.XValues, series.YValues, _mainColor, 0.5f, 0f);
             RenderPlot(plot, xLabel, yLabel);
         }
@@ -33,16 +31,14 @@ namespace TsaToolbox
         internal void PlotScatter(ScottPlot.WpfPlot plot, double[] xs, double[] ys, string xLabel, string yLabel)
         {
             ClearPlot(plot);
-            //plot.Plot.AddSignalXY(xs, ys, _mainColor);
             plot.Plot.AddScatter(xs, ys, _mainColor, 0.5f, 0f);
             RenderPlot(plot, xLabel, yLabel);
         }
 
         internal void PlotSignal(ScottPlot.WpfPlot plot, double[] series, string xLabel, string yLabel)
         {
-            ClearPlot(plot);
-            plot.Plot.AddSignal(series, 1, _mainColor);
-            RenderPlot(plot, xLabel, yLabel);
+            double[] xs = Vector.CreateUniform(series.Length, 0d, 1d);
+            PlotScatter(plot, xs, series, xLabel, yLabel);
         }
 
         internal void PlotScatterPoints(ScottPlot.WpfPlot plot, DataSeries series, string xLabel, string yLabel)
@@ -55,7 +51,8 @@ namespace TsaToolbox
         internal void AddVerticalLine(ScottPlot.WpfPlot plot, double x)
         {
             plot.Plot.AddVerticalLine(x, _markerColor, 1, ScottPlot.LineStyle.DashDot);
-            plot.Plot.AddAnnotation(x.ToString(), 0, 0);
+            var annotation = plot.Plot.AddAnnotation(x.ToString(), 0, 0);
+            annotation.Shadow = false;
             plot.Render();
         }
 
@@ -75,13 +72,6 @@ namespace TsaToolbox
             plot.Plot.YAxis.Label(yLabel);
             plot.Plot.Grid(enable: _settings.ShowGridLines);
             plot.Render();
-        }
-
-        private double GetSizeCoefficient(ScottPlot.WpfPlot plot)
-        {
-            double coefficient = Math.Max(_settings.SaveChartWidth / plot.Width, _settings.SaveChartHeight / plot.Height);
-            coefficient = Math.Max(coefficient, 1f);
-            return coefficient;
         }
     }
 }

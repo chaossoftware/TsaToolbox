@@ -72,8 +72,8 @@ namespace TsaToolbox.Commands
                 _viewModel.EndPoint = _source.Data.LinesCount;
             }
 
-            _viewModel.DataLoaded = true;
-            _viewModel.TimeSeriesStale = true;
+            _viewModel.FireDataLoadedEvent();
+            _viewModel.StaleTimeSeries();
             _viewModel.SetTimeseriesCommand.Execute(null);
         }
     }

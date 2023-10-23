@@ -15,8 +15,6 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
 using TsaToolbox.Helpers;
 using TsaToolbox.Models;
 using TsaToolbox.Models.Setups;
@@ -29,7 +27,6 @@ namespace TsaToolbox
     public partial class MainWindow : Window
     {
         private readonly LyapunovExponents _lyapunov;
-        private readonly CommandProcessor _commandProcessor;
         private Charts charts;
 
         public MainWindow()
@@ -42,7 +39,6 @@ namespace TsaToolbox
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
             statusVersionText.Text = $" v{versionInfo.ProductVersion}";
             _lyapunov = new LyapunovExponents();
-            _commandProcessor = new CommandProcessor(tboxConsole, this);
 
             Instance = this;
         }
@@ -325,6 +321,16 @@ namespace TsaToolbox
                 Charts.SavePlot(ch_acfChart, fName + "_acf.png");
             }
 
+            if (ch_fnnCbox.IsChecked.Value)
+            {
+                Charts.SavePlot(an_FnnChart, fName + "_fnn.png");
+            }
+
+            if (ch_miCbox.IsChecked.Value)
+            {
+                Charts.SavePlot(an_miChart, fName + "_mi.png");
+            }
+
             if (Setup.Fft.Enabled)
             {
                 Charts.SavePlot(FftView.ch_FftChart, fName + "_fft.png");
@@ -356,53 +362,6 @@ namespace TsaToolbox
                 .AppendLine(_lyapunov.Method.Log.ToString());
 
             DataWriter.CreateDataFile(baseFileName + "_lyapunov.txt", sb.ToString());
-        }
-
-        private void tboxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Back:
-                    var restOfCommand = LastInline().Text;
-
-                    if (string.IsNullOrEmpty(restOfCommand))
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-
-                    break;
-
-                case Key.Enter:
-                    var commandToProcess = LastInline().Text.Trim();
-                    _commandProcessor.ProcessCommand(commandToProcess);
-                    break;
-
-                case Key.Up:
-                    var lastInline = LastInline();
-                    lastInline.Text = _commandProcessor.LastCommand;
-                    tboxConsole.CaretPosition = lastInline.ContentEnd;
-                    e.Handled = true;
-                    break;
-
-                case Key.Tab:
-                    var lastInline1 = LastInline();
-                    var matchingCommands = _commandProcessor.Commands.Keys.Where(c => c.StartsWith(lastInline1.Text));
-
-                    if (matchingCommands.Any())
-                    {
-                        lastInline1.Text = matchingCommands.First();
-
-                        tboxConsole.CaretPosition = lastInline1.ContentEnd;
-                        var thread = new Thread(() => { Thread.Sleep(500); Dispatcher.BeginInvoke(new Action(() => tboxConsole.Focus())); });
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
-                    }
-
-                    break;
-            }
-
-            Run LastInline() => (tboxConsole.Document.Blocks.LastBlock as Paragraph).Inlines.LastInline as Run;
         }
 
         private DataSeries GetFft() =>

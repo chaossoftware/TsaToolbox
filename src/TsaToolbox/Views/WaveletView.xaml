@@ -20,7 +20,7 @@
                     <TextBox x:Name="wav_omRight" Style="{StaticResource ParameterValueShort}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding OmegaTo}" VerticalAlignment="Top"/>
                 </DockPanel>
 
-                <CheckBox x:Name="wvl_radCbox" Content="in radians (*2π)" Margin="0,10,0,0" HorizontalAlignment="Center" IsChecked="{Binding UseRadians}"/>
+                <CheckBox x:Name="wvl_radCbox" Content="use radians" Margin="0,10,0,0" HorizontalAlignment="Center" IsChecked="{Binding UseRadians}"/>
 
                 <TextBlock Text="thinning" HorizontalAlignment="Center" Margin="0,10,0,0" />
                 <TextBox x:Name="wav_thinning" Style="{StaticResource ParameterValueWide}" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding Thinning}" VerticalAlignment="Top"/>
@@ -30,6 +30,12 @@
 
                 <TextBlock Text="color map" HorizontalAlignment="Center" Margin="0,10,0,0" />
                 <ComboBox x:Name="wav_paletteCbox" ItemsSource="{Binding ColorMaps}" Text="{Binding ColorMap}" HorizontalContentAlignment="Center"/>
+
+                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,20,0,0">
+                        <Hyperlink NavigateUri="https://www.mathworks.com/products/compiler/matlab-runtime.html">
+                            MCR 2016b 
+                        </Hyperlink>
+                </TextBlock>
 
             </StackPanel>
             <WpfPlot x:Name="ch_wavChart" HorizontalAlignment="Left" Width="320" Height="240" VerticalAlignment="Top" Margin="0,0,0,0" Cursor="Cross"></WpfPlot>

@@ -4,10 +4,11 @@
              xmlns:local="clr-namespace:TsaToolbox">
     <Application.Resources>
         <ResourceDictionary>
+            <FontFamily x:Key="Sansation">pack://application:,,,/Fonts/#Sansation</FontFamily>
             <Style x:Key="ParameterValue" TargetType="TextBox">
                 <Setter Property="Height" Value="18" />
                 <Setter Property="TextAlignment" Value="Center" />
-                <Setter Property="Width" Value="60" />
+                <Setter Property="Width" Value="80" />
                 <Setter Property="MaxLines" Value="1" />
             </Style>
             <Style x:Key="ParameterValueShort" TargetType="TextBox">
